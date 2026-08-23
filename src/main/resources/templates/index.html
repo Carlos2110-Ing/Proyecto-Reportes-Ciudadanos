@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/base-auth}"
+      lang="es">
+<head>
+  <title>Bienvenido</title>
+</head>
+<body>
+
+  <div layout:fragment="content">
+    <div class="auth-wrapper">
+      <div class="auth-card">
+
+        <!-- Cabecera -->
+        <div class="auth-card-header">
+          <div class="auth-logo-icon auth-logo-icon-lg">
+            <i class="fa-solid fa-city"></i>
+          </div>
+          <div class="auth-brand-title">SafePeru</div>
+          <div class="auth-brand-sub">Sistema de Reportes Ciudadanos</div>
+        </div>
+
+        <!-- Cuerpo -->
+        <div class="auth-card-body">
+          <div class="text-center">
+            <span class="badge-tag"><i class="bi bi-shield-check me-1"></i>Plataforma Oficial</span>
+          </div>
+          <p class="auth-desc text-center">
+            Reporta incidentes, emergencias y situaciones de riesgo en tu comunidad de forma rápida, segura y confiable.
+          </p>
+          <a th:href="@{/login}" class="btn-primary-custom mb-3">
+            <i class="fa-solid fa-right-to-bracket me-2"></i>Iniciar Sesión
+          </a>
+          <a th:href="@{/registro}" class="btn-outline-teal">
+            <i class="fa-solid fa-user-plus me-2"></i>Crear Cuenta
+          </a>
+          <p class="footer-note">Al continuar aceptas nuestros Términos y Política de Privacidad.</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

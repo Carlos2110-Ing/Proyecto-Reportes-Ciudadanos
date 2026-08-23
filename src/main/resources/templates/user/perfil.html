@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/base-user}"
+      lang="es">
+<head>
+  <title>Mi Perfil</title>
+</head>
+<body>
+
+  <th:block layout:fragment="activePageValue">perfil</th:block>
+
+  <div layout:fragment="content">
+
+    <!-- Flash adicionales de perfil -->
+    <div th:if="${exitoPassword}" class="alert-exito mb-3">
+      <i class="bi bi-check-circle me-2"></i><span th:text="${exitoPassword}"></span>
+    </div>
+    <div th:if="${errorPassword}" class="alert-error mb-3">
+      <i class="bi bi-exclamation-circle me-2"></i><span th:text="${errorPassword}"></span>
+    </div>
+
+    <!-- Hero del perfil -->
+    <div class="profile-hero">
+      <div class="avatar-circle" th:text="${usuario.avatarInicial}">JD</div>
+      <div>
+        <div class="profile-name"  th:text="${usuario.nombreCompleto}">Nombre</div>
+        <div class="profile-email" th:text="${usuario.email}">email</div>
+        <span th:if="${verificacion != null and verificacion.verificado}" class="verified-pill">
+          <i class="bi bi-patch-check-fill"></i>Cuenta Verificada
+        </span>
+        <span th:unless="${verificacion != null and verificacion.verificado}" class="unverified-pill">
+          <i class="bi bi-clock"></i>Verificación Pendiente
+        </span>
+      </div>
+      <div class="profile-stats">
+        <div class="text-center">
+          <div class="pstat-num" th:text="${totalReportes}">0</div>
+          <div class="pstat-lbl">Reportes</div>
+        </div>
+        <div class="text-center">
+          <div class="pstat-num" th:text="${resueltos}">0</div>
+          <div class="pstat-lbl">Resueltos</div>
+        </div>
+        <div class="text-center">
+          <div class="pstat-num" th:text="${activos}">0</div>
+          <div class="pstat-lbl">Activos</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <!-- Datos de cuenta -->
+      <div class="col-md-6">
+        <div class="section-card">
+          <div class="section-card-title"><i class="bi bi-person-fill"></i>Datos de Cuenta</div>
+          <form th:action="@{/perfil/actualizar}" method="post" class="needs-validation" novalidate>
+            <div class="mb-3">
+              <label class="form-label">Nombre Completo</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-person"></i></span>
+                <input type="text" name="nombreCompleto" class="form-control"
+                       th:value="${usuario.nombreCompleto}" required minlength="3" />
+                <div class="invalid-feedback">Mínimo 3 caracteres.</div>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Correo Electrónico</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                <input type="email" name="email" class="form-control"
+                       th:value="${usuario.email}" required />
+                <div class="invalid-feedback">Correo inválido.</div>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-save">
+              <i class="bi bi-check-lg me-2"></i>Guardar Cambios
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Cambiar contraseña + Estado verificación -->
+      <div class="col-md-6">
+        <div class="section-card">
+          <div class="section-card-title"><i class="bi bi-lock-fill"></i>Cambiar Contraseña</div>
+          <form th:action="@{/perfil/cambiar-password}" method="post"
+                id="pwdForm" class="needs-validation" novalidate>
+            <div class="mb-3">
+              <label class="form-label">Contraseña Actual</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                <input type="password" name="passwordActual" class="form-control" placeholder="••••••••" required />
+                <div class="invalid-feedback">Campo requerido.</div>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Nueva Contraseña</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+                <input type="password" name="nuevaPassword" id="nuevaPwd"
+                       class="form-control" placeholder="••••••••" required minlength="8" />
+                <div class="invalid-feedback">Mínimo 8 caracteres.</div>
+              </div>
+            </div>
+            <div class="mb-4">
+              <label class="form-label">Confirmar Nueva Contraseña</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+                <input type="password" name="confirmPassword" id="confirmPwd"
+                       class="form-control" placeholder="••••••••" required />
+                <div class="invalid-feedback">Las contraseñas no coinciden.</div>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-save">
+              <i class="bi bi-shield-lock me-2"></i>Actualizar Contraseña
+            </button>
+          </form>
+        </div>
+
+        <!-- Estado de verificación -->
+        <div class="section-card">
+          <div class="section-card-title"><i class="bi bi-patch-check-fill"></i>Estado de Verificación</div>
+          <div th:if="${verificacion != null and verificacion.verificado}">
+            <div class="alert-info-custom mb-3">
+              <i class="bi bi-info-circle me-2"></i>
+              Tu cuenta está verificada. Los reportes de cuentas verificadas tienen mayor visibilidad.
+            </div>
+            <div class="d-flex align-items-center gap-2">
+              <span class="verified-pill"><i class="bi bi-patch-check-fill"></i>Verificado por SafePeru</span>
+              <span style="font-size:0.78rem; color:#94a3b8;"
+                    th:if="${verificacion.fechaVerificacion != null}"
+                    th:text="'desde ' + ${verificacion.fechaVerificacion}"></span>
+            </div>
+          </div>
+          <div th:unless="${verificacion != null and verificacion.verificado}">
+            <div class="alert-error mb-3" style="background:#fff3e0; border-left-color:#f57c00; color:#7c3c00;">
+              <i class="bi bi-clock me-2"></i>
+              Tu solicitud de verificación está en revisión por un administrador.
+            </div>
+            <span class="unverified-pill"><i class="bi bi-clock"></i>Pendiente de Revisión</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <th:block layout:fragment="scripts-extra">
+    <script>
+      (() => {
+        const form    = document.getElementById('pwdForm');
+        const nueva   = document.getElementById('nuevaPwd');
+        const confirm = document.getElementById('confirmPwd');
+        form.addEventListener('submit', e => {
+          confirm.setCustomValidity(nueva.value !== confirm.value ? 'mismatch' : '');
+          if (!form.checkValidity()) { e.preventDefault(); e.stopPropagation(); }
+          form.classList.add('was-validated');
+        });
+        confirm.addEventListener('input', () => confirm.setCustomValidity(''));
+      })();
+    </script>
+  </th:block>
+
+</body>
+</html>

@@ -1,0 +1,224 @@
+{
+  "categorias" : [ {
+    "id" : 1,
+    "nombre" : "Emergencia",
+    "icono" : "bi bi-exclamation-triangle-fill",
+    "color" : "#ef4444"
+  }, {
+    "id" : 2,
+    "nombre" : "Infraestructura",
+    "icono" : "bi bi-building",
+    "color" : "#3b82f6"
+  }, {
+    "id" : 3,
+    "nombre" : "Seguridad",
+    "icono" : "bi bi-shield-exclamation",
+    "color" : "#f57c00"
+  }, {
+    "id" : 4,
+    "nombre" : "Medio Ambiente",
+    "icono" : "bi bi-tree-fill",
+    "color" : "#16a34a"
+  }, {
+    "id" : 5,
+    "nombre" : "Tránsito",
+    "icono" : "bi bi-car-front",
+    "color" : "#6b7280"
+  }, {
+    "id" : 6,
+    "nombre" : "Otro",
+    "icono" : "bi bi-three-dots",
+    "color" : "#94a3b8"
+  } ],
+  "verificaciones" : [ {
+    "id" : 1,
+    "usuarioId" : 1,
+    "estado" : "VERIFICADO",
+    "fechaVerificacion" : "2026-03-10",
+    "adminId" : 99,
+    "verificado" : true
+  }, {
+    "id" : 2,
+    "usuarioId" : 3,
+    "estado" : "VERIFICADO",
+    "fechaVerificacion" : "2026-02-15",
+    "adminId" : 99,
+    "verificado" : true
+  }, {
+    "id" : 3,
+    "usuarioId" : 2,
+    "estado" : "PENDIENTE",
+    "fechaVerificacion" : null,
+    "adminId" : null,
+    "verificado" : false
+  }, {
+    "id" : 4,
+    "usuarioId" : 4,
+    "estado" : "PENDIENTE",
+    "fechaVerificacion" : null,
+    "adminId" : null,
+    "verificado" : false
+  }, {
+    "id" : 5,
+    "usuarioId" : 5,
+    "estado" : "PENDIENTE",
+    "fechaVerificacion" : null,
+    "adminId" : null,
+    "verificado" : false
+  }, {
+    "id" : 6,
+    "usuarioId" : 103,
+    "estado" : "PENDIENTE",
+    "fechaVerificacion" : null,
+    "adminId" : null,
+    "verificado" : false
+  }, {
+    "id" : 7,
+    "usuarioId" : 100,
+    "estado" : "PENDIENTE",
+    "fechaVerificacion" : null,
+    "adminId" : null,
+    "verificado" : false
+  } ],
+  "usuarios" : [ {
+    "id" : 1,
+    "username" : "juan.diaz",
+    "email" : "juan.diaz@correo.com",
+    "password" : "pass1234",
+    "nombreCompleto" : "Juan Diaz",
+    "rol" : "USUARIO",
+    "avatarInicial" : "JD",
+    "fechaRegistro" : "2026-03-01",
+    "admin" : false
+  }, {
+    "id" : 2,
+    "username" : "maria.lopez",
+    "email" : "maria.lopez@correo.com",
+    "password" : "pass1234",
+    "nombreCompleto" : "María López",
+    "rol" : "USUARIO",
+    "avatarInicial" : "ML",
+    "fechaRegistro" : "2026-04-01",
+    "admin" : false
+  }, {
+    "id" : 3,
+    "username" : "carlos.rojas",
+    "email" : "carlos.rojas@correo.com",
+    "password" : "pass1234",
+    "nombreCompleto" : "Carlos Rojas",
+    "rol" : "USUARIO",
+    "avatarInicial" : "CR",
+    "fechaRegistro" : "2026-02-10",
+    "admin" : false
+  }, {
+    "id" : 4,
+    "username" : "ana.torres",
+    "email" : "ana.torres@correo.com",
+    "password" : "pass1234",
+    "nombreCompleto" : "Ana Torres",
+    "rol" : "USUARIO",
+    "avatarInicial" : "AT",
+    "fechaRegistro" : "2026-04-05",
+    "admin" : false
+  }, {
+    "id" : 5,
+    "username" : "pedro.espinoza",
+    "email" : "pedro.espinoza@correo.com",
+    "password" : "pass1234",
+    "nombreCompleto" : "Pedro Espinoza",
+    "rol" : "USUARIO",
+    "avatarInicial" : "PE",
+    "fechaRegistro" : "2026-04-10",
+    "admin" : false
+  }, {
+    "id" : 99,
+    "username" : "admin",
+    "email" : "admin@safeperu.pe",
+    "password" : "admin2026",
+    "nombreCompleto" : "Administrador",
+    "rol" : "ADMIN",
+    "avatarInicial" : "AD",
+    "fechaRegistro" : "2026-01-01",
+    "admin" : true
+  }, {
+    "id" : 100,
+    "username" : "carlos.castillo",
+    "email" : "carlos.castillo@correo.com",
+    "password" : "pass1234",
+    "nombreCompleto" : "Carlos Castillo",
+    "rol" : "USUARIO",
+    "avatarInicial" : "CC",
+    "fechaRegistro" : "2026-05-07",
+    "admin" : false
+  } ],
+  "reportes" : [ {
+    "id" : 1,
+    "titulo" : "Poste de luz caído en Av. Grau",
+    "descripcion" : "Un poste eléctrico cayó sobre la vía pública bloqueando el tránsito y representando un peligro eléctrico para los transeúntes.",
+    "categoriaId" : 1,
+    "usuarioId" : 1,
+    "ubicacion" : "Av. Grau, Barranco, Lima",
+    "latitud" : -12.1528,
+    "longitud" : -77.0197,
+    "estado" : "PENDIENTE",
+    "fechaCreacion" : "2026-04-11T09:12:00",
+    "categoria" : {
+      "id" : 1,
+      "nombre" : "Emergencia",
+      "icono" : "bi bi-exclamation-triangle-fill",
+      "color" : "#ef4444"
+    },
+    "usuarioNombre" : "Juan Diaz",
+    "usuarioAvatar" : "JD",
+    "usuarioVerificado" : true,
+    "pendiente" : true,
+    "enProceso" : false,
+    "resuelto" : false
+  }, {
+    "id" : 2,
+    "titulo" : "Fuga de agua en Jr. Moquegua",
+    "descripcion" : "Fuga de agua considerable en la tubería principal que afecta la vía pública y desperdicia el recurso hídrico.",
+    "categoriaId" : 2,
+    "usuarioId" : 3,
+    "ubicacion" : "Jr. Moquegua, Cercado de Lima",
+    "latitud" : -12.05,
+    "longitud" : -77.03,
+    "estado" : "EN_PROCESO",
+    "fechaCreacion" : "2026-04-10T16:45:00",
+    "categoria" : {
+      "id" : 2,
+      "nombre" : "Infraestructura",
+      "icono" : "bi bi-building",
+      "color" : "#3b82f6"
+    },
+    "usuarioNombre" : "Carlos Rojas",
+    "usuarioAvatar" : "CR",
+    "usuarioVerificado" : true,
+    "pendiente" : false,
+    "enProceso" : true,
+    "resuelto" : false
+  }, {
+    "id" : 4,
+    "titulo" : "Semáforo dañado en intersección",
+    "descripcion" : "El semáforo de la intersección principal no funciona desde hace 3 días, generando caos vehicular y riesgo de accidentes.",
+    "categoriaId" : 5,
+    "usuarioId" : 1,
+    "ubicacion" : "San Isidro, Lima",
+    "latitud" : -12.0972,
+    "longitud" : -77.0351,
+    "estado" : "PENDIENTE",
+    "fechaCreacion" : "2026-04-08T14:20:00",
+    "categoria" : {
+      "id" : 5,
+      "nombre" : "Tránsito",
+      "icono" : "bi bi-car-front",
+      "color" : "#6b7280"
+    },
+    "usuarioNombre" : "Juan Diaz",
+    "usuarioAvatar" : "JD",
+    "usuarioVerificado" : true,
+    "pendiente" : true,
+    "enProceso" : false,
+    "resuelto" : false
+  } ]
+}
