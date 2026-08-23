@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/base-auth}"
+      lang="es">
+<head>
+  <title>Iniciar Sesión</title>
+</head>
+<body>
+
+  <div layout:fragment="content">
+    <div class="auth-wrapper">
+      <div class="auth-card">
+
+        <!-- Cabecera -->
+        <div class="auth-card-header">
+          <div class="auth-logo-icon">
+            <i class="fa-solid fa-city"></i>
+          </div>
+          <div class="auth-brand-title">SafePeru</div>
+          <div class="auth-brand-sub">Inicia sesión en tu cuenta</div>
+        </div>
+
+        <!-- Cuerpo -->
+        <div class="auth-card-body">
+
+          <!-- Flash messages -->
+          <div th:if="${error}" class="alert-error mb-3">
+            <i class="bi bi-exclamation-circle me-2"></i>
+            <span th:text="${error}"></span>
+          </div>
+          <div th:if="${exito}" class="alert-exito mb-3">
+            <i class="bi bi-check-circle me-2"></i>
+            <span th:text="${exito}"></span>
+          </div>
+
+          <form th:action="@{/login}" method="post" class="needs-validation" novalidate>
+
+            <div class="mb-3">
+              <label class="form-label">Correo Electrónico</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                <input type="email" name="email" class="form-control"
+                       placeholder="usuario@correo.com" required />
+                <div class="invalid-feedback">Ingresa un correo válido.</div>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label">Contraseña</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                <input type="password" name="password" class="form-control"
+                       placeholder="••••••••" required minlength="4" />
+                <div class="invalid-feedback">Ingresa tu contraseña.</div>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-primary-custom">
+              <i class="fa-solid fa-right-to-bracket me-2"></i>Iniciar Sesión
+            </button>
+          </form>
+
+          <div class="auth-divider">¿No tienes cuenta?</div>
+          <div class="text-center">
+            <a th:href="@{/registro}" class="link-teal">Crear cuenta nueva</a>
+          </div>
+          <div class="text-center mt-3">
+            <a th:href="@{/}" class="back-link"><i class="bi bi-arrow-left"></i> Volver al inicio</a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

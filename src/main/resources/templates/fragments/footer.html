@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+    <body>
+
+        <!-- ═══════════════════════════════════════════════════════
+             FRAGMENT: footer  →  th:replace="~{fragments/footer :: footer}"
+             ═══════════════════════════════════════════════════════ -->
+        <footer th:fragment="footer" class="footer-safeperu">
+            <div class="container">
+                <div class="row g-4">
+
+                    <div class="col-md-4">
+                        <div class="footer-brand mb-2">
+                            <i class="fa-solid fa-city"></i>SafePeru
+                        </div>
+                        <p class="footer-desc">
+                            Sistema de reportes ciudadanos para una ciudad más segura y conectada.
+                        </p>
+                        <div class="mt-2">
+                            <a href="#" class="footer-social"><i class="bi bi-facebook"></i></a>
+                            <a href="#" class="footer-social"><i class="bi bi-twitter-x"></i></a>
+                            <a href="#" class="footer-social"><i class="bi bi-instagram"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-md-2">
+                        <div class="footer-section-title">Navegación</div>
+                        <a th:href="@{/dashboard}"            class="footer-link">Inicio</a>
+                        <a th:href="@{/reportes/nuevo}"        class="footer-link">Reportar</a>
+                        <a th:href="@{/reportes/mis-reportes}" class="footer-link">Mis Reportes</a>
+                        <a th:href="@{/acerca-de}"             class="footer-link">Acerca de</a>
+                    </div>
+
+                    <div class="col-6 col-md-3">
+                        <div class="footer-section-title">Contacto</div>
+                        <p class="footer-link"><i class="bi bi-envelope me-2"></i>soporte@safeperu.pe</p>
+                        <p class="footer-link"><i class="bi bi-telephone me-2"></i>+51 952126570</p>
+                        <p class="footer-link"><i class="bi bi-geo-alt me-2"></i>Piura, Perú</p>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="footer-section-title">Emergencias</div>
+                        <p class="footer-emergency-sub">Para emergencias llama al:</p>
+                        <p class="footer-emergency-num">105</p>
+                        <p class="footer-emergency-detail">PNP · Bomberos · Serenazgo</p>
+                    </div>
+
+                </div>
+                <hr class="footer-divider" />
+                <p class="footer-copy text-center mb-0">
+                    © 2026 SafePeru. Todos los derechos reservados. Proyecto Académico.
+                </p>
+            </div>
+        </footer>
+
+    </body>
+</html>
+

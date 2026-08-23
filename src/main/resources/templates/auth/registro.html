@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/base-auth}"
+      lang="es">
+<head>
+  <title>Crear Cuenta</title>
+</head>
+<body>
+
+  <div layout:fragment="content">
+    <div class="auth-wrapper">
+      <div class="auth-card">
+
+        <!-- Cabecera -->
+        <div class="auth-card-header">
+          <div class="auth-logo-icon">
+            <i class="fa-solid fa-city"></i>
+          </div>
+          <div class="auth-brand-title">SafePeru</div>
+          <div class="auth-brand-sub">Crea tu cuenta ciudadana</div>
+        </div>
+
+        <!-- Cuerpo -->
+        <div class="auth-card-body">
+
+          <div th:if="${error}" class="alert-error mb-3">
+            <i class="bi bi-exclamation-circle me-2"></i>
+            <span th:text="${error}"></span>
+          </div>
+
+          <form th:action="@{/registro}" method="post"
+                id="registerForm" class="needs-validation" novalidate>
+
+            <div class="mb-3">
+              <label class="form-label">Nombre Completo</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-person"></i></span>
+                <input type="text" name="nombreCompleto" class="form-control"
+                       placeholder="Ej: Juan Díaz" required minlength="3" />
+                <div class="invalid-feedback">Ingresa tu nombre completo.</div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Correo Electrónico</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                <input type="email" name="email" class="form-control"
+                       placeholder="usuario@correo.com" required />
+                <div class="invalid-feedback">Ingresa un correo válido.</div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Contraseña</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                <input type="password" name="password" id="password"
+                       class="form-control" placeholder="••••••••"
+                       required minlength="8" />
+                <div class="invalid-feedback">Mínimo 8 caracteres.</div>
+              </div>
+              <p class="password-hint">Mínimo 8 caracteres.</p>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label">Confirmar Contraseña</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+                <input type="password" name="confirmPassword" id="confirmPassword"
+                       class="form-control" placeholder="••••••••" required />
+                <div class="invalid-feedback">Las contraseñas no coinciden.</div>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-primary-custom">
+              <i class="fa-solid fa-user-plus me-2"></i>Crear Cuenta
+            </button>
+          </form>
+
+          <div class="auth-divider">¿Ya tienes cuenta?</div>
+          <div class="text-center">
+            <a th:href="@{/login}" class="link-teal">Iniciar sesión</a>
+          </div>
+          <div class="text-center mt-3">
+            <a th:href="@{/}" class="back-link"><i class="bi bi-arrow-left"></i> Volver al inicio</a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Script de validación de contraseñas -->
+  <th:block layout:fragment="scripts-extra">
+    <script>
+      (() => {
+        const form    = document.getElementById('registerForm');
+        const pwd     = document.getElementById('password');
+        const confirm = document.getElementById('confirmPassword');
+
+        form.addEventListener('submit', e => {
+          confirm.setCustomValidity(pwd.value !== confirm.value ? 'no-match' : '');
+          if (!form.checkValidity()) { e.preventDefault(); e.stopPropagation(); }
+          form.classList.add('was-validated');
+        });
+
+        confirm.addEventListener('input', () => confirm.setCustomValidity(''));
+      })();
+    </script>
+  </th:block>
+
+</body>
+</html>
