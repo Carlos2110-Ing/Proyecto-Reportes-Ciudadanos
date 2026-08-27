@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/base-admin}"
+      lang="es">
+<head>
+  <title>Panel Admin</title>
+</head>
+<body>
+
+  <th:block layout:fragment="page-title">Panel de Administración</th:block>
+
+  <div layout:fragment="content">
+
+    <!-- Stats -->
+    <div class="row g-3 mb-4">
+      <div class="col-6 col-md-3">
+        <div class="stat-card">
+          <div class="stat-icon navy"><i class="bi bi-people-fill"></i></div>
+          <div><div class="stat-num" th:text="${totalUsuarios}">0</div><div class="stat-lbl">Usuarios</div></div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-card">
+          <div class="stat-icon teal"><i class="bi bi-patch-check-fill"></i></div>
+          <div><div class="stat-num" th:text="${totalVerificados}">0</div><div class="stat-lbl">Verificados</div></div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-card">
+          <div class="stat-icon orange"><i class="bi bi-flag-fill"></i></div>
+          <div><div class="stat-num" th:text="${totalReportes}">0</div><div class="stat-lbl">Reportes</div></div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-card">
+          <div class="stat-icon red"><i class="bi bi-hourglass-split"></i></div>
+          <div><div class="stat-num" th:text="${pendientes}">0</div><div class="stat-lbl">Pendientes</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabla Usuarios -->
+    <div class="admin-card" id="usuarios">
+      <div class="admin-card-header">
+        <h6><i class="bi bi-people-fill"></i>Gestión de Usuarios y Verificación</h6>
+        <span style="font-size:0.78rem; color:#94a3b8;" th:text="${totalUsuarios} + ' usuarios'"></span>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>Usuario</th>
+              <th>Estado</th>
+              <th>Rol</th>
+              <th>Registro</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="u : ${usuarios}">
+              <td>
+                <div class="d-flex align-items-center gap-2">
+                  <div class="mini-avatar" th:text="${u.avatarInicial}">??</div>
+                  <div>
+                    <div class="user-name"  th:text="${u.nombreCompleto}">Nombre</div>
+                    <div class="user-email" th:text="${u.email}">email</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <th:block th:with="verif=${verificaciones.?[usuarioId == __${u.id}__]}">
+                  <span th:if="${!verif.isEmpty() and verif[0].verificado}" class="verified-pill">
+                    <i class="bi bi-patch-check-fill"></i>Verificado
+                  </span>
+                  <span th:unless="${!verif.isEmpty() and verif[0].verificado}" class="unverified-pill">
+                    <i class="bi bi-clock"></i>Pendiente
+                  </span>
+                </th:block>
+              </td>
+              <td style="font-size:0.8rem; color:#64748b;" th:text="${u.rol}">USUARIO</td>
+              <td style="font-size:0.8rem; color:#94a3b8;" th:text="${u.fechaRegistro}">—</td>
+              <td>
+                <th:block th:with="verif=${verificaciones.?[usuarioId == __${u.id}__]}">
+                  <form th:if="${!verif.isEmpty() and verif[0].verificado}"
+                        th:action="@{/admin/revocar/{id}(id=${u.id})}" method="post" style="display:inline;">
+                    <button type="submit" class="btn-revoke-action">
+                      <i class="bi bi-x me-1"></i>Revocar
+                    </button>
+                  </form>
+                  <form th:unless="${!verif.isEmpty() and verif[0].verificado}"
+                        th:action="@{/admin/verificar/{id}(id=${u.id})}" method="post" style="display:inline;">
+                    <button type="submit" class="btn-verify-action">
+                      <i class="bi bi-check2 me-1"></i>Verificar
+                    </button>
+                  </form>
+                </th:block>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Tabla Reportes -->
+    <div class="admin-card" id="reportes">
+      <div class="admin-card-header">
+        <h6><i class="bi bi-flag-fill"></i>Gestión de Reportes Ciudadanos</h6>
+        <span style="font-size:0.78rem; color:#94a3b8;" th:text="${totalReportes} + ' reportes'"></span>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>Título</th>
+              <th>Usuario</th>
+              <th>Categoría</th>
+              <th>Fecha</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="r : ${ultimosReportes}">
+              <td style="font-weight:600; color:var(--navy); font-size:0.85rem;" th:text="${r.titulo}">—</td>
+              <td>
+                <span style="font-size:0.82rem;" th:text="${r.usuarioNombre}">—</span>
+                <i class="bi bi-patch-check-fill ms-1"
+                   th:if="${r.usuarioVerificado}"
+                   style="color:var(--teal); font-size:0.7rem;"></i>
+              </td>
+              <td>
+                <span style="font-size:0.78rem; font-weight:600;"
+                      th:style="'color:' + (${r.categoria} != null ? ${r.categoria.color} : '#94a3b8')"
+                      th:text="${r.categoria != null} ? ${r.categoria.nombre} : '—'"></span>
+              </td>
+              <td style="font-size:0.8rem; color:#94a3b8;"
+                  th:text="${#strings.substring(r.fechaCreacion,0,10)}">—</td>
+              <td>
+                <form th:action="@{/admin/reportes/estado/{id}(id=${r.id})}" method="post">
+                  <select name="estado" class="estado-select" onchange="this.form.submit()">
+                    <option value="PENDIENTE"  th:selected="${r.pendiente}">Pendiente</option>
+                    <option value="EN_PROCESO" th:selected="${r.enProceso}">En Proceso</option>
+                    <option value="RESUELTO"   th:selected="${r.resuelto}">Resuelto</option>
+                  </select>
+                </form>
+              </td>
+              <td>
+                <form th:action="@{/reportes/eliminar/{id}(id=${r.id})}" method="post"
+                      onsubmit="return confirm('¿Eliminar este reporte?')">
+                  <button type="submit" class="btn-del-report">
+                    <i class="bi bi-trash3 me-1"></i>Eliminar
+                  </button>
+                </form>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
