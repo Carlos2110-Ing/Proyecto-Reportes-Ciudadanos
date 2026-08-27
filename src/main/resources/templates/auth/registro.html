@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/base-auth}"
-      lang="es">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layouts/base-auth}" lang="es">
+
 <head>
   <title>Crear Cuenta</title>
 </head>
+
 <body>
 
   <div layout:fragment="content">
@@ -29,15 +29,14 @@
             <span th:text="${error}"></span>
           </div>
 
-          <form th:action="@{/registro}" method="post"
-                id="registerForm" class="needs-validation" novalidate>
+          <form th:action="@{/registro}" method="post" id="registerForm" class="needs-validation" novalidate>
 
             <div class="mb-3">
               <label class="form-label">Nombre Completo</label>
               <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-person"></i></span>
-                <input type="text" name="nombreCompleto" class="form-control"
-                       placeholder="Ej: Juan Díaz" required minlength="3" />
+                <input type="text" name="nombreCompleto" class="form-control" placeholder="Ej: Juan Díaz" required
+                  minlength="3" />
                 <div class="invalid-feedback">Ingresa tu nombre completo.</div>
               </div>
             </div>
@@ -46,8 +45,7 @@
               <label class="form-label">Correo Electrónico</label>
               <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                <input type="email" name="email" class="form-control"
-                       placeholder="usuario@correo.com" required />
+                <input type="email" name="email" class="form-control" placeholder="usuario@correo.com" required />
                 <div class="invalid-feedback">Ingresa un correo válido.</div>
               </div>
             </div>
@@ -56,20 +54,28 @@
               <label class="form-label">Contraseña</label>
               <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                <input type="password" name="password" id="password"
-                       class="form-control" placeholder="••••••••"
-                       required minlength="8" />
+                <input type="password" name="password" id="password" class="form-control" placeholder="••••••••"
+                  required minlength="8" />
                 <div class="invalid-feedback">Mínimo 8 caracteres.</div>
               </div>
-              <p class="password-hint">Mínimo 8 caracteres.</p>
+              <div class="password-strength">
+                <div class="strength-bar">
+                  <div id="strengthProgress" class="strength-progress"></div>
+                </div>
+                <span id="strengthText" class="strength-text">Ingresa una contraseña</span>
+              </div>
+
+              <p class="password-hint">
+                Usa al menos 8 caracteres, incluyendo mayúsculas, números y símbolos.
+              </p>
             </div>
 
             <div class="mb-4">
               <label class="form-label">Confirmar Contraseña</label>
               <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
-                <input type="password" name="confirmPassword" id="confirmPassword"
-                       class="form-control" placeholder="••••••••" required />
+                <input type="password" name="confirmPassword" id="confirmPassword" class="form-control"
+                  placeholder="••••••••" required />
                 <div class="invalid-feedback">Las contraseñas no coinciden.</div>
               </div>
             </div>
@@ -96,20 +102,94 @@
   <th:block layout:fragment="scripts-extra">
     <script>
       (() => {
-        const form    = document.getElementById('registerForm');
-        const pwd     = document.getElementById('password');
+        const form = document.getElementById('registerForm');
+        const pwd = document.getElementById('password');
         const confirm = document.getElementById('confirmPassword');
 
+        const strengthProgress = document.getElementById('strengthProgress');
+        const strengthText = document.getElementById('strengthText');
+
+        // Evaluar seguridad de la contraseña
+        pwd.addEventListener('input', () => {
+
+          const password = pwd.value;
+          let strength = 0;
+
+          // Longitud
+          if (password.length >= 8) {
+            strength++;
+          }
+
+          // Minúsculas
+          if (/[a-z]/.test(password)) {
+            strength++;
+          }
+
+          // Mayúsculas
+          if (/[A-Z]/.test(password)) {
+            strength++;
+          }
+
+          // Números
+          if (/[0-9]/.test(password)) {
+            strength++;
+          }
+
+          // Caracteres especiales
+          if (/[^A-Za-z0-9]/.test(password)) {
+            strength++;
+          }
+
+          // Actualizar barra
+          if (password.length === 0) {
+
+            strengthProgress.style.width = '0%';
+            strengthProgress.style.backgroundColor = '#e5e7eb';
+            strengthText.textContent = 'Ingresa una contraseña';
+
+          } else if (strength <= 2) {
+
+            strengthProgress.style.width = '33%';
+            strengthProgress.style.backgroundColor = '#ef4444';
+            strengthText.textContent = 'Contraseña débil';
+
+          } else if (strength <= 4) {
+
+            strengthProgress.style.width = '66%';
+            strengthProgress.style.backgroundColor = '#f59e0b';
+            strengthText.textContent = 'Contraseña media';
+
+          } else {
+
+            strengthProgress.style.width = '100%';
+            strengthProgress.style.backgroundColor = '#22c55e';
+            strengthText.textContent = 'Contraseña fuerte';
+          }
+        });
+
+        // Validar que ambas contraseñas coincidan
         form.addEventListener('submit', e => {
-          confirm.setCustomValidity(pwd.value !== confirm.value ? 'no-match' : '');
-          if (!form.checkValidity()) { e.preventDefault(); e.stopPropagation(); }
+
+          confirm.setCustomValidity(
+            pwd.value !== confirm.value ? 'no-match' : ''
+          );
+
+          if (!form.checkValidity()) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+
           form.classList.add('was-validated');
         });
 
-        confirm.addEventListener('input', () => confirm.setCustomValidity(''));
+        confirm.addEventListener('input', () => {
+          confirm.setCustomValidity('');
+        });
+
       })();
     </script>
   </th:block>
 
 </body>
+
 </html>
