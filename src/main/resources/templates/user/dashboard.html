@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/base-user}"
+      lang="es">
+<head>
+  <title>Dashboard</title>
+  <th:block layout:fragment="head-extra">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  </th:block>
+</head>
+<body>
+
+  <!-- Página activa para el navbar -->
+  <th:block layout:fragment="activePageValue">dashboard</th:block>
+
+  <div layout:fragment="content">
+
+    <!-- Stats -->
+    <div class="row g-3 mb-4">
+      <div class="col-6 col-md-3">
+        <div class="stat-card">
+          <div class="stat-icon teal"><i class="bi bi-flag-fill"></i></div>
+          <div>
+            <div class="stat-num" th:text="${totalReportes}">0</div>
+            <div class="stat-lbl">Reportes Totales</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-card">
+          <div class="stat-icon orange"><i class="bi bi-clock-fill"></i></div>
+          <div>
+            <div class="stat-num" th:text="${pendientes}">0</div>
+            <div class="stat-lbl">Pendientes</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-card">
+          <div class="stat-icon navy"><i class="bi bi-arrow-repeat"></i></div>
+          <div>
+            <div class="stat-num" th:text="${enProceso}">0</div>
+            <div class="stat-lbl">En Proceso</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-card">
+          <div class="stat-icon green"><i class="bi bi-check-circle-fill"></i></div>
+          <div>
+            <div class="stat-num" th:text="${resueltos}">0</div>
+            <div class="stat-lbl">Resueltos</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mapa Leaflet -->
+    <div class="d-flex align-items-center justify-content-between mb-2">
+      <h5 class="section-title mb-0"><i class="bi bi-map-fill"></i>Mapa de Incidentes</h5>
+      <span style="font-size:0.78rem; color:#94a3b8;">Lima Metropolitana</span>
+    </div>
+    <div class="map-wrapper mb-4">
+      <div id="map"></div>
+    </div>
+
+    <!-- Feed últimos reportes -->
+    <div class="d-flex align-items-center justify-content-between mb-3">
+      <h5 class="section-title mb-0"><i class="bi bi-rss-fill"></i>Últimos Reportes</h5>
+      <a th:href="@{/reportes/nuevo}" class="btn-teal">
+        <i class="bi bi-plus"></i>Nuevo Reporte
+      </a>
+    </div>
+
+    <div class="row g-3">
+      <div th:each="r : ${ultimosReportes}" class="col-md-4">
+        <div class="report-card">
+          <span class="report-category"
+                th:style="'color:' + (${r.categoria} != null ? ${r.categoria.color} : '#94a3b8')">
+            <i th:class="${r.categoria != null} ? ${r.categoria.icono} : 'bi bi-tag'"></i>
+            <span th:text="${r.categoria != null} ? ${r.categoria.nombre} : 'Sin categoría'"></span>
+          </span>
+          <div class="report-title" th:text="${r.titulo}">Título</div>
+          <div class="report-meta">
+            <i class="bi bi-person-fill"></i>
+            <span th:text="${r.usuarioNombre}">Usuario</span>
+            <i class="bi bi-patch-check-fill ms-1"
+               th:if="${r.usuarioVerificado}"
+               style="color:var(--teal); font-size:0.7rem;" title="Verificado"></i>
+          </div>
+          <div class="report-meta">
+            <i class="bi bi-geo-alt-fill"></i>
+            <span th:text="${r.ubicacion}">Ubicación</span>
+          </div>
+          <div class="report-meta">
+            <i class="bi bi-calendar3"></i>
+            <span th:text="${#strings.substring(r.fechaCreacion,0,10)}">Fecha</span>
+          </div>
+          <div class="report-footer">
+            <span th:if="${r.pendiente}"  class="badge-pendiente"><i class="bi bi-hourglass me-1"></i>Pendiente</span>
+            <span th:if="${r.enProceso}"  class="badge-en-proceso"><i class="bi bi-arrow-repeat me-1"></i>En Proceso</span>
+            <span th:if="${r.resuelto}"   class="badge-resuelto"><i class="bi bi-check2 me-1"></i>Resuelto</span>
+          </div>
+        </div>
+      </div>
+
+      <div th:if="${#lists.isEmpty(ultimosReportes)}" class="col-12 text-center py-4 text-muted">
+        <i class="bi bi-inbox" style="font-size:2rem;"></i>
+        <p class="mt-2">No hay reportes aún.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Script Leaflet -->
+  <th:block layout:fragment="scripts-extra">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script th:inline="javascript">
+      /*<![CDATA[*/
+      const reportes = /*[[${todosReportes}]]*/ [];
+
+      const map = L.map('map').setView([-12.0464, -77.0428], 12);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+      }).addTo(map);
+
+      const colorEstado = { 'PENDIENTE': '#f57c00', 'EN_PROCESO': '#20b2aa', 'RESUELTO': '#388e3c' };
+
+      reportes.forEach(r => {
+        if (!r.latitud || !r.longitud) return;
+        const color = colorEstado[r.estado] || '#94a3b8';
+        const icon = L.divIcon({
+          className: '',
+          html: `<div style="width:14px;height:14px;border-radius:50%;background:${color};border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,0.35);"></div>`,
+          iconSize: [14, 14], iconAnchor: [7, 7]
+        });
+        const estadoLabel = { 'PENDIENTE': 'Pendiente', 'EN_PROCESO': 'En Proceso', 'RESUELTO': 'Resuelto' }[r.estado] || r.estado;
+        L.marker([r.latitud, r.longitud], { icon }).addTo(map).bindPopup(`
+          <div class="popup-title">${r.titulo}</div>
+          <div class="popup-meta"><b>Categoría:</b> ${r.categoria ? r.categoria.nombre : '—'}</div>
+          <div class="popup-meta"><b>Ubicación:</b> ${r.ubicacion}</div>
+          <div class="popup-meta"><b>Estado:</b> <span style="color:${color};font-weight:700;">${estadoLabel}</span></div>
+          <div class="popup-meta"><b>Fecha:</b> ${r.fechaCreacion ? r.fechaCreacion.substring(0,10) : '—'}</div>
+        `);
+      });
+      /*]]>*/
+    </script>
+  </th:block>
+
+</body>
+</html>
