@@ -2,12 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.safeperu.controller;
+package com.utp.reportes_ciudadanos.controller;
 
-import com.safeperu.model.Reporte;
-import com.safeperu.model.Usuario;
-import com.safeperu.service.ReporteService;
-import com.safeperu.service.UsuarioService;
+import com.utp.reportes_ciudadanos.model.Reporte;
+import com.utp.reportes_ciudadanos.model.Usuario;
+import com.utp.reportes_ciudadanos.service.ReporteService;
+import com.utp.reportes_ciudadanos.service.UsuarioService;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import java.util.stream.Collectors;
