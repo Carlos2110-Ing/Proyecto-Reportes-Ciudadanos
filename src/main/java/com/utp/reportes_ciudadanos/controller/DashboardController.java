@@ -28,6 +28,14 @@ public class DashboardController {
     public String dashboard(HttpSession session, Model model) {
         if (session.getAttribute("usuarioId") == null) return "redirect:/login";
 
+        // Verificar si acaba de iniciar sesión
+        Object loginExitoso = session.getAttribute("loginExitoso");
+
+        if (loginExitoso != null) {
+            model.addAttribute("loginExitoso", loginExitoso);
+            session.removeAttribute("loginExitoso");
+        }
+
         // Stats globales
         model.addAttribute("totalReportes",    reporteService.countTotal());
         model.addAttribute("pendientes",       reporteService.countPendiente());

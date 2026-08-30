@@ -1,21 +1,20 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/base-user}"
-      lang="es">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layouts/base-user}" lang="es">
+
 <head>
   <title>Dashboard</title>
   <th:block layout:fragment="head-extra">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   </th:block>
 </head>
+
 <body>
 
   <!-- Página activa para el navbar -->
   <th:block layout:fragment="activePageValue">dashboard</th:block>
 
   <div layout:fragment="content">
-
     <!-- Stats -->
     <div class="row g-3 mb-4">
       <div class="col-6 col-md-3">
@@ -77,7 +76,7 @@
       <div th:each="r : ${ultimosReportes}" class="col-md-4">
         <div class="report-card">
           <span class="report-category"
-                th:style="'color:' + (${r.categoria} != null ? ${r.categoria.color} : '#94a3b8')">
+            th:style="'color:' + (${r.categoria} != null ? ${r.categoria.color} : '#94a3b8')">
             <i th:class="${r.categoria != null} ? ${r.categoria.icono} : 'bi bi-tag'"></i>
             <span th:text="${r.categoria != null} ? ${r.categoria.nombre} : 'Sin categoría'"></span>
           </span>
@@ -85,9 +84,8 @@
           <div class="report-meta">
             <i class="bi bi-person-fill"></i>
             <span th:text="${r.usuarioNombre}">Usuario</span>
-            <i class="bi bi-patch-check-fill ms-1"
-               th:if="${r.usuarioVerificado}"
-               style="color:var(--teal); font-size:0.7rem;" title="Verificado"></i>
+            <i class="bi bi-patch-check-fill ms-1" th:if="${r.usuarioVerificado}"
+              style="color:var(--teal); font-size:0.7rem;" title="Verificado"></i>
           </div>
           <div class="report-meta">
             <i class="bi bi-geo-alt-fill"></i>
@@ -112,7 +110,62 @@
     </div>
 
   </div>
+<div th:if="${loginExitoso}"
+     class="modal fade"
+     id="modalBienvenida"
+     tabindex="-1"
+     aria-labelledby="modalBienvenidaLabel"
+     aria-hidden="true">
 
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalBienvenidaLabel">
+                    <i class="fa-solid fa-circle-check me-2"></i>
+                    ¡Bienvenido!
+                </h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Cerrar">
+                </button>
+            </div>
+
+            <div class="modal-body text-center">
+
+                <div class="mb-3">
+                    <i class="fa-solid fa-circle-user"
+                       style="font-size: 4rem;"></i>
+                </div>
+
+                <h4>
+                    ¡Hola,
+                    <span th:text="${session.usuarioNombre}">Usuario</span>!
+                </h4>
+
+                <p class="text-muted mb-0">
+                    Has iniciado sesión correctamente en SafePeru.
+                </p>
+
+            </div>
+
+            <div class="modal-footer justify-content-center">
+
+                <button type="button"
+                        class="btn-primary-custom"
+                        data-bs-dismiss="modal">
+                    <i class="fa-solid fa-arrow-right me-2"></i>
+                    Ir al Dashboard
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+</div>
   <!-- Script Leaflet -->
   <th:block layout:fragment="scripts-extra">
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -146,6 +199,19 @@
       });
       /*]]>*/
     </script>
+
+    <script th:if="${loginExitoso}">
+    document.addEventListener("DOMContentLoaded", function () {
+
+      const modalElement = document.getElementById("modalBienvenida");
+
+      if (modalElement) {
+        const modal = new bootstrap.Modal(modalElement);
+        modal.show();
+      }
+
+    });
+  </script>
   </th:block>
 
 </body>

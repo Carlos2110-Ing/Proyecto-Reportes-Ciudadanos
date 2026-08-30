@@ -56,7 +56,7 @@ public class AuthController {
         session.setAttribute("usuarioRol",    u.getRol().name());
         session.setAttribute("verificado",    usuarioService.isVerificado(u.getId()));
         
-        redirectAttributes.addFlashAttribute("loginExitoso", true);
+        session.setAttribute("loginExitoso", true);
         
         return u.isAdmin() ? "redirect:/admin" : "redirect:/dashboard";
     }
