@@ -1,1 +1,5 @@
+<<<<<<< HEAD
+PUERTO = 5000
+=======
 PUERTO = 8080
+>>>>>>> feature/configuracion
