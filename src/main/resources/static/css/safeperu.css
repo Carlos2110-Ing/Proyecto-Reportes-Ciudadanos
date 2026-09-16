@@ -1487,3 +1487,312 @@ body.admin-body {
     transition: none;
   }
 }
+
+/*ANIMACIONES - ACERCA DE */
+/*1. Animación general de entrada*/
+.about-animate {
+  animation: aboutFadeUp 0.7s ease both;
+}
+
+/* * Retrasos para que los elementos aparezcan progresivamente. */
+.about-animate:nth-child(1) {
+  animation-delay: 0.05s;
+}
+
+.about-animate:nth-child(2) {
+  animation-delay: 0.12s;
+}
+
+.about-animate:nth-child(3) {
+  animation-delay: 0.19s;
+}
+
+.about-animate:nth-child(4) {
+  animation-delay: 0.26s;
+}
+
+.about-animate:nth-child(5) {
+  animation-delay: 0.33s;
+}
+
+@keyframes aboutFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/*2. Animación del icono principal*/
+.about-hero-icon {
+  animation: heroIconAppear 0.8s ease both, heroIconFloat 3s ease-in-out 1s infinite;
+}
+
+@keyframes heroIconAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.7) rotate(-8deg);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0);
+  }
+}
+
+@keyframes heroIconFloat {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+/*3. Tarjetas de los pilares*/
+.pillar-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pillar-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 25px rgba(27, 43, 75, 0.10);
+}
+
+/* * Animación del icono al pasar el mouse. */
+.pillar-card .about-card-icon {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pillar-card:hover .about-card-icon {
+  transform: scale(1.08) rotate(-4deg);
+  box-shadow: 0 6px 15px rgba(27, 43, 75, 0.10);
+}
+
+/*4. ¿Cómo funciona?*/
+.how-it-works-card {
+  overflow: hidden;
+}
+
+.process-step {
+  position: relative;
+  text-align: center;
+  padding: 10px 20px;
+  height: 100%;
+}
+
+/* * Número 01, 02, 03 */
+.process-number {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--teal);
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+
+/* * Icono del proceso */
+.process-icon {
+  width: 58px;
+  height: 58px;
+  margin: 0 auto 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--teal-light);
+  color: var(--teal);
+  font-size: 1.35rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.process-step:hover .process-icon {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 8px 18px rgba(32, 178, 170, 0.18);
+}
+
+.process-step h5 {
+  color: var(--navy);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.process-step p {
+  color: #64748b;
+  font-size: 0.88rem;
+  line-height: 1.7;
+  margin: 0;
+}
+
+/*5. Descripción de "¿Por qué nació?"*/
+.about-description-card p {
+  font-size: 0.92rem;
+  color: #475569;
+  line-height: 1.8;
+  margin-bottom: 1rem;
+}
+
+.about-description-card p:last-child {
+  margin-bottom: 0;
+}
+
+/*6. Timeline*/
+.timeline {
+  position: relative;
+  padding-left: 25px;
+}
+
+/* * Línea vertical */
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 5px;
+  bottom: 5px;
+  width: 2px;
+  background: rgba(32, 178, 170, 0.20);
+  transform-origin: top;
+  animation: timelineLine 1.5s ease both;
+}
+
+@keyframes timelineLine {
+  from {
+    transform: scaleY(0);
+  }
+
+  to {
+    transform: scaleY(1);
+  }
+}
+
+/* * Cada elemento de la historia */
+.timeline-item {
+  position: relative;
+  padding-left: 15px;
+  padding-bottom: 25px;
+  opacity: 0;
+  animation: timelineItemAppear 0.5s ease forwards;
+}
+
+/* * Retraso de cada etapa */
+.timeline-item:nth-child(1) {
+  animation-delay: 0.3s;
+}
+
+.timeline-item:nth-child(2) {
+  animation-delay: 0.55s;
+}
+
+.timeline-item:nth-child(3) {
+  animation-delay: 0.8s;
+}
+
+.timeline-item:nth-child(4) {
+  animation-delay: 1.05s;
+}
+
+@keyframes timelineItemAppear {
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* * Punto de cada etapa */
+.timeline-item::before {
+  content: "";
+  position: absolute;
+  left: -25px;
+  top: 3px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: var(--teal);
+  border: 3px solid #ffffff;
+  box-shadow: 0 0 0 2px rgba(32, 178, 170, 0.20);
+}
+
+/*7. Equipo*/
+.team-card {
+  text-align: center;
+  padding: 25px 15px;
+  border-radius: 12px;
+  background: #ffffff;
+  border: 1px solid rgba(27, 43, 75, 0.07);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.team-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 22px rgba(27, 43, 75, 0.10);
+}
+
+/* * Avatar */
+.team-avatar {
+  width: 58px;
+  height: 58px;
+  margin: 0 auto 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--navy);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1rem;
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.team-card:hover .team-avatar {
+  transform: scale(1.08) rotate(3deg);
+  background: var(--teal);
+}
+
+.team-name {
+  color: var(--navy);
+  font-weight: 700;
+  font-size: 0.92rem;
+}
+
+.team-role {
+  color: #64748b;
+  font-size: 0.78rem;
+  margin-top: 4px;
+}
+
+/*8. Animaciones accesibles*/
+/* * Si el usuario tiene activada la opción del sistema * para reducir movimiento, eliminamos las animaciones. */
+@media (prefers-reduced-motion: reduce) {
+
+  .about-animate,
+  .about-hero-icon,
+  .timeline::before,
+  .timeline-item {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .pillar-card,
+  .pillar-card .about-card-icon,
+  .process-icon,
+  .team-card,
+  .team-avatar {
+    transition: none;
+  }
+}
+
+.about-history-section {
+    margin-top: 1rem;
+}

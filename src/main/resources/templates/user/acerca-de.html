@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/base-user}"
-      lang="es">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layouts/base-user}" lang="es">
+
 <head>
   <title>Acerca de</title>
 </head>
+
 <body>
 
   <th:block layout:fragment="activePageValue">acerca-de</th:block>
@@ -17,17 +17,23 @@
       <div class="about-hero-icon"><i class="fa-solid fa-city"></i></div>
       <div class="about-hero-title">Acerca de SafePeru</div>
       <p class="about-hero-sub">
-        Una plataforma nacida de la necesidad de conectar a los ciudadanos con las autoridades para construir comunidades más seguras.
+        Una plataforma nacida de la necesidad de conectar a los ciudadanos con las autoridades para construir
+        comunidades más seguras.
       </p>
     </div>
 
     <!-- ¿Por qué? -->
     <div class="section-title"><i class="bi bi-question-circle-fill"></i>¿Por qué nació SafePeru?</div>
-    <div class="about-card mb-4">
-      <p style="font-size:0.92rem; color:#475569; line-height:1.8; margin:0;">
-        SafePeru nació como respuesta a una problemática real: la falta de un canal directo, rápido y confiable para que los ciudadanos peruanos reporten incidentes en su entorno. En muchos distritos, problemas como baches, alumbrado público defectuoso, fugas de agua o situaciones de riesgo quedan sin atención durante semanas porque no existe un mecanismo ágil de comunicación entre la comunidad y las autoridades locales.
+    <div class="about-card about-animate about-description-card mb-4">
+      <p>
+        SafePeru nació como respuesta a una problemática real: la falta de un canal directo, rápido y confiable para que
+        los ciudadanos peruanos reporten incidentes en su entorno. En muchos distritos, problemas como baches, alumbrado
+        público defectuoso, fugas de agua o situaciones de riesgo quedan sin atención durante semanas porque no existe
+        un mecanismo ágil de comunicación entre la comunidad y las autoridades locales.
         <br /><br />
-        Este proyecto fue desarrollado como iniciativa académica para demostrar que la tecnología puede ser un puente entre el ciudadano y el Estado, promoviendo la participación activa, la transparencia y la construcción colectiva de ciudades más habitables.
+        Este proyecto fue desarrollado como iniciativa académica para demostrar que la tecnología puede ser un puente
+        entre el ciudadano y el Estado, promoviendo la participación activa, la transparencia y la construcción
+        colectiva de ciudades más habitables.
       </p>
     </div>
 
@@ -35,45 +41,78 @@
     <div class="section-title"><i class="bi bi-layers-fill"></i>Nuestros Pilares</div>
     <div class="row g-3 mb-4">
       <div class="col-6 col-md-3">
-        <div class="about-card">
-          <div class="about-card-icon" style="background:var(--teal-light); color:var(--teal);"><i class="bi bi-safe2"></i></div>
+        <div class="about-card pillar-card about-animate">
+          <div class="about-card-icon pillar-security"><i class="bi bi-safe2"></i></div>
           <h5>Seguridad</h5>
           <p>Reportes gestionados con integridad y protección de datos del ciudadano.</p>
         </div>
       </div>
       <div class="col-6 col-md-3">
-        <div class="about-card">
-          <div class="about-card-icon" style="background:rgba(27,43,75,0.08); color:var(--navy);"><i class="bi bi-people-fill"></i></div>
+        <div class="about-card pillar-card about-animate">
+          <div class="about-card-icon pillar-community"><i class="bi bi-people-fill"></i></div>
           <h5>Comunidad</h5>
           <p>Fomentamos la participación ciudadana como motor del cambio social.</p>
         </div>
       </div>
       <div class="col-6 col-md-3">
-        <div class="about-card">
-          <div class="about-card-icon" style="background:#fff3e0; color:#f57c00;"><i class="bi bi-lightning-charge-fill"></i></div>
+        <div class="about-card pillar-card about-animate">
+          <div class="about-card-icon pillar-speed"><i class="bi bi-lightning-charge-fill"></i></div>
           <h5>Agilidad</h5>
           <p>Reportes procesados en tiempo real para una respuesta oportuna.</p>
         </div>
       </div>
       <div class="col-6 col-md-3">
-        <div class="about-card">
-          <div class="about-card-icon" style="background:#e8f5e9; color:#388e3c;"><i class="bi bi-patch-check-fill"></i></div>
+        <div class="about-card pillar-card about-animate">
+          <div class="about-card-icon pillar-reliable"><i class="bi bi-patch-check-fill"></i></div>
           <h5>Confiabilidad</h5>
           <p>Sistema de verificación de cuentas para garantizar la veracidad.</p>
         </div>
       </div>
     </div>
 
-    <div class="row g-4">
+    <!-- ==================== ¿CÓMO FUNCIONA? ==================== -->
+    <div class="section-title about-animate"> <i class="bi bi-diagram-3-fill"></i> ¿Cómo funciona SafePeru? </div>
+    <div class="about-card how-it-works-card about-animate">
+      <div class="row g-4">
+        <!-- Paso 1 -->
+        <div class="col-md-4">
+          <div class="process-step">
+            <div class="process-number"> 01 </div>
+            <div class="process-icon"> <i class="bi bi-geo-alt-fill"></i> </div>
+            <h5>Reporta</h5>
+            <p> Registra un incidente indicando su ubicación, categoría y descripción. </p>
+          </div>
+        </div> <!-- Paso 2 -->
+        <div class="col-md-4">
+          <div class="process-step">
+            <div class="process-number"> 02 </div>
+            <div class="process-icon"> <i class="bi bi-file-text-fill"></i> </div>
+            <h5>Describe</h5>
+            <p> Proporciona información que permita comprender mejor el problema reportado. </p>
+          </div>
+        </div> <!-- Paso 3 -->
+        <div class="col-md-4">
+          <div class="process-step">
+            <div class="process-number"> 03 </div>
+            <div class="process-icon"> <i class="bi bi-search"></i> </div>
+            <h5>Consulta</h5>
+            <p> Realiza seguimiento al estado de tu reporte desde tu cuenta. </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-4 about-history-section">
       <!-- Timeline -->
       <div class="col-md-6">
-        <div class="section-title"><i class="bi bi-clock-history"></i>Historia del Proyecto</div>
-        <div class="about-card">
+        <div class="section-title about-animate"><i class="bi bi-clock-history"></i>Historia del Proyecto</div>
+        <div class="about-card about-animate">
           <div class="timeline">
             <div class="timeline-item">
               <div class="timeline-date">Marzo 2026</div>
               <div class="timeline-text">Identificación del problema</div>
-              <div class="timeline-desc">Investigación sobre la falta de canales ciudadanos en distritos de Lima y provincias.</div>
+              <div class="timeline-desc">Investigación sobre la falta de canales ciudadanos en distritos de Lima y
+                provincias.</div>
             </div>
             <div class="timeline-item">
               <div class="timeline-date">Abril 2026</div>
@@ -96,33 +135,27 @@
 
       <!-- Equipo -->
       <div class="col-md-6">
-        <div class="section-title"><i class="bi bi-person-workspace"></i>Equipo de Desarrollo</div>
+        <div class="section-title about-animate"><i class="bi bi-person-workspace"></i>Equipo de Desarrollo</div>
         <div class="row g-2">
-            <div class="col-6">
-                <div class="team-card">
-                    <div class="team-avatar">IS</div>
-                    <div class="team-name">Irvin Sosa</div>
-                    <div class="team-role">Frontend Developer</div>
-                </div>
+          <div class="col-6">
+            <div class="team-card about-animate">
+              <div class="team-avatar">IS</div>
+              <div class="team-name">Irvin Sosa</div>
+              <div class="team-role">Frontend Developer</div>
             </div>
-            <div class="col-6">
-                <div class="team-card">
-                    <div class="team-avatar">CC</div>
-                    <div class="team-name">Carlos Castillo</div>
-                    <div class="team-role">Backend Developer</div>
-                </div>
+          </div>
+          <div class="col-6">
+            <div class="team-card about-animate">
+              <div class="team-avatar">CC</div>
+              <div class="team-name">Carlos Castillo</div>
+              <div class="team-role">Backend Developer</div>
             </div>
-            <div class="col-6">
-                <div class="team-card">
-                    <div class="team-avatar">EF</div>
-                    <div class="team-name">Eduardo Flores</div>
-                    <div class="team-role">UX / UI Designer</div>
-                </div>
-            </div>
+          </div>
+        </div>
       </div>
+
     </div>
 
-  </div>
-
 </body>
+
 </html>
