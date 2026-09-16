@@ -1,5 +1,612 @@
-<<<<<<< HEAD
-PUERTO = 5000
-=======
-PUERTO = 8080
->>>>>>> feature/configuracion
+# ============================================================
+# SAFEPERU - CONFIGURACIÓN Y CONTEXTO DEL PROYECTO
+# ============================================================
+
+## 1. INFORMACIÓN GENERAL
+
+Nombre del proyecto:
+SafePeru
+
+Nombre completo:
+Sistema de Reportes Ciudadanos
+
+Tipo de proyecto:
+Proyecto académico de desarrollo web.
+
+Objetivo principal:
+Crear una plataforma web que permita a los ciudadanos registrar,
+consultar y gestionar reportes relacionados con problemas o incidentes
+que ocurren en su entorno, facilitando la participación ciudadana y
+la comunicación mediante un sistema organizado de reportes.
+
+Idea principal:
+SafePeru busca funcionar como un puente tecnológico entre los
+ciudadanos y la gestión de incidencias de una comunidad.
+
+El sistema permite registrar situaciones como:
+
+* Problemas de infraestructura.
+* Situaciones de seguridad.
+* Problemas ambientales.
+* Problemas de tránsito.
+* Emergencias u otros incidentes ciudadanos.
+
+IMPORTANTE:
+SafePeru es un proyecto académico/prototipo. No debe presentarse como
+una plataforma oficial del Estado peruano ni como un sistema conectado
+realmente con municipalidades o autoridades gubernamentales.
+
+# ============================================================
+# 2. TECNOLOGÍAS
+# ============================================================
+
+Backend:
+* Java
+* Spring Boot
+* Spring MVC
+* Bean Validation
+
+Frontend:
+* HTML
+* CSS
+* JavaScript
+* Thymeleaf
+* Bootstrap 5
+* Bootstrap Icons
+* Font Awesome
+
+Mapas:
+* Leaflet
+
+Persistencia:
+El proyecto ha tenido dos etapas:
+
+Backend utilizando archivos JSON como almacenamiento.
+
+# ============================================================
+# 3. IDENTIDAD VISUAL
+# ============================================================
+
+La interfaz debe mantener una apariencia moderna, limpia y
+profesional.
+
+Colores principales:
+
+--navy:
+#1b2b4b
+
+--teal:
+#20b2aa
+
+--background:
+#f8fafc
+
+Otros colores utilizados para estados:
+
+PENDIENTE:
+#f57c00
+
+EN_PROCESO:
+#20b2aa
+
+RESUELTO:
+#388e3c
+
+Tipografía principal:
+Urbanist
+
+La interfaz utiliza principalmente:
+
+* Bordes redondeados.
+* Tarjetas.
+* Sombras suaves.
+* Espaciado amplio.
+* Iconos.
+* Animaciones discretas.
+* Diseño responsive.
+
+IMPORTANTE:
+Las animaciones deben ser sutiles y profesionales.
+No utilizar animaciones excesivamente llamativas que afecten la
+usabilidad o hagan que la plataforma parezca un sitio de entretenimiento.
+
+# ============================================================
+# 4. ESTRUCTURA GENERAL DEL SISTEMA
+# ============================================================
+
+El sistema se organiza conceptualmente en:
+
+Usuario
+|
+v
+Autenticación
+|
+v
+Dashboard
+|
++---- Reportes
+|
++---- Crear reporte
+|
++---- Mis reportes
+|
++---- Perfil
+|
++---- Acerca de
+|
++---- Administración (según permisos)
+
+# ============================================================
+# 5. AUTENTICACIÓN Y USUARIOS
+# ============================================================
+
+El sistema permite:
+
+* Registrar usuarios.
+* Iniciar sesión.
+* Gestionar sesión.
+* Manejar roles.
+* Manejar permisos.
+* Acceder al perfil.
+* Verificar cuentas.
+* Gestionar contraseñas.
+
+Datos principales de usuario:
+
+* id
+* nombre
+* apellido
+* DNI
+* correo
+* password
+* verificado
+* puntaje
+
+La contraseña NO debe mostrarse en respuestas de API ni en vistas.
+
+Cuando se trabaja con la versión JSON, las contraseñas se almacenan
+utilizando un mecanismo de hash con salt.
+
+IMPORTANTE:
+Nunca mostrar contraseñas en DTOs de respuesta.
+
+# ============================================================
+# 6. ROLES Y PERMISOS
+# ============================================================
+
+SafePeru utiliza un sistema de roles y permisos.
+
+La idea es que el acceso no dependa únicamente de ocultar botones
+en el frontend.
+
+La seguridad debe validarse también en el backend.
+
+Ejemplos de rutas:
+
+/login
+/registro
+/dashboard
+/perfil
+/admin
+
+Las rutas públicas deben poder utilizarse sin autenticación.
+
+Las rutas privadas requieren una sesión/autenticación válida.
+
+Las rutas administrativas requieren los permisos correspondientes.
+
+# ============================================================
+# 7. DASHBOARD
+# ============================================================
+
+El dashboard es la pantalla principal después de iniciar sesión.
+
+Actualmente contempla estadísticas como:
+
+* Total de reportes.
+* Reportes pendientes.
+* Reportes en proceso.
+* Reportes resueltos.
+
+También puede mostrar:
+
+* Últimos reportes.
+* Todos los reportes disponibles.
+* Ubicación de reportes en un mapa.
+
+El mapa utiliza Leaflet.
+
+Vista inicial utilizada como referencia:
+
+Latitud:
+-12.0464
+
+Longitud:
+-77.0428
+
+Zoom:
+12
+
+Los reportes pueden representarse mediante marcadores.
+
+Los estados poseen una representación visual:
+
+PENDIENTE:
+naranja
+
+EN_PROCESO:
+turquesa
+
+RESUELTO:
+verde
+
+# ============================================================
+# 8. REPORTES CIUDADANOS
+# ============================================================
+
+El reporte es una de las entidades principales del sistema.
+
+Un reporte puede contener información como:
+
+* Identificador.
+* Título.
+* Categoría.
+* Descripción.
+* Dirección o referencia.
+* Latitud.
+* Longitud.
+* Estado.
+* Usuario que lo creó.
+* Fecha de creación.
+* Otros datos relacionados.
+
+Categorías principales:
+
+* Emergencia
+* Infraestructura
+* Seguridad
+* Medio Ambiente
+* Tránsito
+
+Estados principales:
+
+* PENDIENTE
+* EN_PROCESO
+* RESUELTO
+
+# ============================================================
+# 9. CRUD DE REPORTES
+# ============================================================
+
+El sistema contempla operaciones CRUD:
+
+CREATE:
+Crear un nuevo reporte.
+
+READ:
+Consultar reportes.
+
+UPDATE:
+Modificar información de un reporte.
+
+DELETE:
+Eliminar un reporte.
+
+La persistencia debe conservar los cambios.
+
+Por ejemplo:
+
+POST:
+crea un registro.
+
+PUT:
+actualiza un registro existente.
+
+DELETE:
+elimina un registro.
+
+GET:
+consulta información.
+
+# ============================================================
+# 10. MAPA
+# ============================================================
+
+El sistema utiliza Leaflet para representar ubicaciones.
+
+Cuando un usuario crea un reporte puede indicar:
+
+* Dirección o referencia.
+* Latitud.
+* Longitud.
+
+Los reportes pueden mostrarse mediante marcadores.
+
+El mapa debe integrarse de forma visual con la interfaz de SafePeru.
+
+Evitar sobrecargar el mapa con elementos innecesarios.
+
+# ============================================================
+# 11. PÁGINAS PRINCIPALES
+# ============================================================
+
+Página de inicio:
+Presenta la plataforma y permite acceder al sistema.
+
+Login:
+Permite iniciar sesión.
+
+Registro:
+Permite crear una nueva cuenta.
+
+Dashboard:
+Muestra el resumen de actividad y los reportes.
+
+Crear reporte:
+Permite registrar un nuevo incidente.
+
+Mis reportes:
+Permite consultar los reportes realizados por el usuario.
+
+Perfil:
+Permite consultar información del usuario.
+
+Acerca de:
+Explica el propósito, pilares, funcionamiento, historia y equipo
+del proyecto.
+
+Administración:
+Permite funciones administrativas según los permisos del usuario.
+
+# ============================================================
+# 12. PÁGINA "ACERCA DE"
+# ============================================================
+
+La página explica:
+
+* Qué es SafePeru.
+* Por qué nació el proyecto.
+* Los pilares del sistema.
+* Cómo funciona.
+* Historia del proyecto.
+* Equipo de desarrollo.
+
+Pilares actuales:
+
+1. Seguridad
+2. Comunidad
+3. Agilidad
+4. Confiabilidad
+
+La sección "Cómo funciona" explica:
+
+01 - Reporta
+El ciudadano registra un incidente.
+
+02 - Describe
+El ciudadano proporciona información sobre el problema.
+
+03 - Consulta
+El ciudadano puede consultar el estado de su reporte.
+
+La página utiliza animaciones suaves:
+
+* Entrada progresiva.
+* Hover en tarjetas.
+* Animación de iconos.
+* Animación de timeline.
+* Aparición progresiva de elementos.
+
+Las animaciones deben respetar la estética general del sistema.
+
+# ============================================================
+# 13. ESTRUCTURA VISUAL
+# ============================================================
+
+El sistema utiliza layouts Thymeleaf.
+
+Ejemplos:
+
+layouts/base-auth
+layouts/base-user
+
+Las páginas pueden utilizar:
+
+layout:decorate="~{layouts/base-user}"
+
+El layout base-user contiene elementos comunes de la aplicación,
+como navegación y estructura general.
+
+Cada página debe intentar reutilizar los componentes existentes
+en lugar de duplicar estructuras.
+
+# ============================================================
+# 14. FRONTEND
+# ============================================================
+
+Reglas importantes:
+
+1. Mantener HTML, CSS y JavaScript separados cuando sea posible.
+
+2. Evitar estilos inline como:
+
+style="color: red;"
+
+Preferir clases CSS:
+
+class="mi-elemento"
+
+3. Reutilizar variables CSS existentes.
+
+4. Mantener Bootstrap para layout y responsive.
+
+5. Utilizar Font Awesome y Bootstrap Icons cuando corresponda.
+
+6. No introducir otra librería visual sin necesidad.
+
+7. Mantener compatibilidad responsive.
+
+8. Los botones deben tener estados visuales claros.
+
+9. Los formularios deben mostrar validaciones comprensibles.
+
+10. Las animaciones deben ser rápidas y discretas.
+
+# ============================================================
+# 15. BACKEND
+# ============================================================
+
+El backend sigue una separación por capas.
+
+Conceptualmente:
+
+Controller
+|
+v
+Service
+|
+v
+Repository
+|
+v
+Persistencia
+
+Controller:
+Recibe las solicitudes HTTP.
+
+Service:
+Contiene la lógica de negocio.
+
+Repository:
+Gestiona el acceso a los datos.
+
+DTO:
+Controla qué información entra y sale de la API.
+
+Exception Handler:
+Centraliza el manejo de errores.
+
+# ============================================================
+# 16. MANEJO DE ERRORES
+# ============================================================
+
+El sistema contempla excepciones específicas para situaciones como:
+
+* Recurso no encontrado.
+* Solicitud inválida.
+* Conflicto.
+* Datos duplicados.
+* Errores de validación.
+
+Ejemplo:
+
+Si se intenta registrar un correo que ya existe:
+
+HTTP:
+409 Conflict
+
+La respuesta debe contener un mensaje entendible.
+
+No mostrar stack traces al usuario final.
+
+# ============================================================
+# 18. VALIDACIONES
+# ============================================================
+
+Los datos recibidos deben validarse antes de procesarlos.
+
+Ejemplos:
+
+Correo:
+Debe tener un formato válido.
+
+Contraseña:
+Debe cumplir las reglas definidas por el sistema.
+
+Campos obligatorios:
+No deben aceptar valores nulos cuando el negocio no lo permita.
+
+IMPORTANTE:
+Hay una diferencia entre:
+
+null
+
+y
+
+false
+
+Para campos booleanos primitivos, Jackson puede producir errores
+si recibe null.
+
+Cuando se permita un valor opcional, evaluar utilizar Boolean en
+lugar de boolean o establecer una estrategia adecuada de
+deserialización.
+
+# ============================================================
+# 19. PERSISTENCIA JSON
+# ============================================================
+
+En la etapa basada en JSON, los datos se almacenan en un archivo general.
+
+Ejemplos:
+
+db.json
+
+El repositorio genérico permite trabajar con diferentes entidades.
+
+IMPORTANTE:
+Verificar siempre la ruta configurada de los archivos.
+
+Ejemplo:
+
+app.data=...
+
+No asumir que la carpeta data está necesariamente dentro de
+src/main/resources.
+
+# ===========================================================
+# 20. CONTEXTO ACADÉMICO
+# ============================================================
+
+SafePeru forma parte de un proyecto académico relacionado con
+desarrollo web e ingeniería de software.
+
+Por lo tanto, las decisiones técnicas deben poder explicarse
+durante una exposición.
+
+Cuando se proponga una solución, preferir una implementación que:
+
+* Sea comprensible.
+* Sea justificable académicamente.
+* Mantenga buenas prácticas.
+* No agregue complejidad innecesaria.
+* Permita explicar claramente el flujo.
+
+# ============================================================
+# 21. REGLA GENERAL
+# ============================================================
+
+Antes de modificar SafePeru:
+
+1. Comprender la estructura existente.
+2. Identificar qué componente se está modificando.
+3. Mantener compatibilidad con las funcionalidades existentes.
+4. Respetar la identidad visual.
+5. Evitar cambios innecesarios.
+6. Proporcionar el código completo cuando sea necesario.
+7. Explicar dónde colocar cada modificación.
+
+SafePeru debe mantenerse como una plataforma ciudadana moderna,
+clara, segura, responsive y fácil de utilizar.
+
+# ============================================================
+
+# FIN DEL CONFIG.TXT
+
+# ============================================================
+
+```
+
+Este archivo está pensado como **contexto base para otra persona o IA**. Lo importante es que no solo describe "qué hace" SafePeru, sino también **cómo debe tratarse el proyecto al modificarlo**: arquitectura, tecnologías, diseño, seguridad, persistencia, API y estilo de explicación.
+
+```
