@@ -69,9 +69,27 @@
                 <span id="strengthText" class="strength-text">Ingresa una contraseña</span>
               </div>
 
-              <p class="password-hint">
-                Usa al menos 8 caracteres, incluyendo mayúsculas, números y símbolos.
-              </p>
+              <div class="password-requirements">
+                <small id="lengthRequirement">
+                  <i class="bi bi-circle"></i>
+                  Mínimo 8 caracteres
+                </small>
+
+                <small id="uppercaseRequirement">
+                  <i class="bi bi-circle"></i>
+                  Una letra mayúscula
+                </small>
+
+                <small id="numberRequirement">
+                  <i class="bi bi-circle"></i>
+                  Un número
+                </small>
+
+                <small id="specialRequirement">
+                  <i class="bi bi-circle"></i>
+                  Un carácter especial
+                </small>
+              </div>
             </div>
 
             <div class="mb-4">
@@ -127,8 +145,7 @@
             icono.classList.toggle('bi-eye', !mostrar);
             icono.classList.toggle('bi-eye-slash', mostrar);
 
-            boton.setAttribute('aria-label', mostrar ? 'Ocultar contraseña' : 'Mostrar contraseña'
-            );
+            boton.setAttribute('aria-label', mostrar ? 'Ocultar contraseña' : 'Mostrar contraseña');
           });
         }
 
@@ -138,10 +155,38 @@
         const strengthProgress = document.getElementById('strengthProgress');
         const strengthText = document.getElementById('strengthText');
 
+        const requirements = {
+          length: document.getElementById('lengthRequirement'),
+          uppercase: document.getElementById('uppercaseRequirement'),
+          number: document.getElementById('numberRequirement'),
+          special: document.getElementById('specialRequirement')
+        };
+
+        function actualizarRequisito(elemento, cumple) {
+          const icono = elemento.querySelector('i');
+
+          if (cumple) {
+            icono.className = 'bi bi-check-circle-fill';
+            elemento.classList.add('valid');
+          } else {
+            icono.className = 'bi bi-circle';
+            elemento.classList.remove('valid');
+          }
+        }
+
         // Evaluar seguridad de la contraseña
         pwd.addEventListener('input', () => {
 
           const password = pwd.value;
+          const cumpleLongitud = password.length >= 8;
+          const cumpleMayuscula = /[A-Z]/.test(password);
+          const cumpleNumero = /[0-9]/.test(password);
+          const cumpleEspecial = /[^A-Za-z0-9]/.test(password);
+
+          actualizarRequisito(requirements.length, cumpleLongitud);
+          actualizarRequisito(requirements.uppercase, cumpleMayuscula);
+          actualizarRequisito(requirements.number, cumpleNumero);
+          actualizarRequisito(requirements.special, cumpleEspecial);
           let strength = 0;
 
           // Longitud
