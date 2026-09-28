@@ -1814,3 +1814,24 @@ body.admin-body {
 .password-toggle:focus {
   box-shadow: none;
 }
+
+.password-requirements {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.password-requirements small {
+  color: #6b7280;
+  font-size: 0.78rem;
+  transition: color 0.2s ease;
+}
+
+.password-requirements small i {
+  margin-right: 5px;
+}
+
+.password-requirements small.valid {
+  color: #22c55e;
+}
