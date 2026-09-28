@@ -1796,3 +1796,21 @@ body.admin-body {
 .about-history-section {
     margin-top: 1rem;
 }
+
+/*Contraseña*/
+.password-toggle {
+  border-color: #dee2e6;
+  background-color: #fff;
+  color: #6c757d;
+  transition: all 0.2s ease;
+}
+
+.password-toggle:hover {
+  color: #20b2aa;
+  border-color: #20b2aa;
+  background-color: #f8fafc;
+}
+
+.password-toggle:focus {
+  box-shadow: none;
+}
