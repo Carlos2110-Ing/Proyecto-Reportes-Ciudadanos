@@ -36,7 +36,7 @@
               <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-person"></i></span>
                 <input type="text" name="nombreCompleto" class="form-control" placeholder="Ej: Juan Díaz" required
-                  minlength="3" />
+                autocomplete="name"  minlength="3" />
                 <div class="invalid-feedback">Ingresa tu nombre completo.</div>
               </div>
             </div>
@@ -45,7 +45,8 @@
               <label class="form-label">Correo Electrónico</label>
               <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                <input type="email" name="email" class="form-control" placeholder="usuario@correo.com" required />
+                <input type="email" name="email" class="form-control" placeholder="usuario@correo.com" 
+                autocomplete="email" required />
                 <div class="invalid-feedback">Ingresa un correo válido.</div>
               </div>
             </div>
@@ -55,7 +56,7 @@
               <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-lock"></i></span>
                 <input type="password" name="password" id="password" class="form-control" placeholder="••••••••"
-                  required minlength="8" />
+                  autocomplete="new-password" required minlength="8" />
                 <button type="button" class="btn btn-outline-secondary password-toggle" id="togglePassword"
                   aria-label="Mostrar contraseña">
                   <i class="bi bi-eye"></i>
@@ -97,7 +98,7 @@
               <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
                 <input type="password" name="confirmPassword" id="confirmPassword" class="form-control"
-                  placeholder="••••••••" required />
+                  autocomplete="new-password" placeholder="••••••••" required />
                 <button type="button" class="btn btn-outline-secondary password-toggle" id="toggleConfirmPassword"
                   aria-label="Mostrar contraseña">
                   <i class="bi bi-eye"></i>
