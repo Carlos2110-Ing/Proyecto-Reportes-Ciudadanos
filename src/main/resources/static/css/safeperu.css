@@ -1422,6 +1422,36 @@ body.admin-body {
 }
 
 .strength-text {
+    display: block;
+    margin-top: 5px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* ADMINPANEL- Estilo base tipo "píldora" para el selector */
+.estado-select {
+  padding: 0.25rem 1.5rem 0.25rem 0.75rem;
+  border-radius: 50rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+/* Cambia el color automáticamente según la opción elegida */
+.estado-select:has(option[value="PENDIENTE"]:checked) {
+  background-color: #fef3c7; /* Amarillo/Naranja */
+  color: #d97706;
+}
+
+.estado-select:has(option[value="EN_PROCESO"]:checked) {
+  background-color: #e0f2fe; /* Azul */
+  color: #0284c7;
+}
+
+.estado-select:has(option[value="RESUELTO"]:checked) {
+  background-color: #dcfce7; /* Verde */
+  color: #15803d;
   display: block;
   margin-top: 5px;
   font-size: 13px;
