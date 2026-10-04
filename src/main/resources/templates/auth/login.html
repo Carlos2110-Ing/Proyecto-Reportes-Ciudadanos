@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/base-auth}"
-      lang="es">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layouts/base-auth}" lang="es">
+
 <head>
   <title>Iniciar Sesión</title>
 </head>
+
 <body>
 
   <div layout:fragment="content">
@@ -40,8 +40,7 @@
               <label class="form-label">Correo Electrónico</label>
               <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                <input type="email" name="email" class="form-control"
-                       placeholder="usuario@correo.com" required />
+                <input type="email" name="email" class="form-control" placeholder="usuario@correo.com" required />
                 <div class="invalid-feedback">Ingresa un correo válido.</div>
               </div>
             </div>
@@ -50,8 +49,12 @@
               <label class="form-label">Contraseña</label>
               <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                <input type="password" name="password" class="form-control"
-                       placeholder="••••••••" required minlength="4" />
+                <input type="password" name="password" id="password" class="form-control" placeholder="••••••••"
+                  required minlength="4" />
+                <button type="button" class="btn btn-outline-secondary password-toggle" id="togglePassword"
+                  aria-label="Mostrar contraseña">
+                  <i class="bi bi-eye"></i>
+                </button>
                 <div class="invalid-feedback">Ingresa tu contraseña.</div>
               </div>
             </div>
@@ -73,6 +76,38 @@
       </div>
     </div>
   </div>
+  <th:block layout:fragment="scripts-extra">
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+
+        const password = document.getElementById('password');
+        const togglePassword = document.getElementById('togglePassword');
+
+        if (!password || !togglePassword) {
+          return;
+        }
+
+        togglePassword.addEventListener('click', () => {
+
+          const mostrar = password.type === 'password';
+
+          password.type = mostrar ? 'text' : 'password';
+
+          const icono = togglePassword.querySelector('i');
+
+          icono.classList.toggle('bi-eye', !mostrar);
+          icono.classList.toggle('bi-eye-slash', mostrar);
+
+          togglePassword.setAttribute(
+            'aria-label',
+            mostrar ? 'Ocultar contraseña' : 'Mostrar contraseña'
+          );
+        });
+
+      });
+    </script>
+  </th:block>
 
 </body>
+
 </html>
