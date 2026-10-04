@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/base-user}"
+      lang="es">
+    <head>
+        <title>Mis Reportes</title>
+    <th:block layout:fragment="head-extra">
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    </th:block>
+</head>
+
+
+<th:block layout:fragment="activePageValue">mis-reportes</th:block>
+
+<div layout:fragment="content">
+
+    <div class="d-flex align-items-start justify-content-between mb-3 flex-wrap gap-2">
+        <div>
+            <h4 class="page-title mb-0">Mis Reportes</h4>
+            <p class="page-sub mb-0">Gestiona todos tus reportes ciudadanos</p>
+        </div>
+        <a th:href="@{/reportes/nuevo}" class="btn-teal">
+            <i class="bi bi-plus"></i>Nuevo Reporte
+        </a>
+    </div>
+
+    <!-- Lista -->
+    <div th:if="${!#lists.isEmpty(reportes)}">
+        <div th:each="r : ${reportes}" class="report-row">
+
+            <div class="report-icon"
+                 th:style="'background:' + (${r.categoria} != null ? ${r.categoria.color} + '18' : '#f1f5f9') + '; color:' + (${r.categoria} != null ? ${r.categoria.color} : '#94a3b8')">
+                <i th:class="${r.categoria != null} ? ${r.categoria.icono} : 'bi bi-tag'"></i>
+            </div>
+
+            <div class="flex-grow-1">
+                <div class="report-row-title" th:text="${r.titulo}">Título</div>
+                <div class="report-row-meta">
+                    <span><i class="bi bi-tag"></i>
+                        <span th:text="${r.categoria != null} ? ${r.categoria.nombre} : 'Sin categoría'"></span>
+                    </span>
+                    <span><i class="bi bi-geo-alt"></i><span th:text="${r.ubicacion}"></span></span>
+                    <span><i class="bi bi-calendar3"></i>
+                        <span th:text="${#strings.substring(r.fechaCreacion,0,10)}"></span>
+                    </span>
+                </div>
+            </div>
+
+            <span th:if="${r.pendiente}"  class="badge-pendiente"><i class="bi bi-hourglass me-1"></i>Pendiente</span>
+            <span th:if="${r.enProceso}"  class="badge-en-proceso"><i class="bi bi-arrow-repeat me-1"></i>En Proceso</span>
+            <span th:if="${r.resuelto}"   class="badge-resuelto"><i class="bi bi-check2 me-1"></i>Resuelto</span>
+
+            <div class="report-actions">
+                <button type="button" class="btn-edit-icon"
+                        data-bs-toggle="modal" data-bs-target="#editModal"
+                        th:data-id="${r.id}"
+                        th:data-titulo="${r.titulo}"
+                        th:data-descripcion="${r.descripcion}"
+                        th:data-categoria="${r.categoriaId}"
+                        th:data-ubicacion="${r.ubicacion}"
+                        th:data-latitud="${r.latitud}"
+                        th:data-longitud="${r.longitud}"
+                        title="Editar">
+                    <i class="bi bi-pencil-fill"></i>
+                </button>
+                <form th:action="@{/reportes/eliminar/{id}(id=${r.id})}" method="post"
+                      onsubmit="return confirm('¿Eliminar este reporte?')">
+                    <button type="submit" class="btn-del-icon" title="Eliminar">
+                        <i class="bi bi-trash3-fill"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div th:if="${#lists.isEmpty(reportes)}" class="empty-state">
+        <i class="bi bi-inbox"></i>
+        <p style="font-weight:600;">Aún no has creado ningún reporte.</p>
+        <a th:href="@{/reportes/nuevo}" class="btn-teal d-inline-flex">
+            <i class="bi bi-plus"></i>Crear mi primer reporte
+        </a>
+    </div>
+
+    <!-- Modal Editar -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content rounded-4 border-0 shadow">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title" style="font-weight:800; color:var(--navy);">
+                        <i class="bi bi-pencil-fill me-2" style="color:var(--teal);"></i>
+                        Editar Reporte
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body pt-2">
+
+                    <form id="editForm" method="post" class="needs-validation" novalidate>
+
+                        <div class="mb-3">
+                            <label for="editTitulo" class="form-label">
+                                <i class="bi bi-card-heading me-1"></i>
+                                Título
+                            </label>
+
+                            <input type="text"
+                                   name="titulo"
+                                   id="editTitulo"
+                                   class="form-control"
+                                   required
+                                   minlength="5">
+
+                            <div class="invalid-feedback" id="tituloError"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="bi bi-tags-fill me-1"></i>
+                                Categoría
+                            </label>
+
+                            <select name="categoriaId"
+                                    id="editCategoria"
+                                    class="form-select"
+                                    required>
+
+                                <option th:each="cat : ${categorias}"
+                                        th:value="${cat.id}"
+                                        th:text="${cat.nombre}">
+                                    Categoría
+                                </option>
+
+                            </select>
+
+                            <div class="invalid-feedback">
+                                Debe seleccionar una categoría.
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="editDescripcion" class="form-label">
+                                <i class="bi bi-card-text me-1"></i>
+                                Descripción
+                            </label>
+
+                            <textarea name="descripcion"
+                                      id="editDescripcion"
+                                      class="form-control"
+                                      rows="4"
+                                      required
+                                      minlength="10"></textarea>
+
+                            <div class="invalid-feedback" id="descripcionError"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="editUbicacion" class="form-label">
+                                <i class="bi bi-geo-alt-fill me-1"></i>
+                                Ubicación
+                            </label>
+
+                            <input type="text"
+                                   name="ubicacion"
+                                   id="editUbicacion"
+                                   class="form-control"
+                                   required
+                                   minlength="5">
+
+                            <div class="invalid-feedback" id="ubicacionError"></div>
+                        </div>
+
+                        <!-- Coordenadas ocultas -->
+                        <input type="hidden" name="latitud" id="editLatitud">
+                        <input type="hidden" name="longitud" id="editLongitud">
+
+                        <!-- MAPA -->
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                <i class="bi bi-pin-map-fill me-1"
+                                   style="color:var(--teal);"></i>
+                                Ubicación en el Mapa
+                            </label>
+
+                            <div style="
+                             height:320px;
+                             border-radius:14px;
+                             overflow:hidden;
+                             border:1px solid #e2e8f0;">
+
+                                <div id="editMap" style="height:100%;"></div>
+
+                            </div>
+
+                            <p class="map-hint mt-2">
+                                <i class="bi bi-cursor-fill"></i>
+                                Haz clic en el mapa para actualizar la ubicación.
+                            </p>
+
+                            <div class="coords-display mt-2"
+                                 id="editCoordsDisplay">
+
+                                <i class="bi bi-check-circle-fill me-1"></i>
+                                Coordenadas:
+                                <span id="editCoordsText"></span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="d-flex gap-2 justify-content-end mt-4">
+
+                            <button type="button"
+                                    class="btn btn-light rounded-3"
+                                    data-bs-dismiss="modal">
+
+                                <i class="bi bi-x-circle me-1"></i>
+                                Cancelar
+
+                            </button>
+                            
+                            <input type="hidden" th:name="${_csrf.parameterName}"
+                            th:value="${_csrf.token}">
+                            
+                            <button type="submit"
+                                    class="btn rounded-3"
+                                    style="background:var(--navy); color:#fff; font-weight:700;">
+
+                                <i class="bi bi-check2-circle me-1"></i>
+                                Guardar Cambios
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<th:block layout:fragment="scripts-extra">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+                          let editMap = null;
+                          let editMarker = null;
+
+                          document.getElementById('editModal').addEventListener('show.bs.modal', function (e) {
+
+                              const btn = e.relatedTarget;
+
+                              document.getElementById('editTitulo').value = btn.dataset.titulo;
+                              document.getElementById('editDescripcion').value = btn.dataset.descripcion;
+                              document.getElementById('editUbicacion').value = btn.dataset.ubicacion;
+                              document.getElementById('editCategoria').value = btn.dataset.categoria;
+
+                              const lat = parseFloat(btn.dataset.latitud);
+                              const lng = parseFloat(btn.dataset.longitud);
+
+                              document.getElementById('editLatitud').value = lat;
+                              document.getElementById('editLongitud').value = lng;
+
+                              document.getElementById('editCoordsText').textContent =
+                                      `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+                              
+                              document.getElementById('editCoordsDisplay').style.display = 'block';
+
+                              document.getElementById('editForm').action =
+                                      '/reportes/editar/' + btn.dataset.id;
+
+                              setTimeout(() => {
+
+                                  if (!editMap) {
+
+                                      editMap = L.map('editMap');
+
+                                      L.tileLayer(
+                                              'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                                              {
+                                                  attribution: '© OpenStreetMap contributors'
+                                              }
+                                      ).addTo(editMap);
+
+                                      editMap.on('click', function (ev) {
+
+                                          const newLat = ev.latlng.lat;
+                                          const newLng = ev.latlng.lng;
+
+                                          if (editMarker) {
+                                              editMarker.remove();
+                                          }
+
+                                          editMarker = L.marker([newLat, newLng])
+                                                  .addTo(editMap);
+
+                                          document.getElementById('editLatitud').value =
+                                                  newLat.toFixed(6);
+
+                                          document.getElementById('editLongitud').value =
+                                                  newLng.toFixed(6);
+
+                                          document.getElementById('editCoordsText').textContent =
+                                                  `${newLat.toFixed(5)}, ${newLng.toFixed(5)}`;
+                                      });
+                                  }
+
+                                  editMap.invalidateSize();
+
+                                  editMap.setView([lat, lng], 16);
+
+                                  if (editMarker) {
+                                      editMarker.remove();
+                                  }
+
+                                  editMarker = L.marker([lat, lng])
+                                          .addTo(editMap);
+
+                              }, 300);
+                          });
+
+                          const editForm = document.getElementById('editForm');
+
+                          editForm.addEventListener('submit', function (e) {
+
+                              const titulo = document.getElementById('editTitulo');
+                              const descripcion = document.getElementById('editDescripcion');
+                              const ubicacion = document.getElementById('editUbicacion');
+
+                              const latitud = document.getElementById('editLatitud').value;
+                              const longitud = document.getElementById('editLongitud').value;
+
+                              let valido = true;
+
+                              document.getElementById('tituloError').textContent = '';
+                              document.getElementById('descripcionError').textContent = '';
+                              document.getElementById('ubicacionError').textContent = '';
+
+                              // TÍTULO
+                              if (titulo.validity.valueMissing) {
+
+                                  document.getElementById('tituloError').textContent =
+                                          'El título es obligatorio.';
+                                  valido = false;
+
+                              } else if (titulo.value.trim().length < 5) {
+
+                                  document.getElementById('tituloError').textContent =
+                                          'El título debe tener al menos 5 caracteres.';
+                                  valido = false;
+                              }
+
+                              // DESCRIPCIÓN
+                              if (descripcion.validity.valueMissing) {
+
+                                  document.getElementById('descripcionError').textContent =
+                                          'La descripción es obligatoria.';
+                                  valido = false;
+
+                              } else if (descripcion.value.trim().length < 10) {
+
+                                  document.getElementById('descripcionError').textContent =
+                                          'La descripción debe tener al menos 10 caracteres.';
+                                  valido = false;
+                              }
+
+                              // UBICACIÓN
+                              if (ubicacion.validity.valueMissing) {
+
+                                  document.getElementById('ubicacionError').textContent =
+                                          'La ubicación es obligatoria.';
+                                  valido = false;
+
+                              } else if (ubicacion.value.trim().length < 5) {
+
+                                  document.getElementById('ubicacionError').textContent =
+                                          'La ubicación debe tener al menos 5 caracteres.';
+                                  valido = false;
+                              }
+
+                              // MAPA
+                              if (!latitud || !longitud) {
+
+                                  alert('Debe seleccionar una ubicación en el mapa.');
+                                  valido = false;
+                              }
+
+                              if (!valido) {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                              }
+
+                              editForm.classList.add('was-validated');
+                          });
+    </script>
+</th:block>
+
+</html>

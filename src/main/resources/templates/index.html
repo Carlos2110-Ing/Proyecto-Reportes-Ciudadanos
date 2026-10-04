@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/base-auth}"
-      lang="es">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layouts/base-auth}" lang="es">
+
 <head>
   <title>Bienvenido</title>
 </head>
+
 <body>
 
   <div layout:fragment="content">
@@ -29,11 +29,11 @@
           <p class="auth-desc text-center">
             Reporta incidentes, emergencias y situaciones de riesgo en tu comunidad de forma rápida, segura y confiable.
           </p>
-          <a th:href="@{/login}" class="btn-primary-custom mb-3">
-            <i class="fa-solid fa-right-to-bracket me-2"></i>Iniciar Sesión
+          <a th:href="@{/login}" class="btn-primary-custom auth-action-btn mb-3">
+            <i class="fa-solid fa-right-to-bracket btn-icon me-2"></i><span class="btn-text">Iniciar Sesión</span>
           </a>
-          <a th:href="@{/registro}" class="btn-outline-teal">
-            <i class="fa-solid fa-user-plus me-2"></i>Crear Cuenta
+          <a th:href="@{/registro}" class="btn-outline-teal auth-action-btn">
+            <i class="fa-solid fa-user-plus btn-icon me-2"></i><span class="btn-text">Crear Cuenta</span>
           </a>
           <p class="footer-note">Al continuar aceptas nuestros Términos y Política de Privacidad.</p>
         </div>
@@ -42,5 +42,27 @@
     </div>
   </div>
 
+  <th:block layout:fragment="scripts-extra">
+    <script>
+      document.querySelectorAll('.auth-action-btn').forEach(button => {
+        button.addEventListener('click', function (event) {
+          // Evita que el enlace cambie de página inmediatamente 
+          event.preventDefault();
+          // Evita hacer clic varias veces durante la animación 
+          if (this.classList.contains('is-clicked')) {
+            return;
+          }
+          this.classList.add('is-clicked');
+          // Esperamos a que termine la animación 
+          setTimeout(() => {
+              window.location.href = this.href;
+            },
+            450);
+        });
+      });
+    </script>
+  </th:block>
+
 </body>
+
 </html>
