@@ -88,7 +88,8 @@
               <label class="form-label">Contraseña Actual</label>
               <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                <input type="password" name="passwordActual" id="passwordActual" class="form-control" placeholder="••••••••" required />
+                <input type="password" name="passwordActual" id="passwordActual" class="form-control"
+                  placeholder="••••••••" required />
                 <button type="button" class="btn btn-outline-secondary toggle-password" data-target="passwordActual"
                   aria-label="Mostrar contraseña actual" aria-pressed="false">
                   <i class="bi bi-eye"></i>
@@ -107,6 +108,31 @@
                   <i class="bi bi-eye"></i>
                 </button>
                 <div class="invalid-feedback">Mínimo 8 caracteres.</div>
+              </div>
+              <!-- Indicador de seguridad de la contraseña -->
+              <div class="password-strength">
+                <div class="strength-bar">
+                  <div id="strengthProgress" class="strength-progress"></div>
+                </div>
+
+                <span id="strengthText" class="strength-text">
+                  Ingresa una contraseña
+                </span>
+
+                <div class="password-requirements">
+                  <small id="reqLength">
+                    <i class="bi bi-circle"></i> Al menos 8 caracteres
+                  </small>
+                  <small id="reqUpper">
+                    <i class="bi bi-circle"></i> Una letra mayúscula
+                  </small>
+                  <small id="reqLower">
+                    <i class="bi bi-circle"></i> Una letra minúscula
+                  </small>
+                  <small id="reqNumber">
+                    <i class="bi bi-circle"></i> Un número
+                  </small>
+                </div>
               </div>
             </div>
             <div class="mb-4">
@@ -161,24 +187,110 @@
         const form = document.getElementById('pwdForm');
         const nueva = document.getElementById('nuevaPwd');
         const confirm = document.getElementById('confirmPwd');
+
+        // VALIDACIÓN DE CONTRASEÑAS
         form.addEventListener('submit', e => {
-          confirm.setCustomValidity(nueva.value !== confirm.value ? 'mismatch' : '');
+          confirm.setCustomValidity(
+            nueva.value !== confirm.value ? 'mismatch' : ''
+          );
+
           if (!form.checkValidity()) {
             e.preventDefault();
             e.stopPropagation();
           }
+
           form.classList.add('was-validated');
         });
-        confirm.addEventListener('input', () => confirm.setCustomValidity(''));
+
+        confirm.addEventListener('input', () => {
+          confirm.setCustomValidity('');
+        });
+
+        // INDICADOR DE SEGURIDAD DE CONTRASEÑA
+        const strengthProgress = document.getElementById('strengthProgress');
+        const strengthText = document.getElementById('strengthText');
+
+        const requisitosPassword = [{
+            id: 'reqLength',
+            cumple: password => password.length >= 8
+          },
+          {
+            id: 'reqUpper',
+            cumple: password => /[A-Z]/.test(password)
+          },
+          {
+            id: 'reqLower',
+            cumple: password => /[a-z]/.test(password)
+          },
+          {
+            id: 'reqNumber',
+            cumple: password => /[0-9]/.test(password)
+          }
+        ];
+
+        function actualizarSeguridadPassword() {
+          const password = nueva.value;
+          let cumplidos = 0;
+
+          requisitosPassword.forEach(requisito => {
+            const elemento = document.getElementById(requisito.id);
+
+            if (!elemento) return;
+
+            const icono = elemento.querySelector('i');
+            const valido = requisito.cumple(password);
+
+            elemento.classList.toggle('valid', valido);
+
+            if (icono) {
+              icono.className = valido ?
+                'bi bi-check-circle-fill' :
+                'bi bi-circle';
+            }
+
+            if (valido) cumplidos++;
+          });
+
+          if (strengthProgress) {
+            strengthProgress.style.width =
+              `${(cumplidos / requisitosPassword.length) * 100}%`;
+
+            if (!password) {
+              strengthProgress.style.backgroundColor = '#94a3b8';
+            } else if (cumplidos <= 1) {
+              strengthProgress.style.backgroundColor = '#ef4444';
+            } else if (cumplidos <= 3) {
+              strengthProgress.style.backgroundColor = '#f59e0b';
+            } else {
+              strengthProgress.style.backgroundColor = '#22c55e';
+            }
+          }
+
+          if (strengthText) {
+            if (!password) {
+              strengthText.textContent = 'Ingresa una contraseña';
+            } else if (cumplidos <= 1) {
+              strengthText.textContent = 'Seguridad baja';
+            } else if (cumplidos <= 3) {
+              strengthText.textContent = 'Seguridad media';
+            } else {
+              strengthText.textContent = 'Seguridad alta';
+            }
+          }
+        }
+
+        nueva.addEventListener('input', actualizarSeguridadPassword);
+        actualizarSeguridadPassword();
       })();
+
+      // MOSTRAR U OCULTAR CONTRASEÑAS
       document.querySelectorAll('.toggle-password').forEach(boton => {
         boton.addEventListener('click', () => {
-          const campo = document.getElementById(
-            boton.dataset.target
-          );
+          const campo = document.getElementById(boton.dataset.target);
+
+          if (!campo) return;
 
           const mostrar = campo.type === 'password';
-
           campo.type = mostrar ? 'text' : 'password';
 
           boton.innerHTML = mostrar ?
