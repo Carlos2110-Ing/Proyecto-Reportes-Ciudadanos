@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/base-admin}"
-      lang="es">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layouts/base-admin}" lang="es">
+
 <head>
   <title>Panel Admin</title>
 </head>
+
 <body>
 
   <th:block layout:fragment="page-title">Panel de Administración</th:block>
@@ -17,25 +17,37 @@
       <div class="col-6 col-md-3">
         <div class="stat-card">
           <div class="stat-icon navy"><i class="bi bi-people-fill"></i></div>
-          <div><div class="stat-num" th:text="${totalUsuarios}">0</div><div class="stat-lbl">Usuarios</div></div>
+          <div>
+            <div class="stat-num" th:text="${totalUsuarios}">0</div>
+            <div class="stat-lbl">Usuarios</div>
+          </div>
         </div>
       </div>
       <div class="col-6 col-md-3">
         <div class="stat-card">
           <div class="stat-icon teal"><i class="bi bi-patch-check-fill"></i></div>
-          <div><div class="stat-num" th:text="${totalVerificados}">0</div><div class="stat-lbl">Verificados</div></div>
+          <div>
+            <div class="stat-num" th:text="${totalVerificados}">0</div>
+            <div class="stat-lbl">Verificados</div>
+          </div>
         </div>
       </div>
       <div class="col-6 col-md-3">
         <div class="stat-card">
           <div class="stat-icon orange"><i class="bi bi-flag-fill"></i></div>
-          <div><div class="stat-num" th:text="${totalReportes}">0</div><div class="stat-lbl">Reportes</div></div>
+          <div>
+            <div class="stat-num" th:text="${totalReportes}">0</div>
+            <div class="stat-lbl">Reportes</div>
+          </div>
         </div>
       </div>
       <div class="col-6 col-md-3">
         <div class="stat-card">
           <div class="stat-icon red"><i class="bi bi-hourglass-split"></i></div>
-          <div><div class="stat-num" th:text="${pendientes}">0</div><div class="stat-lbl">Pendientes</div></div>
+          <div>
+            <div class="stat-num" th:text="${pendientes}">0</div>
+            <div class="stat-lbl">Pendientes</div>
+          </div>
         </div>
       </div>
     </div>
@@ -63,7 +75,7 @@
                 <div class="d-flex align-items-center gap-2">
                   <div class="mini-avatar" th:text="${u.avatarInicial}">??</div>
                   <div>
-                    <div class="user-name"  th:text="${u.nombreCompleto}">Nombre</div>
+                    <div class="user-name" th:text="${u.nombreCompleto}">Nombre</div>
                     <div class="user-email" th:text="${u.email}">email</div>
                   </div>
                 </div>
@@ -83,13 +95,13 @@
               <td>
                 <th:block th:with="verif=${verificaciones.?[usuarioId == __${u.id}__]}">
                   <form th:if="${!verif.isEmpty() and verif[0].verificado}"
-                        th:action="@{/admin/revocar/{id}(id=${u.id})}" method="post" style="display:inline;">
+                    th:action="@{/admin/revocar/{id}(id=${u.id})}" method="post" style="display:inline;">
                     <button type="submit" class="btn-revoke-action">
                       <i class="bi bi-x me-1"></i>Revocar
                     </button>
                   </form>
                   <form th:unless="${!verif.isEmpty() and verif[0].verificado}"
-                        th:action="@{/admin/verificar/{id}(id=${u.id})}" method="post" style="display:inline;">
+                    th:action="@{/admin/verificar/{id}(id=${u.id})}" method="post" style="display:inline;">
                     <button type="submit" class="btn-verify-action">
                       <i class="bi bi-check2 me-1"></i>Verificar
                     </button>
@@ -125,29 +137,27 @@
               <td style="font-weight:600; color:var(--navy); font-size:0.85rem;" th:text="${r.titulo}">—</td>
               <td>
                 <span style="font-size:0.82rem;" th:text="${r.usuarioNombre}">—</span>
-                <i class="bi bi-patch-check-fill ms-1"
-                   th:if="${r.usuarioVerificado}"
-                   style="color:var(--teal); font-size:0.7rem;"></i>
+                <i class="bi bi-patch-check-fill ms-1" th:if="${r.usuarioVerificado}"
+                  style="color:var(--teal); font-size:0.7rem;"></i>
               </td>
               <td>
                 <span style="font-size:0.78rem; font-weight:600;"
-                      th:style="'color:' + (${r.categoria} != null ? ${r.categoria.color} : '#94a3b8')"
-                      th:text="${r.categoria != null} ? ${r.categoria.nombre} : '—'"></span>
+                  th:style="'color:' + (${r.categoria} != null ? ${r.categoria.color} : '#94a3b8')"
+                  th:text="${r.categoria != null} ? ${r.categoria.nombre} : '—'"></span>
               </td>
-              <td style="font-size:0.8rem; color:#94a3b8;"
-                  th:text="${#strings.substring(r.fechaCreacion,0,10)}">—</td>
+              <td style="font-size:0.8rem; color:#94a3b8;" th:text="${#strings.substring(r.fechaCreacion,0,10)}">—</td>
               <td>
                 <form th:action="@{/admin/reportes/estado/{id}(id=${r.id})}" method="post">
                   <select name="estado" class="estado-select" onchange="this.form.submit()">
-                    <option value="PENDIENTE"  th:selected="${r.pendiente}">Pendiente</option>
+                    <option value="PENDIENTE" th:selected="${r.pendiente}">Pendiente</option>
                     <option value="EN_PROCESO" th:selected="${r.enProceso}">En Proceso</option>
-                    <option value="RESUELTO"   th:selected="${r.resuelto}">Resuelto</option>
+                    <option value="RESUELTO" th:selected="${r.resuelto}">Resuelto</option>
                   </select>
                 </form>
               </td>
               <td>
                 <form th:action="@{/reportes/eliminar/{id}(id=${r.id})}" method="post"
-                      onsubmit="return confirm('¿Eliminar este reporte?')">
+                  onsubmit="return confirm('¿Eliminar este reporte?')">
                   <button type="submit" class="btn-del-report">
                     <i class="bi bi-trash3 me-1"></i>Eliminar
                   </button>
@@ -160,6 +170,56 @@
     </div>
 
   </div>
+  <th:block layout:fragment="scripts-extra">
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const counters = document.querySelectorAll('.counter');
+        const duration = 1000; 
+
+        const startCounterAnimation = (counter) => {
+          const target = parseInt(counter.innerText, 10);
+          if (isNaN(target) || target === 0) return;
+
+          let startTime = null;
+
+          const animate = (timestamp) => {
+            if (!startTime) startTime = timestamp;
+            const progress = timestamp - startTime;
+
+            const progressPercentage = Math.min(progress / duration, 1);
+
+            counter.innerText = Math.floor(progressPercentage * target);
+
+            if (progress < duration) {
+              requestAnimationFrame(animate);
+            } else {
+              counter.innerText = target;
+            }
+          };
+
+          counter.innerText = '0';
+          requestAnimationFrame(animate);
+        };
+
+        const observerOptions = {
+          root: null, 
+          threshold: 0.2
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const counter = entry.target;
+              startCounterAnimation(counter);
+              observer.unobserve(counter); 
+            }
+          });
+        }, observerOptions);
+
+        counters.forEach(counter => observer.observe(counter));
+      });
+    </script>
+  </th:block>
 
 </body>
 </html>
