@@ -1865,3 +1865,26 @@ body.admin-body {
 .password-requirements small.valid {
   color: #22c55e;
 }
+
+/* Indicador de seguridad de contraseña */
+.strength-bar {
+  margin-top: 8px;
+}
+
+.strength-text {
+  color: #64748b;
+}
+
+.password-requirements small {
+  display: block;
+}
+
+.password-requirements small i {
+  width: 16px;
+}
+
+@media (max-width: 400px) {
+  .password-requirements {
+    gap: 6px;
+  }
+}
