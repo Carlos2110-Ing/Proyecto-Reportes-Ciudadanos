@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/base-user}"
-      lang="es">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layouts/base-user}" lang="es">
+
 <head>
   <title>Mi Perfil</title>
 </head>
+
 <body>
 
   <th:block layout:fragment="activePageValue">perfil</th:block>
@@ -24,7 +24,7 @@
     <div class="profile-hero">
       <div class="avatar-circle" th:text="${usuario.avatarInicial}">JD</div>
       <div>
-        <div class="profile-name"  th:text="${usuario.nombreCompleto}">Nombre</div>
+        <div class="profile-name" th:text="${usuario.nombreCompleto}">Nombre</div>
         <div class="profile-email" th:text="${usuario.email}">email</div>
         <span th:if="${verificacion != null and verificacion.verificado}" class="verified-pill">
           <i class="bi bi-patch-check-fill"></i>Cuenta Verificada
@@ -59,8 +59,8 @@
               <label class="form-label">Nombre Completo</label>
               <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-person"></i></span>
-                <input type="text" name="nombreCompleto" class="form-control"
-                       th:value="${usuario.nombreCompleto}" required minlength="3" />
+                <input type="text" name="nombreCompleto" class="form-control" th:value="${usuario.nombreCompleto}"
+                  required minlength="3" />
                 <div class="invalid-feedback">Mínimo 3 caracteres.</div>
               </div>
             </div>
@@ -68,8 +68,7 @@
               <label class="form-label">Correo Electrónico</label>
               <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                <input type="email" name="email" class="form-control"
-                       th:value="${usuario.email}" required />
+                <input type="email" name="email" class="form-control" th:value="${usuario.email}" required />
                 <div class="invalid-feedback">Correo inválido.</div>
               </div>
             </div>
@@ -84,13 +83,16 @@
       <div class="col-md-6">
         <div class="section-card">
           <div class="section-card-title"><i class="bi bi-lock-fill"></i>Cambiar Contraseña</div>
-          <form th:action="@{/perfil/cambiar-password}" method="post"
-                id="pwdForm" class="needs-validation" novalidate>
+          <form th:action="@{/perfil/cambiar-password}" method="post" id="pwdForm" class="needs-validation" novalidate>
             <div class="mb-3">
               <label class="form-label">Contraseña Actual</label>
               <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                <input type="password" name="passwordActual" class="form-control" placeholder="••••••••" required />
+                <input type="password" name="passwordActual" id="passwordActual" class="form-control" placeholder="••••••••" required />
+                <button type="button" class="btn btn-outline-secondary toggle-password" data-target="passwordActual"
+                  aria-label="Mostrar contraseña actual" aria-pressed="false">
+                  <i class="bi bi-eye"></i>
+                </button>
                 <div class="invalid-feedback">Campo requerido.</div>
               </div>
             </div>
@@ -98,8 +100,12 @@
               <label class="form-label">Nueva Contraseña</label>
               <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
-                <input type="password" name="nuevaPassword" id="nuevaPwd"
-                       class="form-control" placeholder="••••••••" required minlength="8" />
+                <input type="password" name="nuevaPassword" id="nuevaPwd" class="form-control" placeholder="••••••••"
+                  required minlength="8" />
+                <button type="button" class="btn btn-outline-secondary toggle-password" data-target="nuevaPwd"
+                  aria-label="Mostrar contraseña actual" aria-pressed="false">
+                  <i class="bi bi-eye"></i>
+                </button>
                 <div class="invalid-feedback">Mínimo 8 caracteres.</div>
               </div>
             </div>
@@ -107,8 +113,12 @@
               <label class="form-label">Confirmar Nueva Contraseña</label>
               <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
-                <input type="password" name="confirmPassword" id="confirmPwd"
-                       class="form-control" placeholder="••••••••" required />
+                <input type="password" name="confirmPassword" id="confirmPwd" class="form-control"
+                  placeholder="••••••••" required />
+                <button type="button" class="btn btn-outline-secondary toggle-password" data-target="confirmPwd"
+                  aria-label="Mostrar contraseña actual" aria-pressed="false">
+                  <i class="bi bi-eye"></i>
+                </button>
                 <div class="invalid-feedback">Las contraseñas no coinciden.</div>
               </div>
             </div>
@@ -128,9 +138,8 @@
             </div>
             <div class="d-flex align-items-center gap-2">
               <span class="verified-pill"><i class="bi bi-patch-check-fill"></i>Verificado por SafePeru</span>
-              <span style="font-size:0.78rem; color:#94a3b8;"
-                    th:if="${verificacion.fechaVerificacion != null}"
-                    th:text="'desde ' + ${verificacion.fechaVerificacion}"></span>
+              <span style="font-size:0.78rem; color:#94a3b8;" th:if="${verificacion.fechaVerificacion != null}"
+                th:text="'desde ' + ${verificacion.fechaVerificacion}"></span>
             </div>
           </div>
           <div th:unless="${verificacion != null and verificacion.verificado}">
@@ -149,18 +158,50 @@
   <th:block layout:fragment="scripts-extra">
     <script>
       (() => {
-        const form    = document.getElementById('pwdForm');
-        const nueva   = document.getElementById('nuevaPwd');
+        const form = document.getElementById('pwdForm');
+        const nueva = document.getElementById('nuevaPwd');
         const confirm = document.getElementById('confirmPwd');
         form.addEventListener('submit', e => {
           confirm.setCustomValidity(nueva.value !== confirm.value ? 'mismatch' : '');
-          if (!form.checkValidity()) { e.preventDefault(); e.stopPropagation(); }
+          if (!form.checkValidity()) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
           form.classList.add('was-validated');
         });
         confirm.addEventListener('input', () => confirm.setCustomValidity(''));
       })();
+      document.querySelectorAll('.toggle-password').forEach(boton => {
+        boton.addEventListener('click', () => {
+          const campo = document.getElementById(
+            boton.dataset.target
+          );
+
+          const mostrar = campo.type === 'password';
+
+          campo.type = mostrar ? 'text' : 'password';
+
+          boton.innerHTML = mostrar ?
+            '<i class="bi bi-eye-slash"></i>' :
+            '<i class="bi bi-eye"></i>';
+
+          boton.setAttribute('aria-pressed', String(mostrar));
+
+          const nombre = campo.name === 'passwordActual' ?
+            'contraseña actual' :
+            campo.name === 'nuevaPassword' ?
+            'nueva contraseña' :
+            'confirmación de contraseña';
+
+          boton.setAttribute(
+            'aria-label',
+            `${mostrar ? 'Ocultar' : 'Mostrar'} ${nombre}`
+          );
+        });
+      });
     </script>
   </th:block>
 
 </body>
+
 </html>
