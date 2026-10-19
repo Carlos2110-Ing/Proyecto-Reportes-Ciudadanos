@@ -768,3 +768,101 @@ body.admin-body { background: var(--bg-admin); }
     font-size: 13px;
     font-weight: 600;
 }
+
+/* ANIMACIÓN DE ENTRADA - NUEVO REPORTE*/
+
+/* Animación general de la tarjeta del formulario */
+.form-card {
+    animation: entradaFormulario 0.8s ease-out both;
+    will-change: opacity, transform;
+}
+
+/* Animación del encabezado */
+.form-card .page-header {
+    animation: entradaContenido 0.7s ease-out both;
+    animation-delay: 0.15s;
+}
+
+/* Animación progresiva de los campos del formulario */
+.form-card form > .mb-3:nth-child(1) {
+    animation: entradaContenido 0.6s ease-out both;
+    animation-delay: 0.20s;
+}
+
+.form-card form > .mb-3:nth-child(2) {
+    animation: entradaContenido 0.6s ease-out both;
+    animation-delay: 0.30s;
+}
+
+.form-card form > .mb-3:nth-child(3) {
+    animation: entradaContenido 0.6s ease-out both;
+    animation-delay: 0.40s;
+}
+
+.form-card form > .mb-3:nth-child(4) {
+    animation: entradaContenido 0.6s ease-out both;
+    animation-delay: 0.50s;
+}
+
+/* Animación del mapa y su sección */
+.form-card form > .mb-3:nth-child(5) {
+    animation: entradaContenido 0.7s ease-out both;
+    animation-delay: 0.60s;
+}
+
+/* Animación del botón Enviar Reporte */
+.form-card .btn-submit {
+    animation: entradaBoton 0.7s ease-out both;
+    animation-delay: 0.75s;
+}
+
+/* Movimiento suave desde abajo hacia su posición */
+@keyframes entradaFormulario {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Aparición progresiva del contenido */
+@keyframes entradaContenido {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* El botón aparece con un desplazamiento ligeramente menor */
+@keyframes entradaBoton {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Accesibilidad: respetar la preferencia de movimiento reducido */
+@media (prefers-reduced-motion: reduce) {
+    .form-card,
+    .form-card .page-header,
+    .form-card form > .mb-3,
+    .form-card .btn-submit {
+        animation: none;
+        opacity: 1;
+        transform: none;
+    }
+}
