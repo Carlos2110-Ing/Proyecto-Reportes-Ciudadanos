@@ -2377,3 +2377,117 @@ body.admin-body {
         animation: none;
     }
 }
+/* ANIMACIÓN DE ENTRADA - NAVEGACIÓN ADMIN*/
+.admin-sidebar {
+    animation: adminSidebarEntrada 0.65s
+        cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.admin-sidebar .sidebar-brand {
+    animation: adminBrandEntrada 0.6s ease-out both;
+    animation-delay: 0.15s;
+}
+
+.admin-sidebar .sidebar-section {
+    animation: adminSeccionEntrada 0.5s ease-out both;
+    animation-delay: 0.2s;
+}
+
+.admin-sidebar .sidebar-link {
+    animation: adminEnlaceEntrada 0.5s ease-out both;
+}
+
+.admin-sidebar .sidebar-link:nth-of-type(1) {
+    animation-delay: 0.15s;
+}
+
+.admin-sidebar .sidebar-link:nth-of-type(2) {
+    animation-delay: 0.25s;
+}
+
+.admin-sidebar .sidebar-link:nth-of-type(3) {
+    animation-delay: 0.35s;
+}
+
+.admin-sidebar .sidebar-link:nth-of-type(4) {
+    animation-delay: 0.45s;
+}
+
+.admin-sidebar .sidebar-link:nth-of-type(5) {
+    animation-delay: 0.55s;
+}
+
+.admin-topbar {
+    animation: adminTopbarEntrada 0.6s ease-out both;
+    animation-delay: 0.15s;
+}
+
+@keyframes adminSidebarEntrada {
+    from {
+        opacity: 0;
+        transform: translateX(-24px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes adminBrandEntrada {
+    from {
+        opacity: 0;
+        transform: scale(0.94);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes adminSeccionEntrada {
+    from {
+        opacity: 0;
+        transform: translateX(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes adminEnlaceEntrada {
+    from {
+        opacity: 0;
+        transform: translateX(-12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes adminTopbarEntrada {
+    from {
+        opacity: 0;
+        transform: translateY(-12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .admin-sidebar,
+    .admin-sidebar .sidebar-brand,
+    .admin-sidebar .sidebar-section,
+    .admin-sidebar .sidebar-link,
+    .admin-topbar {
+        animation: none;
+    }
+}
