@@ -2244,3 +2244,136 @@ body.admin-body {
         transform: none;
     }
 }
+
+/* ANIMACIONES DE ENTRADA - MI PERFIL */
+
+.profile-hero {
+    animation: perfilHeroEntrada 0.75s
+        cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.avatar-circle { /*avatar*/
+    animation: perfilAvatarEntrada 0.7s
+        cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: 0.15s;
+}
+
+.profile-name,
+.profile-email {
+    animation: perfilTextoEntrada 0.6s ease-out both;
+    animation-delay: 0.2s;
+}
+
+.profile-stats {
+    animation: perfilStatsEntrada 0.7s ease-out both;
+    animation-delay: 0.3s;
+}
+
+.row.g-4 > .col-md-6 > .section-card {
+    animation: perfilTarjetaEntrada 0.7s
+        cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.row.g-4 > .col-md-6:first-child > .section-card {
+    animation-delay: 0.2s;
+}
+
+.row.g-4 > .col-md-6:last-child > .section-card:first-child {
+    animation-delay: 0.35s;
+}
+
+.row.g-4 > .col-md-6:last-child > .section-card:last-child {
+    animation-delay: 0.5s;
+}
+
+.alert-exito,
+.alert-error {
+    animation: perfilMensajeEntrada 0.5s ease-out both;
+}
+
+/*MOVIMIENTOS */
+
+@keyframes perfilHeroEntrada {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes perfilAvatarEntrada {
+    from {
+        opacity: 0;
+        transform: scale(0.75) rotate(-8deg);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) rotate(0);
+    }
+}
+
+@keyframes perfilTextoEntrada {
+    from {
+        opacity: 0;
+        transform: translateX(-12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes perfilStatsEntrada {
+    from {
+        opacity: 0;
+        transform: translateX(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes perfilTarjetaEntrada {
+    from {
+        opacity: 0;
+        transform: translateY(24px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes perfilMensajeEntrada {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .profile-hero,
+    .avatar-circle,
+    .profile-name,
+    .profile-email,
+    .profile-stats,
+    .row.g-4 > .col-md-6 > .section-card,
+    .alert-exito,
+    .alert-error {
+        animation: none;
+    }
+}
