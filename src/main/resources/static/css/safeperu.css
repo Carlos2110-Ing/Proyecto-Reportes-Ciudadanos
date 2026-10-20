@@ -2185,3 +2185,62 @@ body.admin-body {
         transform: none;
     }
 }
+
+/* ==========================================
+   EFECTOS HOVER - TARJETAS DE ESTADÍSTICAS
+   Panel de Administración
+   ========================================== */
+
+/* Transición suave para toda la tarjeta */
+.stat-card {
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+    transform-origin: center;
+}
+
+/* La tarjeta crece ligeramente y obtiene una sombra */
+.stat-card:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 10px 24px rgba(27, 43, 75, 0.14);
+}
+
+/* El cuadro del icono gira ligeramente */
+.stat-card .stat-icon {
+    transition:
+        transform 0.35s ease,
+        box-shadow 0.35s ease;
+    transform-origin: center;
+}
+
+/* Al pasar el cursor sobre la tarjeta, gira el cuadro */
+.stat-card:hover .stat-icon {
+    transform: rotate(-8deg) scale(1.06);
+    box-shadow: 0 5px 12px rgba(27, 43, 75, 0.12);
+}
+
+/* El icono aumenta de tamaño */
+.stat-card .stat-icon i {
+    display: inline-block;
+    transition: transform 0.35s ease;
+}
+
+/* Efecto de crecimiento del icono */
+.stat-card:hover .stat-icon i {
+    transform: scale(1.22);
+}
+
+/* Accesibilidad: respetar la preferencia de movimiento reducido */
+@media (prefers-reduced-motion: reduce) {
+    .stat-card,
+    .stat-card .stat-icon,
+    .stat-card .stat-icon i {
+        transition: none;
+    }
+
+    .stat-card:hover,
+    .stat-card:hover .stat-icon,
+    .stat-card:hover .stat-icon i {
+        transform: none;
+    }
+}
