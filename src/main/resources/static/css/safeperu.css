@@ -2059,3 +2059,129 @@ body.admin-body {
         transform: none;
     }
 }
+
+/* MIS REPORTES - ANIMACIÓN DE ENTRADA.efectodedeslizamiento lateral progresivo*/
+
+.page-title {
+    animation: reportesTituloEntrada 0.65s ease-out both;
+}
+
+.page-sub {
+    animation: reportesTituloEntrada 0.65s ease-out both;
+    animation-delay: 0.10s;
+}
+
+.btn-teal {
+    animation: reportesBotonEntrada 0.7s ease-out both;
+    animation-delay: 0.20s;
+}
+
+.report-row {
+    animation: reporteFilaEntrada 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.report-row:nth-child(1) {
+    animation-delay: 0.15s;
+}
+
+.report-row:nth-child(2) {
+    animation-delay: 0.25s;
+}
+
+.report-row:nth-child(3) {
+    animation-delay: 0.35s;
+}
+
+.report-row:nth-child(4) {
+    animation-delay: 0.45s;
+}
+
+.report-row:nth-child(5) {
+    animation-delay: 0.55s;
+}
+
+.report-row:nth-child(6) {
+    animation-delay: 0.65s;
+}
+
+.empty-state {
+    animation: reporteVacioEntrada 0.75s ease-out both;
+    animation-delay: 0.15s;
+}
+
+#editModal .modal-dialog {
+    animation: modalReporteEntrada 0.35s ease-out both;
+}
+
+@keyframes reportesTituloEntrada { /* definicion de animaciones*/
+    from {
+        opacity: 0;
+        transform: translateX(-18px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes reportesBotonEntrada {
+    from {
+        opacity: 0;
+        transform: translateX(18px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes reporteFilaEntrada {
+    from {
+        opacity: 0;
+        transform: translateX(-24px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes reporteVacioEntrada {
+    from {
+        opacity: 0;
+        transform: scale(0.96);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes modalReporteEntrada {
+    from {
+        opacity: 0;
+        transform: translateY(18px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .page-title,
+    .page-sub,
+    .btn-teal,
+    .report-row,
+    .empty-state,
+    #editModal .modal-dialog {
+        animation: none;
+        opacity: 1;
+        transform: none;
+    }
+}
