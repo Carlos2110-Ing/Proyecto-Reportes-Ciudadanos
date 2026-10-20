@@ -1987,3 +1987,75 @@ body.admin-body {
   }
 }
 
+/* ANIMACIÓN DE ENTRADA - PANEL DE ADMINISTRACIÓN*/
+
+/* 1. Tarjetas de estadísticas: aparecen desde arriba */
+.row.g-3.mb-4 > div {
+    animation: adminStatsEntrada 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Cada tarjeta tiene un pequeño retraso */
+.row.g-3.mb-4 > div:nth-child(1) {
+    animation-delay: 0.10s;
+}
+
+.row.g-3.mb-4 > div:nth-child(2) {
+    animation-delay: 0.20s;
+}
+
+.row.g-3.mb-4 > div:nth-child(3) {
+    animation-delay: 0.30s;
+}
+
+.row.g-3.mb-4 > div:nth-child(4) {
+    animation-delay: 0.40s;
+}
+
+/* 2. Tarjeta de gestión de usuarios */
+#usuarios {
+    animation: adminTablaEntrada 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: 0.40s;
+}
+
+/* 3. Tarjeta de gestión de reportes */
+#reportes {
+    animation: adminTablaEntrada 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: 0.60s;
+}
+
+/* 4. Animación de estadísticas */
+@keyframes adminStatsEntrada {
+    from {
+        opacity: 0;
+        transform: translateY(-18px) scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* 5. Animación de las tablas */
+@keyframes adminTablaEntrada {
+    from {
+        opacity: 0;
+        transform: translateY(24px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 6. Accesibilidad: reducir movimiento si el usuario lo solicita */
+@media (prefers-reduced-motion: reduce) {
+    .row.g-3.mb-4 > div,
+    #usuarios,
+    #reportes {
+        animation: none;
+        opacity: 1;
+        transform: none;
+    }
+}
