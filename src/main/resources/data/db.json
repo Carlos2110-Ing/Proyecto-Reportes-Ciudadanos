@@ -1,224 +1,242 @@
 {
   "categorias" : [ {
-    "id" : 1,
-    "nombre" : "Emergencia",
+    "color" : "#ef4444",
     "icono" : "bi bi-exclamation-triangle-fill",
-    "color" : "#ef4444"
+    "id" : 1,
+    "nombre" : "Emergencia"
   }, {
-    "id" : 2,
-    "nombre" : "Infraestructura",
+    "color" : "#3b82f6",
     "icono" : "bi bi-building",
-    "color" : "#3b82f6"
+    "id" : 2,
+    "nombre" : "Infraestructura"
   }, {
-    "id" : 3,
-    "nombre" : "Seguridad",
+    "color" : "#f57c00",
     "icono" : "bi bi-shield-exclamation",
-    "color" : "#f57c00"
+    "id" : 3,
+    "nombre" : "Seguridad"
   }, {
-    "id" : 4,
-    "nombre" : "Medio Ambiente",
+    "color" : "#16a34a",
     "icono" : "bi bi-tree-fill",
-    "color" : "#16a34a"
+    "id" : 4,
+    "nombre" : "Medio Ambiente"
   }, {
-    "id" : 5,
-    "nombre" : "Tránsito",
+    "color" : "#6b7280",
     "icono" : "bi bi-car-front",
-    "color" : "#6b7280"
+    "id" : 5,
+    "nombre" : "Tránsito"
   }, {
-    "id" : 6,
-    "nombre" : "Otro",
+    "color" : "#94a3b8",
     "icono" : "bi bi-three-dots",
-    "color" : "#94a3b8"
-  } ],
-  "verificaciones" : [ {
-    "id" : 1,
-    "usuarioId" : 1,
-    "estado" : "VERIFICADO",
-    "fechaVerificacion" : "2026-03-10",
-    "adminId" : 99,
-    "verificado" : true
-  }, {
-    "id" : 2,
-    "usuarioId" : 3,
-    "estado" : "VERIFICADO",
-    "fechaVerificacion" : "2026-02-15",
-    "adminId" : 99,
-    "verificado" : true
-  }, {
-    "id" : 3,
-    "usuarioId" : 2,
-    "estado" : "PENDIENTE",
-    "fechaVerificacion" : null,
-    "adminId" : null,
-    "verificado" : false
-  }, {
-    "id" : 4,
-    "usuarioId" : 4,
-    "estado" : "PENDIENTE",
-    "fechaVerificacion" : null,
-    "adminId" : null,
-    "verificado" : false
-  }, {
-    "id" : 5,
-    "usuarioId" : 5,
-    "estado" : "PENDIENTE",
-    "fechaVerificacion" : null,
-    "adminId" : null,
-    "verificado" : false
-  }, {
     "id" : 6,
-    "usuarioId" : 103,
-    "estado" : "PENDIENTE",
-    "fechaVerificacion" : null,
-    "adminId" : null,
-    "verificado" : false
-  }, {
-    "id" : 7,
-    "usuarioId" : 100,
-    "estado" : "PENDIENTE",
-    "fechaVerificacion" : null,
-    "adminId" : null,
-    "verificado" : false
-  } ],
-  "usuarios" : [ {
-    "id" : 1,
-    "username" : "juan.diaz",
-    "email" : "juan.diaz@correo.com",
-    "password" : "pass1234",
-    "nombreCompleto" : "Juan Diaz",
-    "rol" : "USUARIO",
-    "avatarInicial" : "JD",
-    "fechaRegistro" : "2026-03-01",
-    "admin" : false
-  }, {
-    "id" : 2,
-    "username" : "maria.lopez",
-    "email" : "maria.lopez@correo.com",
-    "password" : "pass1234",
-    "nombreCompleto" : "María López",
-    "rol" : "USUARIO",
-    "avatarInicial" : "ML",
-    "fechaRegistro" : "2026-04-01",
-    "admin" : false
-  }, {
-    "id" : 3,
-    "username" : "carlos.rojas",
-    "email" : "carlos.rojas@correo.com",
-    "password" : "pass1234",
-    "nombreCompleto" : "Carlos Rojas",
-    "rol" : "USUARIO",
-    "avatarInicial" : "CR",
-    "fechaRegistro" : "2026-02-10",
-    "admin" : false
-  }, {
-    "id" : 4,
-    "username" : "ana.torres",
-    "email" : "ana.torres@correo.com",
-    "password" : "pass1234",
-    "nombreCompleto" : "Ana Torres",
-    "rol" : "USUARIO",
-    "avatarInicial" : "AT",
-    "fechaRegistro" : "2026-04-05",
-    "admin" : false
-  }, {
-    "id" : 5,
-    "username" : "pedro.espinoza",
-    "email" : "pedro.espinoza@correo.com",
-    "password" : "pass1234",
-    "nombreCompleto" : "Pedro Espinoza",
-    "rol" : "USUARIO",
-    "avatarInicial" : "PE",
-    "fechaRegistro" : "2026-04-10",
-    "admin" : false
-  }, {
-    "id" : 99,
-    "username" : "admin",
-    "email" : "admin@safeperu.pe",
-    "password" : "admin2026",
-    "nombreCompleto" : "Administrador",
-    "rol" : "ADMIN",
-    "avatarInicial" : "AD",
-    "fechaRegistro" : "2026-01-01",
-    "admin" : true
-  }, {
-    "id" : 100,
-    "username" : "carlos.castillo",
-    "email" : "carlos.castillo@correo.com",
-    "password" : "pass1234",
-    "nombreCompleto" : "Carlos Castillo",
-    "rol" : "USUARIO",
-    "avatarInicial" : "CC",
-    "fechaRegistro" : "2026-05-07",
-    "admin" : false
+    "nombre" : "Otro"
   } ],
   "reportes" : [ {
-    "id" : 1,
-    "titulo" : "Poste de luz caído en Av. Grau",
-    "descripcion" : "Un poste eléctrico cayó sobre la vía pública bloqueando el tránsito y representando un peligro eléctrico para los transeúntes.",
+    "categoria" : {
+      "color" : "#ef4444",
+      "icono" : "bi bi-exclamation-triangle-fill",
+      "id" : 1,
+      "nombre" : "Emergencia"
+    },
     "categoriaId" : 1,
-    "usuarioId" : 1,
-    "ubicacion" : "Av. Grau, Barranco, Lima",
-    "latitud" : -12.1528,
-    "longitud" : -77.0197,
+    "descripcion" : "Un poste eléctrico cayó sobre la vía pública bloqueando el tránsito y representando un peligro eléctrico para los transeúntes.",
+    "enProceso" : false,
     "estado" : "PENDIENTE",
     "fechaCreacion" : "2026-04-11T09:12:00",
-    "categoria" : {
-      "id" : 1,
-      "nombre" : "Emergencia",
-      "icono" : "bi bi-exclamation-triangle-fill",
-      "color" : "#ef4444"
-    },
-    "usuarioNombre" : "Juan Diaz",
-    "usuarioAvatar" : "JD",
-    "usuarioVerificado" : true,
+    "id" : 1,
+    "latitud" : -12.1528,
+    "longitud" : -77.0197,
     "pendiente" : true,
-    "enProceso" : false,
-    "resuelto" : false
+    "resuelto" : false,
+    "titulo" : "Poste de luz caído en Av. Grau",
+    "ubicacion" : "Av. Grau, Barranco, Lima",
+    "usuarioAvatar" : "JD",
+    "usuarioId" : 1,
+    "usuarioNombre" : "Juan Diaz",
+    "usuarioVerificado" : true
   }, {
-    "id" : 2,
-    "titulo" : "Fuga de agua en Jr. Moquegua",
-    "descripcion" : "Fuga de agua considerable en la tubería principal que afecta la vía pública y desperdicia el recurso hídrico.",
+    "categoria" : {
+      "color" : "#3b82f6",
+      "icono" : "bi bi-building",
+      "id" : 2,
+      "nombre" : "Infraestructura"
+    },
     "categoriaId" : 2,
-    "usuarioId" : 3,
-    "ubicacion" : "Jr. Moquegua, Cercado de Lima",
-    "latitud" : -12.05,
-    "longitud" : -77.03,
+    "descripcion" : "Fuga de agua considerable en la tubería principal que afecta la vía pública y desperdicia el recurso hídrico.",
+    "enProceso" : true,
     "estado" : "EN_PROCESO",
     "fechaCreacion" : "2026-04-10T16:45:00",
-    "categoria" : {
-      "id" : 2,
-      "nombre" : "Infraestructura",
-      "icono" : "bi bi-building",
-      "color" : "#3b82f6"
-    },
-    "usuarioNombre" : "Carlos Rojas",
-    "usuarioAvatar" : "CR",
-    "usuarioVerificado" : true,
+    "id" : 2,
+    "latitud" : -12.05,
+    "longitud" : -77.03,
     "pendiente" : false,
-    "enProceso" : true,
-    "resuelto" : false
+    "resuelto" : false,
+    "titulo" : "Fuga de agua en Jr. Moquegua",
+    "ubicacion" : "Jr. Moquegua, Cercado de Lima",
+    "usuarioAvatar" : "CR",
+    "usuarioId" : 3,
+    "usuarioNombre" : "Carlos Rojas",
+    "usuarioVerificado" : true
   }, {
-    "id" : 4,
-    "titulo" : "Semáforo dañado en intersección",
-    "descripcion" : "El semáforo de la intersección principal no funciona desde hace 3 días, generando caos vehicular y riesgo de accidentes.",
+    "categoria" : {
+      "color" : "#6b7280",
+      "icono" : "bi bi-car-front",
+      "id" : 5,
+      "nombre" : "Tránsito"
+    },
     "categoriaId" : 5,
-    "usuarioId" : 1,
-    "ubicacion" : "San Isidro, Lima",
-    "latitud" : -12.0972,
-    "longitud" : -77.0351,
+    "descripcion" : "El semáforo de la intersección principal no funciona desde hace 3 días, generando caos vehicular y riesgo de accidentes.",
+    "enProceso" : false,
     "estado" : "PENDIENTE",
     "fechaCreacion" : "2026-04-08T14:20:00",
-    "categoria" : {
-      "id" : 5,
-      "nombre" : "Tránsito",
-      "icono" : "bi bi-car-front",
-      "color" : "#6b7280"
-    },
-    "usuarioNombre" : "Juan Diaz",
-    "usuarioAvatar" : "JD",
-    "usuarioVerificado" : true,
+    "id" : 4,
+    "latitud" : -12.0972,
+    "longitud" : -77.0351,
     "pendiente" : true,
+    "resuelto" : false,
+    "titulo" : "Semáforo dañado en intersección",
+    "ubicacion" : "San Isidro, Lima",
+    "usuarioAvatar" : "JD",
+    "usuarioId" : 1,
+    "usuarioNombre" : "Juan Diaz",
+    "usuarioVerificado" : true
+  }, {
+    "categoria" : null,
+    "categoriaId" : 5,
+    "descripcion" : "Accidente en la via Piura - Sullana, tránsito interrumpido",
     "enProceso" : false,
-    "resuelto" : false
+    "estado" : "PENDIENTE",
+    "fechaCreacion" : "2026-10-20T22:32:35",
+    "id" : 5,
+    "latitud" : -4.970201,
+    "longitud" : -80.697936,
+    "pendiente" : true,
+    "resuelto" : false,
+    "titulo" : "Accidente en la via Piura - Sullana",
+    "ubicacion" : "Carretera Panamericana Norte",
+    "usuarioAvatar" : null,
+    "usuarioId" : 100,
+    "usuarioNombre" : null,
+    "usuarioVerificado" : false
+  } ],
+  "usuarios" : [ {
+    "admin" : false,
+    "avatarInicial" : "JD",
+    "email" : "juan.diaz@correo.com",
+    "fechaRegistro" : "2026-03-01",
+    "id" : 1,
+    "nombreCompleto" : "Juan Diaz",
+    "password" : "pass1234",
+    "rol" : "USUARIO",
+    "username" : "juan.diaz"
+  }, {
+    "admin" : false,
+    "avatarInicial" : "ML",
+    "email" : "maria.lopez@correo.com",
+    "fechaRegistro" : "2026-04-01",
+    "id" : 2,
+    "nombreCompleto" : "María López",
+    "password" : "pass1234",
+    "rol" : "USUARIO",
+    "username" : "maria.lopez"
+  }, {
+    "admin" : false,
+    "avatarInicial" : "CR",
+    "email" : "carlos.rojas@correo.com",
+    "fechaRegistro" : "2026-02-10",
+    "id" : 3,
+    "nombreCompleto" : "Carlos Rojas",
+    "password" : "pass1234",
+    "rol" : "USUARIO",
+    "username" : "carlos.rojas"
+  }, {
+    "admin" : false,
+    "avatarInicial" : "AT",
+    "email" : "ana.torres@correo.com",
+    "fechaRegistro" : "2026-04-05",
+    "id" : 4,
+    "nombreCompleto" : "Ana Torres",
+    "password" : "pass1234",
+    "rol" : "USUARIO",
+    "username" : "ana.torres"
+  }, {
+    "admin" : false,
+    "avatarInicial" : "PE",
+    "email" : "pedro.espinoza@correo.com",
+    "fechaRegistro" : "2026-04-10",
+    "id" : 5,
+    "nombreCompleto" : "Pedro Espinoza",
+    "password" : "pass1234",
+    "rol" : "USUARIO",
+    "username" : "pedro.espinoza"
+  }, {
+    "admin" : true,
+    "avatarInicial" : "AD",
+    "email" : "admin@safeperu.pe",
+    "fechaRegistro" : "2026-01-01",
+    "id" : 99,
+    "nombreCompleto" : "Administrador",
+    "password" : "admin2026",
+    "rol" : "ADMIN",
+    "username" : "admin"
+  }, {
+    "admin" : false,
+    "avatarInicial" : "CC",
+    "email" : "carlos.castillo@correo.com",
+    "fechaRegistro" : "2026-05-07",
+    "id" : 100,
+    "nombreCompleto" : "Carlos Castillo",
+    "password" : "pass1234",
+    "rol" : "USUARIO",
+    "username" : "carlos.castillo"
+  } ],
+  "verificaciones" : [ {
+    "adminId" : 99,
+    "estado" : "VERIFICADO",
+    "fechaVerificacion" : "2026-03-10",
+    "id" : 1,
+    "usuarioId" : 1,
+    "verificado" : true
+  }, {
+    "adminId" : 99,
+    "estado" : "VERIFICADO",
+    "fechaVerificacion" : "2026-02-15",
+    "id" : 2,
+    "usuarioId" : 3,
+    "verificado" : true
+  }, {
+    "adminId" : null,
+    "estado" : "PENDIENTE",
+    "fechaVerificacion" : null,
+    "id" : 3,
+    "usuarioId" : 2,
+    "verificado" : false
+  }, {
+    "adminId" : null,
+    "estado" : "PENDIENTE",
+    "fechaVerificacion" : null,
+    "id" : 4,
+    "usuarioId" : 4,
+    "verificado" : false
+  }, {
+    "adminId" : null,
+    "estado" : "PENDIENTE",
+    "fechaVerificacion" : null,
+    "id" : 5,
+    "usuarioId" : 5,
+    "verificado" : false
+  }, {
+    "adminId" : null,
+    "estado" : "PENDIENTE",
+    "fechaVerificacion" : null,
+    "id" : 6,
+    "usuarioId" : 103,
+    "verificado" : false
+  }, {
+    "adminId" : null,
+    "estado" : "PENDIENTE",
+    "fechaVerificacion" : null,
+    "id" : 7,
+    "usuarioId" : 100,
+    "verificado" : false
   } ]
 }
