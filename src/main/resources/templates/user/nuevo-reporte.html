@@ -40,10 +40,11 @@
 
         <div class="mb-3">
           <label class="form-label">Descripción</label>
-          <textarea  id="descripcion" name="descripcion" class="form-control" rows="3"
-            placeholder="Describe el incidente con el mayor detalle posible..." required minlength="10" maxlength="500"></textarea>
+          <textarea id="descripcion" name="descripcion" class="form-control" rows="3"
+            placeholder="Describe el incidente con el mayor detalle posible..." required minlength="10"
+            maxlength="500"></textarea>
           <div class="invalid-feedback">La descripción debe tener al menos 10 caracteres.</div>
-           <small class="text-muted ms-auto">
+          <small class="text-muted ms-auto">
             <span id="contadorDescripcion">0</span>/500 caracteres
           </small>
         </div>
@@ -52,8 +53,8 @@
           <label class="form-label">Dirección / Referencia</label>
           <div class="input-group">
             <span class="input-group-text"><i class="bi bi-geo-alt-fill"></i></span>
-            <input type="text" name="ubicacion" class="form-control" placeholder="Av. / Jr. / Distrito, Ciudad"
-              required />
+            <input type="text" name="ubicacion" id="ubicacion" class="form-control"
+              placeholder="Av. / Jr. / Distrito, Ciudad" required />
             <div class="invalid-feedback">Ingresa la dirección del incidente.</div>
           </div>
         </div>
@@ -86,6 +87,38 @@
   <th:block layout:fragment="scripts-extra">
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
+      const ubicacionInput = document.getElementById('ubicacion');
+
+      ubicacionInput.addEventListener('change', async function () {
+        const direccion = this.value.trim();
+
+        if (!direccion) return;
+
+        try {
+          const respuesta = await fetch(
+            `https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q=${encodeURIComponent(direccion)}`
+          );
+
+          if (!respuesta.ok) {
+            throw new Error('No se pudo buscar la dirección');
+          }
+
+          const resultados = await respuesta.json();
+
+          if (resultados.length > 0) {
+            const lat = parseFloat(resultados[0].lat);
+            const lng = parseFloat(resultados[0].lon);
+
+            // Mover el mapa sin seleccionar la ubicación
+            map.setView([lat, lng], 16);
+          } else {
+            alert('No se encontró la dirección ingresada.');
+          }
+
+        } catch (error) {
+          console.error('Error al buscar la dirección:', error);
+        }
+      });
       const map = L.map('mapNuevoReporte').setView([-12.0464, -77.0428], 13);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
@@ -93,13 +126,17 @@
 
       let marker = null;
       map.on('click', function (e) {
-        const { lat, lng } = e.latlng;
+        const {
+          lat,
+          lng
+        } = e.latlng;
         if (marker) marker.remove();
         marker = L.marker([lat, lng], {
           icon: L.divIcon({
             className: '',
             html: `<div style="width:18px;height:18px;border-radius:50%;background:#ef4444;border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,0.4);"></div>`,
-            iconSize: [18, 18], iconAnchor: [9, 9]
+            iconSize: [18, 18],
+            iconAnchor: [9, 9]
           })
         }).addTo(map);
         document.getElementById('latInput').value = lat.toFixed(6);
@@ -116,8 +153,6 @@
           contadorInput.textContent = this.value.length;
         });
       }
-
-
     </script>
   </th:block>
 
