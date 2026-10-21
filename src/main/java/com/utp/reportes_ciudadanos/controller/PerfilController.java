@@ -31,17 +31,19 @@ public class PerfilController {
 
     @GetMapping
     public String verPerfil(HttpSession session, Model model) {
-        if (session.getAttribute("usuarioId") == null) return "redirect:/login";
+        if (session.getAttribute("usuarioId") == null)
+            return "redirect:/login";
 
         Integer id = (Integer) session.getAttribute("usuarioId");
         Optional<Usuario> opt = usuarioService.findById(id);
-        if (opt.isEmpty()) return "redirect:/logout";
+        if (opt.isEmpty())
+            return "redirect:/logout";
 
         Usuario u = opt.get();
-        model.addAttribute("usuario",       u);
-        model.addAttribute("verificacion",  usuarioService.findVerificacionByUsuario(id).orElse(null));
+        model.addAttribute("usuario", u);
+        model.addAttribute("verificacion", usuarioService.findVerificacionByUsuario(id).orElse(null));
         model.addAttribute("totalReportes", reporteService.countByUsuario(id));
-        model.addAttribute("resueltos",     reporteService.countResueltosByUsuario(id));
+        model.addAttribute("resueltos", reporteService.countResueltosByUsuario(id));
         model.addAttribute("activos",
                 reporteService.countByUsuario(id) - reporteService.countResueltosByUsuario(id));
         return "user/perfil";
@@ -49,30 +51,47 @@ public class PerfilController {
 
     @PostMapping("/actualizar")
     public String actualizarPerfil(@RequestParam String nombreCompleto,
-                                   @RequestParam String email,
-                                   HttpSession session,
-                                   RedirectAttributes redirectAttributes) {
-        if (session.getAttribute("usuarioId") == null) return "redirect:/login";
+            @RequestParam String email,
+            HttpSession session,
+            RedirectAttributes redirectAttributes) {
+        if (session.getAttribute("usuarioId") == null) {
+            return "redirect:/login";
+        }
 
         Integer id = (Integer) session.getAttribute("usuarioId");
-        usuarioService.actualizarPerfil(id, nombreCompleto, email);
 
-        // Refrescar sesión
-        session.setAttribute("usuarioNombre", nombreCompleto);
-        session.setAttribute("usuarioAvatar",
-                usuarioService.findById(id).map(Usuario::getAvatarInicial).orElse("??"));
+        try {
+            usuarioService.actualizarPerfil(id, nombreCompleto, email);
 
-        redirectAttributes.addFlashAttribute("exito", "Datos actualizados correctamente.");
+            // Refrescar los datos de la sesión después de actualizar
+            Usuario usuarioActualizado = usuarioService.findById(id)
+                    .orElseThrow();
+
+            session.setAttribute("usuarioNombre",
+                    usuarioActualizado.getNombreCompleto());
+
+            session.setAttribute("usuarioAvatar",
+                    usuarioActualizado.getAvatarInicial());
+
+            redirectAttributes.addFlashAttribute(
+                    "exito", "Datos actualizados correctamente.");
+
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute(
+                    "errorPerfil", e.getMessage());
+        }
+
         return "redirect:/perfil";
     }
 
     @PostMapping("/cambiar-password")
     public String cambiarPassword(@RequestParam String passwordActual,
-                                  @RequestParam String nuevaPassword,
-                                  @RequestParam String confirmPassword,
-                                  HttpSession session,
-                                  RedirectAttributes redirectAttributes) {
-        if (session.getAttribute("usuarioId") == null) return "redirect:/login";
+            @RequestParam String nuevaPassword,
+            @RequestParam String confirmPassword,
+            HttpSession session,
+            RedirectAttributes redirectAttributes) {
+        if (session.getAttribute("usuarioId") == null)
+            return "redirect:/login";
 
         Integer id = (Integer) session.getAttribute("usuarioId");
         Optional<Usuario> opt = usuarioService.findById(id);
