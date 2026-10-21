@@ -1866,6 +1866,104 @@ body.admin-body {
   color: #22c55e;
 }
 
+/* ANIMACIÓN DE ENTRADA - NUEVO REPORTE*/
+
+/* Animación general de la tarjeta del formulario */
+.form-card {
+    animation: entradaFormulario 0.8s ease-out both;
+    will-change: opacity, transform;
+}
+
+/* Animación del encabezado */
+.form-card .page-header {
+    animation: entradaContenido 0.7s ease-out both;
+    animation-delay: 0.15s;
+}
+
+/* Animación progresiva de los campos del formulario */
+.form-card form > .mb-3:nth-child(1) {
+    animation: entradaContenido 0.6s ease-out both;
+    animation-delay: 0.20s;
+}
+
+.form-card form > .mb-3:nth-child(2) {
+    animation: entradaContenido 0.6s ease-out both;
+    animation-delay: 0.30s;
+}
+
+.form-card form > .mb-3:nth-child(3) {
+    animation: entradaContenido 0.6s ease-out both;
+    animation-delay: 0.40s;
+}
+
+.form-card form > .mb-3:nth-child(4) {
+    animation: entradaContenido 0.6s ease-out both;
+    animation-delay: 0.50s;
+}
+
+/* Animación del mapa y su sección */
+.form-card form > .mb-3:nth-child(5) {
+    animation: entradaContenido 0.7s ease-out both;
+    animation-delay: 0.60s;
+}
+
+/* Animación del botón Enviar Reporte */
+.form-card .btn-submit {
+    animation: entradaBoton 0.7s ease-out both;
+    animation-delay: 0.75s;
+}
+
+/* Movimiento suave desde abajo hacia su posición */
+@keyframes entradaFormulario {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Aparición progresiva del contenido */
+@keyframes entradaContenido {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* El botón aparece con un desplazamiento ligeramente menor */
+@keyframes entradaBoton {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Accesibilidad: respetar la preferencia de movimiento reducido */
+@media (prefers-reduced-motion: reduce) {
+    .form-card,
+    .form-card .page-header,
+    .form-card form > .mb-3,
+    .form-card .btn-submit {
+        animation: none;
+        opacity: 1;
+        transform: none;
+    }
+}
+
 /* Indicador de seguridad de contraseña */
 .strength-bar {
   margin-top: 8px;
@@ -1887,4 +1985,509 @@ body.admin-body {
   .password-requirements {
     gap: 6px;
   }
+}
+
+/* ANIMACIÓN DE ENTRADA - PANEL DE ADMINISTRACIÓN*/
+
+/* 1. Tarjetas de estadísticas: aparecen desde arriba */
+.row.g-3.mb-4 > div {
+    animation: adminStatsEntrada 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Cada tarjeta tiene un pequeño retraso */
+.row.g-3.mb-4 > div:nth-child(1) {
+    animation-delay: 0.10s;
+}
+
+.row.g-3.mb-4 > div:nth-child(2) {
+    animation-delay: 0.20s;
+}
+
+.row.g-3.mb-4 > div:nth-child(3) {
+    animation-delay: 0.30s;
+}
+
+.row.g-3.mb-4 > div:nth-child(4) {
+    animation-delay: 0.40s;
+}
+
+/* 2. Tarjeta de gestión de usuarios */
+#usuarios {
+    animation: adminTablaEntrada 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: 0.40s;
+}
+
+/* 3. Tarjeta de gestión de reportes */
+#reportes {
+    animation: adminTablaEntrada 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: 0.60s;
+}
+
+/* 4. Animación de estadísticas */
+@keyframes adminStatsEntrada {
+    from {
+        opacity: 0;
+        transform: translateY(-18px) scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* 5. Animación de las tablas */
+@keyframes adminTablaEntrada {
+    from {
+        opacity: 0;
+        transform: translateY(24px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 6. Accesibilidad: reducir movimiento si el usuario lo solicita */
+@media (prefers-reduced-motion: reduce) {
+    .row.g-3.mb-4 > div,
+    #usuarios,
+    #reportes {
+        animation: none;
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* MIS REPORTES - ANIMACIÓN DE ENTRADA.efectodedeslizamiento lateral progresivo*/
+
+.page-title {
+    animation: reportesTituloEntrada 0.65s ease-out both;
+}
+
+.page-sub {
+    animation: reportesTituloEntrada 0.65s ease-out both;
+    animation-delay: 0.10s;
+}
+
+.btn-teal {
+    animation: reportesBotonEntrada 0.7s ease-out both;
+    animation-delay: 0.20s;
+}
+
+.report-row {
+    animation: reporteFilaEntrada 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.report-row:nth-child(1) {
+    animation-delay: 0.15s;
+}
+
+.report-row:nth-child(2) {
+    animation-delay: 0.25s;
+}
+
+.report-row:nth-child(3) {
+    animation-delay: 0.35s;
+}
+
+.report-row:nth-child(4) {
+    animation-delay: 0.45s;
+}
+
+.report-row:nth-child(5) {
+    animation-delay: 0.55s;
+}
+
+.report-row:nth-child(6) {
+    animation-delay: 0.65s;
+}
+
+.empty-state {
+    animation: reporteVacioEntrada 0.75s ease-out both;
+    animation-delay: 0.15s;
+}
+
+#editModal .modal-dialog {
+    animation: modalReporteEntrada 0.35s ease-out both;
+}
+
+@keyframes reportesTituloEntrada { /* definicion de animaciones*/
+    from {
+        opacity: 0;
+        transform: translateX(-18px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes reportesBotonEntrada {
+    from {
+        opacity: 0;
+        transform: translateX(18px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes reporteFilaEntrada {
+    from {
+        opacity: 0;
+        transform: translateX(-24px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes reporteVacioEntrada {
+    from {
+        opacity: 0;
+        transform: scale(0.96);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes modalReporteEntrada {
+    from {
+        opacity: 0;
+        transform: translateY(18px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .page-title,
+    .page-sub,
+    .btn-teal,
+    .report-row,
+    .empty-state,
+    #editModal .modal-dialog {
+        animation: none;
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* ==========================================
+   EFECTOS HOVER - TARJETAS DE ESTADÍSTICAS
+   Panel de Administración
+   ========================================== */
+
+/* Transición suave para toda la tarjeta */
+.stat-card {
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+    transform-origin: center;
+}
+
+/* La tarjeta crece ligeramente y obtiene una sombra */
+.stat-card:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 10px 24px rgba(27, 43, 75, 0.14);
+}
+
+/* El cuadro del icono gira ligeramente */
+.stat-card .stat-icon {
+    transition:
+        transform 0.35s ease,
+        box-shadow 0.35s ease;
+    transform-origin: center;
+}
+
+/* Al pasar el cursor sobre la tarjeta, gira el cuadro */
+.stat-card:hover .stat-icon {
+    transform: rotate(-8deg) scale(1.06);
+    box-shadow: 0 5px 12px rgba(27, 43, 75, 0.12);
+}
+
+/* El icono aumenta de tamaño */
+.stat-card .stat-icon i {
+    display: inline-block;
+    transition: transform 0.35s ease;
+}
+
+/* Efecto de crecimiento del icono */
+.stat-card:hover .stat-icon i {
+    transform: scale(1.22);
+}
+
+/* Accesibilidad: respetar la preferencia de movimiento reducido */
+@media (prefers-reduced-motion: reduce) {
+    .stat-card,
+    .stat-card .stat-icon,
+    .stat-card .stat-icon i {
+        transition: none;
+    }
+
+    .stat-card:hover,
+    .stat-card:hover .stat-icon,
+    .stat-card:hover .stat-icon i {
+        transform: none;
+    }
+}
+
+/* ANIMACIONES DE ENTRADA - MI PERFIL */
+
+.profile-hero {
+    animation: perfilHeroEntrada 0.75s
+        cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.avatar-circle { /*avatar*/
+    animation: perfilAvatarEntrada 0.7s
+        cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: 0.15s;
+}
+
+.profile-name,
+.profile-email {
+    animation: perfilTextoEntrada 0.6s ease-out both;
+    animation-delay: 0.2s;
+}
+
+.profile-stats {
+    animation: perfilStatsEntrada 0.7s ease-out both;
+    animation-delay: 0.3s;
+}
+
+.row.g-4 > .col-md-6 > .section-card {
+    animation: perfilTarjetaEntrada 0.7s
+        cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.row.g-4 > .col-md-6:first-child > .section-card {
+    animation-delay: 0.2s;
+}
+
+.row.g-4 > .col-md-6:last-child > .section-card:first-child {
+    animation-delay: 0.35s;
+}
+
+.row.g-4 > .col-md-6:last-child > .section-card:last-child {
+    animation-delay: 0.5s;
+}
+
+.alert-exito,
+.alert-error {
+    animation: perfilMensajeEntrada 0.5s ease-out both;
+}
+
+/*MOVIMIENTOS */
+
+@keyframes perfilHeroEntrada {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes perfilAvatarEntrada {
+    from {
+        opacity: 0;
+        transform: scale(0.75) rotate(-8deg);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) rotate(0);
+    }
+}
+
+@keyframes perfilTextoEntrada {
+    from {
+        opacity: 0;
+        transform: translateX(-12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes perfilStatsEntrada {
+    from {
+        opacity: 0;
+        transform: translateX(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes perfilTarjetaEntrada {
+    from {
+        opacity: 0;
+        transform: translateY(24px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes perfilMensajeEntrada {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .profile-hero,
+    .avatar-circle,
+    .profile-name,
+    .profile-email,
+    .profile-stats,
+    .row.g-4 > .col-md-6 > .section-card,
+    .alert-exito,
+    .alert-error {
+        animation: none;
+    }
+}
+/* ANIMACIÓN DE ENTRADA - NAVEGACIÓN ADMIN*/
+.admin-sidebar {
+    animation: adminSidebarEntrada 0.65s
+        cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.admin-sidebar .sidebar-brand {
+    animation: adminBrandEntrada 0.6s ease-out both;
+    animation-delay: 0.15s;
+}
+
+.admin-sidebar .sidebar-section {
+    animation: adminSeccionEntrada 0.5s ease-out both;
+    animation-delay: 0.2s;
+}
+
+.admin-sidebar .sidebar-link {
+    animation: adminEnlaceEntrada 0.5s ease-out both;
+}
+
+.admin-sidebar .sidebar-link:nth-of-type(1) {
+    animation-delay: 0.15s;
+}
+
+.admin-sidebar .sidebar-link:nth-of-type(2) {
+    animation-delay: 0.25s;
+}
+
+.admin-sidebar .sidebar-link:nth-of-type(3) {
+    animation-delay: 0.35s;
+}
+
+.admin-sidebar .sidebar-link:nth-of-type(4) {
+    animation-delay: 0.45s;
+}
+
+.admin-sidebar .sidebar-link:nth-of-type(5) {
+    animation-delay: 0.55s;
+}
+
+.admin-topbar {
+    animation: adminTopbarEntrada 0.6s ease-out both;
+    animation-delay: 0.15s;
+}
+
+@keyframes adminSidebarEntrada {
+    from {
+        opacity: 0;
+        transform: translateX(-24px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes adminBrandEntrada {
+    from {
+        opacity: 0;
+        transform: scale(0.94);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes adminSeccionEntrada {
+    from {
+        opacity: 0;
+        transform: translateX(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes adminEnlaceEntrada {
+    from {
+        opacity: 0;
+        transform: translateX(-12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes adminTopbarEntrada {
+    from {
+        opacity: 0;
+        transform: translateY(-12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .admin-sidebar,
+    .admin-sidebar .sidebar-brand,
+    .admin-sidebar .sidebar-section,
+    .admin-sidebar .sidebar-link,
+    .admin-topbar {
+        animation: none;
+    }
 }

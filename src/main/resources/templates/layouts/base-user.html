@@ -1,23 +1,24 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      lang="es">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" lang="es">
 
-        <title layout:title-pattern="$CONTENT_TITLE – SafePeru">SafePeru</title>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-        <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+    <title layout:title-pattern="$CONTENT_TITLE – SafePeru">SafePeru</title>
 
-        <!-- Slot: páginas que necesitan Leaflet u otros CSS lo declaran aquí -->
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+
+    <!-- Slot: páginas que necesitan Leaflet u otros CSS lo declaran aquí -->
     <th:block layout:fragment="head-extra"></th:block>
 
     <link th:href="@{/css/safeperu.css}" rel="stylesheet" />
 </head>
+
 <body class="d-flex flex-column min-vh-100">
 
     <!-- ════ NAVBAR (fragmento compartido) ════ -->
@@ -68,7 +69,9 @@
     </script>
 
     <!-- SLOT: scripts adicionales por página (Leaflet, lógica de modales, etc.) -->
-<th:block layout:fragment="scripts-extra"></th:block>
-
+    <th:block layout:fragment="scripts-extra"></th:block>
+    <!-- Título dinámico de la pestaña -->
+    <script th:src="@{/js/titulo-dinamico.js}"></script>
 </body>
+
 </html>

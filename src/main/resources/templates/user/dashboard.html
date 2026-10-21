@@ -21,7 +21,7 @@
         <div class="stat-card">
           <div class="stat-icon teal"><i class="bi bi-flag-fill"></i></div>
           <div>
-            <div class="stat-num" th:text="${totalReportes}">0</div>
+            <div class="stat-num counter" th:text="${totalReportes}">0</div>
             <div class="stat-lbl">Reportes Totales</div>
           </div>
         </div>
@@ -30,7 +30,7 @@
         <div class="stat-card">
           <div class="stat-icon orange"><i class="bi bi-clock-fill"></i></div>
           <div>
-            <div class="stat-num" th:text="${pendientes}">0</div>
+            <div class="stat-num counter" th:text="${pendientes}">0</div>
             <div class="stat-lbl">Pendientes</div>
           </div>
         </div>
@@ -39,7 +39,7 @@
         <div class="stat-card">
           <div class="stat-icon navy"><i class="bi bi-arrow-repeat"></i></div>
           <div>
-            <div class="stat-num" th:text="${enProceso}">0</div>
+            <div class="stat-num counter" th:text="${enProceso}">0</div>
             <div class="stat-lbl">En Proceso</div>
           </div>
         </div>
@@ -48,7 +48,7 @@
         <div class="stat-card">
           <div class="stat-icon green"><i class="bi bi-check-circle-fill"></i></div>
           <div>
-            <div class="stat-num" th:text="${resueltos}">0</div>
+            <div class="stat-num counter" th:text="${resueltos}">0</div>
             <div class="stat-lbl">Resueltos</div>
           </div>
         </div>
@@ -96,9 +96,10 @@
             <span th:text="${#strings.substring(r.fechaCreacion,0,10)}">Fecha</span>
           </div>
           <div class="report-footer">
-            <span th:if="${r.pendiente}"  class="badge-pendiente"><i class="bi bi-hourglass me-1"></i>Pendiente</span>
-            <span th:if="${r.enProceso}"  class="badge-en-proceso"><i class="bi bi-arrow-repeat me-1"></i>En Proceso</span>
-            <span th:if="${r.resuelto}"   class="badge-resuelto"><i class="bi bi-check2 me-1"></i>Resuelto</span>
+            <span th:if="${r.pendiente}" class="badge-pendiente"><i class="bi bi-hourglass me-1"></i>Pendiente</span>
+            <span th:if="${r.enProceso}" class="badge-en-proceso"><i class="bi bi-arrow-repeat me-1"></i>En
+              Proceso</span>
+            <span th:if="${r.resuelto}" class="badge-resuelto"><i class="bi bi-check2 me-1"></i>Resuelto</span>
           </div>
         </div>
       </div>
@@ -110,68 +111,58 @@
     </div>
 
   </div>
-<div th:if="${loginExitoso}"
-     class="modal fade"
-     id="modalBienvenida"
-     tabindex="-1"
-     aria-labelledby="modalBienvenidaLabel"
-     aria-hidden="true">
+  <div th:if="${loginExitoso}" class="modal fade" id="modalBienvenida" tabindex="-1"
+    aria-labelledby="modalBienvenidaLabel" aria-hidden="true">
 
     <div class="modal-dialog modal-dialog-centered">
 
-        <div class="modal-content">
+      <div class="modal-content">
 
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalBienvenidaLabel">
-                    <i class="fa-solid fa-circle-check me-2"></i>
-                    ¡Bienvenido!
-                </h5>
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalBienvenidaLabel">
+            <i class="fa-solid fa-circle-check me-2"></i>
+            ¡Bienvenido!
+          </h5>
 
-                <button type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Cerrar">
-                </button>
-            </div>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar">
+          </button>
+        </div>
 
-            <div class="modal-body text-center">
+        <div class="modal-body text-center">
 
-                <div class="mb-3">
-                    <i class="fa-solid fa-circle-user"
-                       style="font-size: 4rem;"></i>
-                </div>
+          <div class="mb-3">
+            <i class="fa-solid fa-circle-user" style="font-size: 4rem;"></i>
+          </div>
 
-                <h4>
-                    ¡Hola,
-                    <span th:text="${session.usuarioNombre}">Usuario</span>!
-                </h4>
+          <h4>
+            ¡Hola,
+            <span th:text="${session.usuarioNombre}">Usuario</span>!
+          </h4>
 
-                <p class="text-muted mb-0">
-                    Has iniciado sesión correctamente en SafePeru.
-                </p>
-
-            </div>
-
-            <div class="modal-footer justify-content-center">
-
-                <button type="button"
-                        class="btn-primary-custom"
-                        data-bs-dismiss="modal">
-                    <i class="fa-solid fa-arrow-right me-2"></i>
-                    Ir al Dashboard
-                </button>
-
-            </div>
+          <p class="text-muted mb-0">
+            Has iniciado sesión correctamente en SafePeru.
+          </p>
 
         </div>
+
+        <div class="modal-footer justify-content-center">
+
+          <button type="button" class="btn-primary-custom" data-bs-dismiss="modal">
+            <i class="fa-solid fa-arrow-right me-2"></i>
+            Ir al Dashboard
+          </button>
+
+        </div>
+
+      </div>
     </div>
-</div>
+  </div>
   <!-- Script Leaflet -->
   <th:block layout:fragment="scripts-extra">
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script th:inline="javascript">
       /*<![CDATA[*/
-      const reportes = /*[[${todosReportes}]]*/ [];
+      const reportes = /*[[${todosReportes}]]*/[];
 
       const map = L.map('map').setView([-12.0464, -77.0428], 12);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -194,25 +185,104 @@
           <div class="popup-meta"><b>Categoría:</b> ${r.categoria ? r.categoria.nombre : '—'}</div>
           <div class="popup-meta"><b>Ubicación:</b> ${r.ubicacion}</div>
           <div class="popup-meta"><b>Estado:</b> <span style="color:${color};font-weight:700;">${estadoLabel}</span></div>
-          <div class="popup-meta"><b>Fecha:</b> ${r.fechaCreacion ? r.fechaCreacion.substring(0,10) : '—'}</div>
+          <div class="popup-meta"><b>Fecha:</b> ${r.fechaCreacion ? r.fechaCreacion.substring(0, 10) : '—'}</div>
         `);
       });
       /*]]>*/
     </script>
 
     <script th:if="${loginExitoso}">
-    document.addEventListener("DOMContentLoaded", function () {
+      document.addEventListener("DOMContentLoaded", function () {
 
-      const modalElement = document.getElementById("modalBienvenida");
+        const modalElement = document.getElementById("modalBienvenida");
 
-      if (modalElement) {
-        const modal = new bootstrap.Modal(modalElement);
-        modal.show();
-      }
+        if (modalElement) {
+          const modal = new bootstrap.Modal(modalElement);
+          modal.show();
+        }
 
-    });
-  </script>
+      });
+    </script>
+
+    <!-- Animación de conteo de las estadísticas -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+
+        // Seleccionar los números que tienen la clase counter.
+        const counters = document.querySelectorAll(".counter");
+
+        // Duración de la animación en milisegundos.
+        const duration = 1000;
+
+        // Animar el número desde cero hasta su valor real.
+        const startCounterAnimation = (counter) => {
+
+          // Guardar el valor original que Thymeleaf muestra.
+          const target = parseInt(counter.textContent.trim(), 10);
+
+          // Evitar animaciones si el valor no es válido o es cero.
+          if (isNaN(target) || target <= 0) return;
+
+          let startTime = null;
+
+          // Función que actualiza el número en cada fotograma.
+          const animate = (timestamp) => {
+
+            if (startTime === null) {
+              startTime = timestamp;
+            }
+
+            // Calcular cuánto tiempo ha transcurrido.
+            const elapsed = timestamp - startTime;
+
+            // Obtener el progreso entre 0 y 1.
+            const progress = Math.min(elapsed / duration, 1);
+
+            // Calcular el número que se mostrará.
+            counter.textContent = Math.floor(progress * target);
+
+            // Continuar hasta completar la animación.
+            if (progress < 1) {
+              requestAnimationFrame(animate);
+            } else {
+              // Garantizar que se muestre el valor exacto.
+              counter.textContent = target;
+            }
+          };
+
+          // Iniciar el conteo desde cero.
+          counter.textContent = "0";
+          requestAnimationFrame(animate);
+        };
+
+        // Detectar cuándo las estadísticas entran en pantalla.
+        const observer = new IntersectionObserver((entries, observer) => {
+
+          entries.forEach(entry => {
+
+            if (entry.isIntersecting) {
+
+              startCounterAnimation(entry.target);
+
+              // Evitar repetir el conteo al desplazarse.
+              observer.unobserve(entry.target);
+            }
+
+          });
+
+        }, {
+          root: null,
+          threshold: 0.2
+        });
+
+        // Observar cada estadística.
+        counters.forEach(counter => observer.observe(counter));
+
+      });
+    </script>
+
   </th:block>
 
 </body>
+
 </html>
