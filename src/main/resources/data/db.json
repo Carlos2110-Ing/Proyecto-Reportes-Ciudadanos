@@ -108,13 +108,13 @@
     },
     "categoriaId" : 5,
     "descripcion" : "Accidente en la via Piura - Sullana, tránsito interrumpido",
-    "enProceso" : false,
-    "estado" : "PENDIENTE",
+    "enProceso" : true,
+    "estado" : "EN_PROCESO",
     "fechaCreacion" : "2026-10-20T22:32:35",
     "id" : 5,
     "latitud" : -4.970201,
     "longitud" : -80.697936,
-    "pendiente" : true,
+    "pendiente" : false,
     "resuelto" : false,
     "titulo" : "Accidente en la via Piura - Sullana",
     "ubicacion" : "Carretera Panamericana Norte",
@@ -195,12 +195,12 @@
     "username" : "carlos.castillo"
   } ],
   "verificaciones" : [ {
-    "adminId" : 99,
-    "estado" : "VERIFICADO",
-    "fechaVerificacion" : "2026-03-10",
+    "adminId" : null,
+    "estado" : "PENDIENTE",
+    "fechaVerificacion" : null,
     "id" : 1,
     "usuarioId" : 1,
-    "verificado" : true
+    "verificado" : false
   }, {
     "adminId" : 99,
     "estado" : "VERIFICADO",
