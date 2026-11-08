@@ -1,24 +1,62 @@
 package com.utp.reportes_ciudadanos.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+
+@Entity
+@Table(name = "reportes")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Reporte {
     public enum Estado { PENDIENTE, EN_PROCESO, RESUELTO }
-
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    
+    @NotBlank(message = "El título es obligatorio")
+    @Size(min = 5, max = 150, message = "El título debe tener entre 5 y 150 caracteres")
+    @Column(nullable = false, length = 150)
     private String titulo;
+    
+    @NotBlank(message = "La descripción es obligatoria")
+    @Size(min = 10, max = 500, message = "La descripción debe tener entre 10 y 500 caracteres")
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String descripcion;
+    
+    @NotNull
+    @Column(name = "categoria_id", nullable = false)
     private Integer categoriaId;
+    
+    @Column(name = "usuario_id", nullable = false)
     private Integer usuarioId;
+    
+    @NotBlank(message = "La ubicación es obligatoria")
+    @Size(min = 5, max = 200, message = "La ubicación debe tener entre 5 y 200 caracteres")
+    @Column(nullable = false, length = 200)
     private String ubicacion;
+    
+    @NotNull(message = "Debe seleccionar una ubicación en el mapa")
+    @Column(nullable = false)
     private Double latitud;
+    
+    @NotNull(message = "Debe seleccionar una ubicación en el mapa")
+    @Column(nullable = false)
     private Double longitud;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 15)
     private Estado estado;
+    
+    @Column(name = "fecha_creacion", length = 30)
     private String fechaCreacion;
 
-    // Campos enriquecidos (no vienen del JSON, se llenan en el service)
-    private Categoria categoria;
-    private String usuarioNombre;
-    private String usuarioAvatar;
-    private boolean usuarioVerificado;
+    // Campos enriquecidos (Solo en memoria, no van a la BD)
+    @Transient private Categoria categoria;
+    @Transient private String usuarioNombre;
+    @Transient private String usuarioAvatar;
+    @Transient private boolean usuarioVerificado;
 
     public Reporte() {}
 
@@ -68,5 +106,5 @@ public class Reporte {
     public boolean isPendiente()  { return Estado.PENDIENTE.equals(this.estado); }
     public boolean isEnProceso()  { return Estado.EN_PROCESO.equals(this.estado); }
     public boolean isResuelto()   { return Estado.RESUELTO.equals(this.estado); }
-
 }
+
