@@ -1,226 +1,236 @@
 package com.utp.reportes_ciudadanos.service;
 
-import java.io.File;
+import com.utp.reportes_ciudadanos.model.Usuario;
+import com.utp.reportes_ciudadanos.model.Verificacion;
+import com.utp.reportes_ciudadanos.repository.JsonRepository;
+import com.utp.reportes_ciudadanos.repository.UsuarioJpaRepository;
+import com.utp.reportes_ciudadanos.repository.VerificacionJpaRepository;
+import jakarta.transaction.Transactional;
+
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import com.utp.reportes_ciudadanos.model.Database;
-import com.utp.reportes_ciudadanos.model.Usuario;
-import com.utp.reportes_ciudadanos.model.Verificacion;
-
-import jakarta.annotation.PostConstruct;
-import tools.jackson.databind.ObjectMapper;
 
 @Service
 public class UsuarioService {
-    private final ObjectMapper objectMapper;
-    private Database database;
 
-    private File dbFile;
-    @Value("${app.db.path}")
-    private String dbPath;
+    private static final Logger log = LoggerFactory.getLogger(UsuarioService.class);
 
-    private final AtomicInteger userIdSeq = new AtomicInteger(100);
-    private final AtomicInteger verifIdSeq = new AtomicInteger(100);
+    private final UsuarioJpaRepository usuarioJpa;
+    private final VerificacionJpaRepository verificacionJpa;
+    private final JsonRepository jsonRepo;
+    private final PasswordEncoder passwordEncoder;
 
+    // @Lazy en PasswordEncoder evita dependencia circular con SecurityConfig
     @Autowired
-    public UsuarioService(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
-    }
-
-    // ── CARGA INICIAL ──────────────────────────────────────────────────
-
-    @PostConstruct
-    public void init() {
-        try {
-            dbFile = new File(dbPath);
-
-            if (!dbFile.exists()) {
-                dbFile.getParentFile().mkdirs(); // crea carpeta si no existe
-                database = new Database();
-                persistir();
-            } else {
-                database = objectMapper.readValue(dbFile, Database.class);
-            }
-
-            // Inicializar secuencias
-            database.getUsuarios().stream()
-                    .mapToInt(Usuario::getId).max()
-                    .ifPresent(m -> userIdSeq.set(m + 1));
-
-            database.getVerificaciones().stream()
-                    .mapToInt(Verificacion::getId).max()
-                    .ifPresent(m -> verifIdSeq.set(m + 1));
-
-        } catch (Exception e) {
-            throw new RuntimeException("Error al cargar db.json: " + e.getMessage(), e);
-        }
-    }
-
-    /**
-     * Persiste el estado actual del Database en memoria al archivo db.json.
-     * Se llama después de cada operación de escritura.
-     */
-    private void persistir() {
-        try {
-            objectMapper.writerWithDefaultPrettyPrinter()
-                    .writeValue(dbFile, database);
-        } catch (Exception e) {
-            throw new RuntimeException("No se pudo persistir db.json: " + e.getMessage(), e);
-        }
-    }
-
-    /**
-     * Expone el Database en memoria para que ReporteService
-     * trabaje sobre la misma instancia sin duplicar la carga del JSON.
-     */
-    public Database getDatabase() {
-        return database;
-    }
-
-    /**
-     * Permite que ReporteService dispare la persistencia después
-     * de sus propias operaciones de escritura.
-     */
-    public void guardar() {
-        persistir();
-    }
-
-    // ── AUTENTICACIÓN ──────────────────────────────────────────────────
-
-    public Optional<Usuario> login(String email, String password) {
-        return database.getUsuarios().stream()
-                .filter(u -> u.getEmail().equalsIgnoreCase(email)
-                        && u.getPassword().equals(password))
-                .findFirst();
+    public UsuarioService(UsuarioJpaRepository usuarioJpa,
+            VerificacionJpaRepository verificacionJpa,
+            JsonRepository jsonRepo,
+            @Lazy PasswordEncoder passwordEncoder) {
+        this.usuarioJpa = usuarioJpa;
+        this.verificacionJpa = verificacionJpa;
+        this.jsonRepo = jsonRepo;
+        this.passwordEncoder = passwordEncoder;
     }
 
     // ── CONSULTAS ──────────────────────────────────────────────────────
-
     public List<Usuario> findAll() {
-        return database.getUsuarios();
+        try {
+            return usuarioJpa.findAll();
+        } catch (Exception e) {
+            log.warn("[FAILOVER] MySQL no disponible en findAll usuarios. Usando JSON.");
+            return jsonRepo.findAllUsuarios();
+        }
     }
 
     public Optional<Usuario> findById(Integer id) {
-        return database.getUsuarios().stream()
-                .filter(u -> u.getId().equals(id))
-                .findFirst();
+        try {
+            return usuarioJpa.findById(id);
+        } catch (Exception e) {
+            log.warn("[FAILOVER] MySQL no disponible en findById usuario {}. Usando JSON.", id);
+            return jsonRepo.findUsuarioById(id);
+        }
     }
 
     public boolean existeEmail(String email) {
-        return database.getUsuarios().stream()
-                .anyMatch(u -> u.getEmail().equalsIgnoreCase(email));
+        try {
+            return usuarioJpa.existsByEmail(email);
+        } catch (Exception e) {
+            log.warn("[FAILOVER] MySQL no disponible en existeEmail. Usando JSON.");
+            return jsonRepo.existeEmail(email);
+        }
     }
 
     // ── REGISTRO ───────────────────────────────────────────────────────
-
+    @Transactional
     public Usuario registrar(String nombreCompleto, String email, String password) {
         Usuario u = new Usuario();
-        u.setId(userIdSeq.getAndIncrement());
         u.setNombreCompleto(nombreCompleto);
         u.setEmail(email);
-        u.setPassword(password);
+        u.setPassword(passwordEncoder.encode(password)); // ← BCrypt
         u.setUsername(email.split("@")[0]);
-        u.setRol(Usuario.Rol.USUARIO);
+        u.setRol("USUARIO");
         u.setAvatarInicial(iniciales(nombreCompleto));
         u.setFechaRegistro(LocalDate.now().toString());
-        database.getUsuarios().add(u);
 
-        // Crear verificación pendiente automáticamente
+        // ── Escritura en MySQL ──
+        try {
+            u = usuarioJpa.save(u);
+            log.debug("Usuario {} guardado en MySQL con id={}", email, u.getId());
+        } catch (Exception e) {
+            log.warn("[FAILOVER] MySQL no disponible al registrar. Solo JSON.");
+        }
+
+        // ── Escritura en JSON (siempre) ──
+        try {
+            jsonRepo.saveUsuario(u);
+        } catch (IOException e) {
+            log.error("Error al guardar usuario {} en archivo JSON: {}", email, e.getMessage());
+        }
+
+        // ── Verificación pendiente ──
         Verificacion v = new Verificacion();
-        v.setId(verifIdSeq.getAndIncrement());
         v.setUsuarioId(u.getId());
         v.setEstado(Verificacion.Estado.PENDIENTE);
-        database.getVerificaciones().add(v);
+        guardarVerificacion(v);
 
-        persistir(); // ← guardar en disco
         return u;
     }
 
     // ── ACTUALIZAR PERFIL ──────────────────────────────────────────────
-
+    @Transactional
     public void actualizarPerfil(Integer id, String nombreCompleto, String email) {
-
-        // Buscar al usuario que desea actualizar su perfil
-        Usuario usuario = findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("El usuario no existe."));
-
-        // Validar que el correo no pertenezca a otro usuario
-        boolean emailEnUso = database.getUsuarios().stream()
-                .anyMatch(u -> !u.getId().equals(id)
-                        && u.getEmail().equalsIgnoreCase(email.trim()));
-
-        if (emailEnUso) {
-            throw new IllegalArgumentException(
-                    "Este correo electrónico ya está registrado.");
-        }
-
-        // Actualizar solamente cuando las validaciones sean correctas
-        usuario.setNombreCompleto(nombreCompleto.trim());
-        usuario.setEmail(email.trim());
-        usuario.setUsername(email.trim().split("@")[0]);
-        usuario.setAvatarInicial(iniciales(nombreCompleto));
-
-        // Guardar los cambios en db.json
-        persistir();
+        findById(id).ifPresent(u -> {
+            u.setNombreCompleto(nombreCompleto);
+            u.setEmail(email);
+            u.setAvatarInicial(iniciales(nombreCompleto));
+            guardarUsuario(u);
+        });
     }
 
+    /**
+     * Verifica que la contraseña actual sea correcta (comparación BCrypt).
+     */
+    public boolean passwordCorrecta(Integer id, String passwordPlano) {
+        return findById(id)
+                .map(u -> passwordEncoder.matches(passwordPlano, u.getPassword()))
+                .orElse(false);
+    }
+
+    @Transactional
+    public void cambiarRol(Integer id, String nuevoRol) {
+        findById(id).ifPresent(u -> {
+            u.setRol(nuevoRol.toUpperCase().trim());
+            guardarUsuario(u);
+        });
+    }
+
+    @Transactional
     public void cambiarPassword(Integer id, String nuevaPassword) {
-        findById(id).ifPresent(u -> u.setPassword(nuevaPassword));
-        persistir(); // ← guardar en disco
+        findById(id).ifPresent(u -> {
+            u.setPassword(passwordEncoder.encode(nuevaPassword)); // ← BCrypt
+            guardarUsuario(u);
+        });
     }
 
     // ── VERIFICACIÓN ───────────────────────────────────────────────────
-
     public boolean isVerificado(Integer usuarioId) {
-        return database.getVerificaciones().stream()
-                .filter(v -> v.getUsuarioId().equals(usuarioId))
-                .anyMatch(Verificacion::isVerificado);
+        try {
+            return verificacionJpa.existsByUsuarioIdAndEstado(
+                    usuarioId, Verificacion.Estado.VERIFICADO);
+        } catch (Exception e) {
+            log.warn("[FAILOVER] MySQL no disponible en isVerificado. Usando JSON.");
+            return jsonRepo.findVerificacionByUsuarioId(usuarioId)
+                    .map(Verificacion::isVerificado).orElse(false);
+        }
     }
 
     public Optional<Verificacion> findVerificacionByUsuario(Integer usuarioId) {
-        return database.getVerificaciones().stream()
-                .filter(v -> v.getUsuarioId().equals(usuarioId))
-                .findFirst();
+        try {
+            return verificacionJpa.findByUsuarioId(usuarioId);
+        } catch (Exception e) {
+            log.warn("[FAILOVER] MySQL no disponible en findVerificacion. Usando JSON.");
+            return jsonRepo.findVerificacionByUsuarioId(usuarioId);
+        }
     }
 
     public List<Verificacion> findAllVerificaciones() {
-        return database.getVerificaciones();
+        try {
+            return verificacionJpa.findAll();
+        } catch (Exception e) {
+            log.warn("[FAILOVER] MySQL no disponible en findAllVerificaciones. Usando JSON.");
+            return jsonRepo.findAllVerificaciones();
+        }
     }
 
+    @Transactional
     public void verificarUsuario(Integer usuarioId, Integer adminId) {
         findVerificacionByUsuario(usuarioId).ifPresent(v -> {
             v.setEstado(Verificacion.Estado.VERIFICADO);
             v.setFechaVerificacion(LocalDate.now().toString());
             v.setAdminId(adminId);
+            guardarVerificacion(v);
         });
-        persistir(); // ← guardar en disco
     }
 
+    @Transactional
     public void revocarVerificacion(Integer usuarioId) {
         findVerificacionByUsuario(usuarioId).ifPresent(v -> {
             v.setEstado(Verificacion.Estado.PENDIENTE);
             v.setFechaVerificacion(null);
             v.setAdminId(null);
+            guardarVerificacion(v);
         });
-        persistir(); // ← guardar en disco
+    }
+
+    // ── ESCRITURA DUPLICADA (helpers internos) ─────────────────────────
+    private void guardarUsuario(Usuario u) {
+        try {
+            usuarioJpa.save(u);
+        } catch (Exception e) {
+            log.warn("[FAILOVER] MySQL no disponible al guardar usuario. Solo JSON.");
+        }
+
+        try {
+            jsonRepo.saveUsuario(u);
+        } catch (IOException e) {
+            log.error("Error al guardar usuario {} en JSON: {}", u.getEmail(), e.getMessage());
+        }
+    }
+
+    private void guardarVerificacion(Verificacion v) {
+        try {
+            verificacionJpa.save(v);
+        } catch (Exception e) {
+            log.warn("[FAILOVER] MySQL no disponible al guardar verificacion. Solo JSON.");
+        }
+        try {
+            jsonRepo.saveVerificacion(v);
+        } catch (IOException e) {
+            log.error("Error al guardar verificacion {} en archivo JSON: {}", v.getId(), e.getMessage());
+        }
+    }
+
+    public boolean existeEmailEnOtroUsuario(String email, Integer usuarioId) {
+        return usuarioJpa.existsByEmailIgnoreCaseAndIdNot(email.trim(), usuarioId);
     }
 
     // ── HELPERS ────────────────────────────────────────────────────────
-
     private String iniciales(String nombre) {
-        if (nombre == null || nombre.isBlank())
+        if (nombre == null || nombre.isBlank()) {
             return "??";
+        }
         String[] partes = nombre.trim().split("\\s+");
-        if (partes.length == 1)
+        if (partes.length == 1) {
             return partes[0].substring(0, Math.min(2, partes[0].length())).toUpperCase();
+        }
         return (partes[0].charAt(0) + "" + partes[partes.length - 1].charAt(0)).toUpperCase();
     }
-
 }
