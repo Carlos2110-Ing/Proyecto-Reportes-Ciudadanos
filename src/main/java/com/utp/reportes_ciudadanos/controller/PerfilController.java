@@ -1,25 +1,26 @@
 package com.utp.reportes_ciudadanos.controller;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
+import com.utp.reportes_ciudadanos.model.PerfilDTO;
 import com.utp.reportes_ciudadanos.model.Usuario;
 import com.utp.reportes_ciudadanos.service.ReporteService;
 import com.utp.reportes_ciudadanos.service.UsuarioService;
-
-import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/perfil")
 public class PerfilController {
+
     private final UsuarioService usuarioService;
     private final ReporteService reporteService;
 
@@ -30,57 +31,60 @@ public class PerfilController {
     }
 
     @GetMapping
-    public String verPerfil(HttpSession session, Model model) {
-        if (session.getAttribute("usuarioId") == null)
-            return "redirect:/login";
-
-        Integer id = (Integer) session.getAttribute("usuarioId");
-        Optional<Usuario> opt = usuarioService.findById(id);
-        if (opt.isEmpty())
-            return "redirect:/logout";
-
-        Usuario u = opt.get();
-        model.addAttribute("usuario", u);
-        model.addAttribute("verificacion", usuarioService.findVerificacionByUsuario(id).orElse(null));
-        model.addAttribute("totalReportes", reporteService.countByUsuario(id));
-        model.addAttribute("resueltos", reporteService.countResueltosByUsuario(id));
+    public String verPerfil(@AuthenticationPrincipal Usuario usuario, Model model) {
+        PerfilDTO perfil = new PerfilDTO();
+        perfil.setNombreCompleto(usuario.getNombreCompleto());
+        perfil.setEmail(usuario.getEmail());
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("perfil", perfil);
+        model.addAttribute("verificacion", usuarioService.findVerificacionByUsuario(usuario.getId()).orElse(null));
+        model.addAttribute("totalReportes", reporteService.countByUsuario(usuario.getId()));
+        model.addAttribute("resueltos", reporteService.countResueltosByUsuario(usuario.getId()));
         model.addAttribute("activos",
-                reporteService.countByUsuario(id) - reporteService.countResueltosByUsuario(id));
+                reporteService.countByUsuario(usuario.getId())
+                - reporteService.countResueltosByUsuario(usuario.getId()));
         return "user/perfil";
     }
 
     @PostMapping("/actualizar")
-    public String actualizarPerfil(@RequestParam String nombreCompleto,
-            @RequestParam String email,
-            HttpSession session,
+    public String actualizarPerfil(
+            @Valid @ModelAttribute("perfil") PerfilDTO perfil,
+            BindingResult result,
+            @AuthenticationPrincipal Usuario usuario,
+            Model model,
             RedirectAttributes redirectAttributes) {
-        if (session.getAttribute("usuarioId") == null) {
-            return "redirect:/login";
+
+        if (!result.hasFieldErrors("email")
+                && usuarioService.existeEmailEnOtroUsuario(
+                        perfil.getEmail(),
+                        usuario.getId())) {
+
+            result.rejectValue(
+                    "email",
+                    "email.duplicado",
+                    "Este correo electrónico ya está registrado."
+            );
         }
 
-        Integer id = (Integer) session.getAttribute("usuarioId");
+        if (result.hasErrors()) {
 
-        try {
-            usuarioService.actualizarPerfil(id, nombreCompleto, email);
+            model.addAttribute("usuario", usuario);
+            model.addAttribute("verificacion", usuarioService.findVerificacionByUsuario(usuario.getId()).orElse(null));
+            model.addAttribute("totalReportes", reporteService.countByUsuario(usuario.getId()));
+            model.addAttribute("resueltos", reporteService.countResueltosByUsuario(usuario.getId()));
+            model.addAttribute("activos",
+                    reporteService.countByUsuario(usuario.getId())
+                    - reporteService.countResueltosByUsuario(usuario.getId()));
 
-            // Refrescar los datos de la sesión después de actualizar
-            Usuario usuarioActualizado = usuarioService.findById(id)
-                    .orElseThrow();
-
-            session.setAttribute("usuarioNombre",
-                    usuarioActualizado.getNombreCompleto());
-
-            session.setAttribute("usuarioAvatar",
-                    usuarioActualizado.getAvatarInicial());
-
-            redirectAttributes.addFlashAttribute(
-                    "exito", "Datos actualizados correctamente.");
-
-        } catch (IllegalArgumentException e) {
-            redirectAttributes.addFlashAttribute(
-                    "errorPerfil", e.getMessage());
+            return "user/perfil";
         }
 
+        usuarioService.actualizarPerfil(
+                usuario.getId(),
+                perfil.getNombreCompleto(),
+                perfil.getEmail());
+
+        redirectAttributes.addFlashAttribute("exito", "Datos actualizados correctamente.");
         return "redirect:/perfil";
     }
 
@@ -88,15 +92,9 @@ public class PerfilController {
     public String cambiarPassword(@RequestParam String passwordActual,
             @RequestParam String nuevaPassword,
             @RequestParam String confirmPassword,
-            HttpSession session,
+            @AuthenticationPrincipal Usuario usuario,
             RedirectAttributes redirectAttributes) {
-        if (session.getAttribute("usuarioId") == null)
-            return "redirect:/login";
-
-        Integer id = (Integer) session.getAttribute("usuarioId");
-        Optional<Usuario> opt = usuarioService.findById(id);
-
-        if (opt.isEmpty() || !opt.get().getPassword().equals(passwordActual)) {
+        if (!usuarioService.passwordCorrecta(usuario.getId(), passwordActual)) {
             redirectAttributes.addFlashAttribute("errorPassword", "La contraseña actual es incorrecta.");
             return "redirect:/perfil";
         }
@@ -104,9 +102,8 @@ public class PerfilController {
             redirectAttributes.addFlashAttribute("errorPassword", "Las contraseñas no coinciden.");
             return "redirect:/perfil";
         }
-        usuarioService.cambiarPassword(id, nuevaPassword);
+        usuarioService.cambiarPassword(usuario.getId(), nuevaPassword);
         redirectAttributes.addFlashAttribute("exitoPassword", "Contraseña actualizada.");
         return "redirect:/perfil";
     }
-
 }

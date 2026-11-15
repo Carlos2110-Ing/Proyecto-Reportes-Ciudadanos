@@ -4,9 +4,10 @@
  */
 package com.utp.reportes_ciudadanos.controller;
 
+import com.utp.reportes_ciudadanos.model.Usuario;
 import com.utp.reportes_ciudadanos.service.ReporteService;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,16 +26,7 @@ public class DashboardController {
     }
 
     @GetMapping("/dashboard")
-    public String dashboard(HttpSession session, Model model) {
-        if (session.getAttribute("usuarioId") == null) return "redirect:/login";
-
-        // Verificar si acaba de iniciar sesión
-        Object loginExitoso = session.getAttribute("loginExitoso");
-
-        if (loginExitoso != null) {
-            model.addAttribute("loginExitoso", loginExitoso);
-            session.removeAttribute("loginExitoso");
-        }
+    public String dashboard(@AuthenticationPrincipal Usuario usuario, Model model) {
 
         // Stats globales
         model.addAttribute("totalReportes",    reporteService.countTotal());
@@ -47,7 +39,7 @@ public class DashboardController {
 
         // Todos los reportes para Leaflet (marcadores en el mapa)
         model.addAttribute("todosReportes",    reporteService.findAll());
-
+        
         return "user/dashboard";
     }
 }

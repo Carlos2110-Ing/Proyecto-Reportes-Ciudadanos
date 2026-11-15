@@ -5,13 +5,17 @@
 package com.utp.reportes_ciudadanos.controller;
 
 import com.utp.reportes_ciudadanos.model.Reporte;
+import com.utp.reportes_ciudadanos.model.Usuario;
 import com.utp.reportes_ciudadanos.service.ReporteService;
-import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +29,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 @RequestMapping("/reportes")
 public class ReporteController {
+
     private final ReporteService reporteService;
 
     @Autowired
@@ -33,69 +38,70 @@ public class ReporteController {
     }
 
     // ── NUEVO REPORTE ──────────────────────────────────────────────────
-
     @GetMapping("/nuevo")
-    public String nuevoForm(HttpSession session, Model model) {
-        if (session.getAttribute("usuarioId") == null) return "redirect:/login";
+    public String nuevoForm(Model model) {
+        model.addAttribute("reporte", new Reporte());
         model.addAttribute("categorias", reporteService.findAllCategorias());
         return "user/nuevo-reporte";
     }
 
     @PostMapping("/nuevo")
-    public String nuevoSubmit(@RequestParam String titulo,
-                              @RequestParam String descripcion,
-                              @RequestParam Integer categoriaId,
-                              @RequestParam String ubicacion,
-                              @RequestParam(required = false) Double latitud,
-                              @RequestParam(required = false) Double longitud,
-                              HttpSession session,
-                              RedirectAttributes redirectAttributes) {
-        if (session.getAttribute("usuarioId") == null) return "redirect:/login";
+    public String nuevoSubmit(
+            @Valid @ModelAttribute("reporte") Reporte reporte,
+            BindingResult result,
+            @AuthenticationPrincipal Usuario usuario,
+            Model model,
+            RedirectAttributes redirectAttributes) {
 
-        Integer usuarioId = (Integer) session.getAttribute("usuarioId");
-        reporteService.crear(titulo, descripcion, categoriaId, ubicacion,
-                latitud, longitud, usuarioId);
+        if (result.hasErrors()) {
+            model.addAttribute("categorias", reporteService.findAllCategorias());
+            return "user/nuevo-reporte";
+        }
 
-        redirectAttributes.addFlashAttribute("exito", "¡Reporte enviado correctamente!");
+        reporteService.crear(
+                reporte.getTitulo(),
+                reporte.getDescripcion(),
+                reporte.getCategoriaId(),
+                reporte.getUbicacion(),
+                reporte.getLatitud(),
+                reporte.getLongitud(),
+                usuario.getId());
+
+        redirectAttributes.addFlashAttribute(
+                "exito",
+                "¡Reporte enviado correctamente!");
+
         return "redirect:/dashboard";
     }
 
     // ── MIS REPORTES ───────────────────────────────────────────────────
-
     @GetMapping("/mis-reportes")
-    public String misReportes(HttpSession session, Model model) {
-        if (session.getAttribute("usuarioId") == null) return "redirect:/login";
-
-        Integer usuarioId = (Integer) session.getAttribute("usuarioId");
-        model.addAttribute("reportes",    reporteService.findByUsuario(usuarioId));
-        model.addAttribute("categorias",  reporteService.findAllCategorias());
+    public String misReportes(@AuthenticationPrincipal Usuario usuario, Model model) {
+        model.addAttribute("reportes", reporteService.findByUsuario(usuario.getId()));
+        model.addAttribute("categorias", reporteService.findAllCategorias());
         return "user/mis-reportes";
     }
 
     // ── EDITAR ─────────────────────────────────────────────────────────
-
     @PostMapping("/editar/{id}")
     public String editar(@PathVariable Integer id,
-                         @RequestParam String titulo,
-                         @RequestParam String descripcion,
-                         @RequestParam Integer categoriaId,
-                         @RequestParam String ubicacion,
-                         @RequestParam(required = false) Double latitud,
-                         @RequestParam(required = false) Double longitud,
-                         HttpSession session,
-                         RedirectAttributes redirectAttributes) {
-        if (session.getAttribute("usuarioId") == null) return "redirect:/login";
+            @RequestParam String titulo,
+            @RequestParam String descripcion,
+            @RequestParam Integer categoriaId,
+            @RequestParam String ubicacion,
+            @RequestParam(required = false) Double latitud,
+            @RequestParam(required = false) Double longitud,
+            @AuthenticationPrincipal Usuario usuario,
+            RedirectAttributes redirectAttributes) {
 
-        Integer usuarioId = (Integer) session.getAttribute("usuarioId");
-
-        // Verificar que el reporte pertenece al usuario (o es admin)
         Optional<Reporte> opt = reporteService.findById(id);
         if (opt.isEmpty()) {
             redirectAttributes.addFlashAttribute("error", "Reporte no encontrado.");
             return "redirect:/reportes/mis-reportes";
         }
-        boolean esAdmin = "ADMIN".equals(session.getAttribute("usuarioRol"));
-        if (!opt.get().getUsuarioId().equals(usuarioId) && !esAdmin) {
+
+        boolean esAdmin = usuario.isAdmin();
+        if (!opt.get().getUsuarioId().equals(usuario.getId()) && !esAdmin) {
             redirectAttributes.addFlashAttribute("error", "No tienes permiso para editar este reporte.");
             return "redirect:/reportes/mis-reportes";
         }
@@ -106,24 +112,22 @@ public class ReporteController {
     }
 
     // ── ELIMINAR ───────────────────────────────────────────────────────
-
     @PostMapping("/eliminar/{id}")
     public String eliminar(@PathVariable Integer id,
-                           HttpSession session,
-                           RedirectAttributes redirectAttributes) {
-        if (session.getAttribute("usuarioId") == null) return "redirect:/login";
-
-        Integer usuarioId = (Integer) session.getAttribute("usuarioId");
-        boolean esAdmin   = "ADMIN".equals(session.getAttribute("usuarioRol"));
+            @AuthenticationPrincipal Usuario usuario,
+            RedirectAttributes redirectAttributes) {
+        boolean esAdmin = usuario.isAdmin();
 
         boolean eliminado = esAdmin
                 ? reporteService.eliminar(id)
-                : reporteService.eliminarSiEsDueno(id, usuarioId);
+                : reporteService.eliminarSiEsDueno(id, usuario.getId());
 
-        if (eliminado) redirectAttributes.addFlashAttribute("exito", "Reporte eliminado.");
-        else           redirectAttributes.addFlashAttribute("error", "No se pudo eliminar el reporte.");
+        if (eliminado) {
+            redirectAttributes.addFlashAttribute("exito", "Reporte eliminado.");
+        } else {
+            redirectAttributes.addFlashAttribute("error", "No se pudo eliminar el reporte.");
+        }
 
-        String redirect = esAdmin ? "/admin" : "/reportes/mis-reportes";
-        return "redirect:" + redirect;
+        return esAdmin ? "redirect:/admin" : "redirect:/reportes/mis-reportes";
     }
 }
