@@ -30,6 +30,57 @@
     "id" : 6,
     "nombre" : "Otro"
   } ],
+  "permisos" : [ {
+    "urlPattern" : "/dashboard",
+    "descripcion" : "Ver dashboard",
+    "httpMethod" : "*",
+    "id" : 1
+  }, {
+    "urlPattern" : "/reportes/nuevo",
+    "descripcion" : "Crear nuevo reporte",
+    "httpMethod" : "*",
+    "id" : 2
+  }, {
+    "urlPattern" : "/reportes/mis-reportes",
+    "descripcion" : "Ver mis reportes",
+    "httpMethod" : "*",
+    "id" : 3
+  }, {
+    "urlPattern" : "/reportes/editar/**",
+    "descripcion" : "Editar reporte propio",
+    "httpMethod" : "POST",
+    "id" : 4
+  }, {
+    "urlPattern" : "/reportes/eliminar/**",
+    "descripcion" : "Eliminar reporte propio",
+    "httpMethod" : "POST",
+    "id" : 5
+  }, {
+    "urlPattern" : "/perfil",
+    "descripcion" : "Ver perfil",
+    "httpMethod" : "*",
+    "id" : 6
+  }, {
+    "urlPattern" : "/perfil/actualizar",
+    "descripcion" : "Actualizar datos de perfil",
+    "httpMethod" : "POST",
+    "id" : 7
+  }, {
+    "urlPattern" : "/perfil/cambiar-password",
+    "descripcion" : "Cambiar contraseña",
+    "httpMethod" : "POST",
+    "id" : 8
+  }, {
+    "urlPattern" : "/acerca-de",
+    "descripcion" : "Ver acerca de",
+    "httpMethod" : "*",
+    "id" : 9
+  }, {
+    "urlPattern" : "/admin/**",
+    "descripcion" : "Acceso total al panel admin",
+    "httpMethod" : "*",
+    "id" : 10
+  } ],
   "reportes" : [ {
     "categoria" : {
       "color" : "#ef4444",
@@ -123,85 +174,129 @@
     "usuarioNombre" : "Carlos Castillo",
     "usuarioVerificado" : true
   } ],
-  "usuarios" : [ {
-    "admin" : false,
-    "avatarInicial" : "JD",
-    "email" : "juan.diaz@correo.com",
-    "fechaRegistro" : "2026-03-01",
+  "roles" : [ {
+    "nombre" : "USUARIO",
+    "descripcion" : "Ciudadano registrado que puede reportar incidentes",
     "id" : 1,
-    "nombreCompleto" : "Juan Diaz",
-    "password" : "pass1234",
-    "rol" : "USUARIO",
-    "username" : "juan.diaz"
+    "permisoIds" : [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
   }, {
+    "nombre" : "VISUALIZADOR",
+    "descripcion" : "Solo puede ver reportes y el dashboard",
+    "id" : 2,
+    "permisoIds" : [ 1, 3, 9 ]
+  }, {
+    "nombre" : "ADMIN",
+    "descripcion" : "Administrador con acceso total al sistema",
+    "id" : 3,
+    "permisoIds" : [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]
+  } ],
+  "usuarios" : [ {
+    "accountNonExpired" : true,
+    "accountNonLocked" : true,
     "admin" : false,
     "avatarInicial" : "ML",
+    "credentialsNonExpired" : true,
     "email" : "maria.lopez@correo.com",
+    "enabled" : true,
     "fechaRegistro" : "2026-04-01",
     "id" : 2,
     "nombreCompleto" : "María López",
     "password" : "pass1234",
     "rol" : "USUARIO",
-    "username" : "maria.lopez"
+    "username" : "maria.lopez@correo.com",
+    "usernameField" : "maria.lopez@correo.com"
   }, {
+    "accountNonExpired" : true,
+    "accountNonLocked" : true,
     "admin" : false,
     "avatarInicial" : "CR",
+    "credentialsNonExpired" : true,
     "email" : "carlos.rojas@correo.com",
+    "enabled" : true,
     "fechaRegistro" : "2026-02-10",
     "id" : 3,
     "nombreCompleto" : "Carlos Rojas",
     "password" : "pass1234",
     "rol" : "USUARIO",
-    "username" : "carlos.rojas"
+    "username" : "carlos.rojas@correo.com",
+    "usernameField" : "carlos.rojas@correo.com"
   }, {
+    "accountNonExpired" : true,
+    "accountNonLocked" : true,
     "admin" : false,
     "avatarInicial" : "AT",
+    "credentialsNonExpired" : true,
     "email" : "ana.torres@correo.com",
+    "enabled" : true,
     "fechaRegistro" : "2026-04-05",
     "id" : 4,
     "nombreCompleto" : "Ana Torres",
     "password" : "pass1234",
     "rol" : "USUARIO",
-    "username" : "ana.torres"
+    "username" : "ana.torres@correo.com",
+    "usernameField" : "ana.torres@correo.com"
   }, {
+    "accountNonExpired" : true,
+    "accountNonLocked" : true,
     "admin" : false,
     "avatarInicial" : "PE",
+    "credentialsNonExpired" : true,
     "email" : "pedro.espinoza@correo.com",
+    "enabled" : true,
     "fechaRegistro" : "2026-04-10",
     "id" : 5,
     "nombreCompleto" : "Pedro Espinoza",
     "password" : "pass1234",
     "rol" : "USUARIO",
-    "username" : "pedro.espinoza"
+    "username" : "pedro.espinoza@correo.com",
+    "usernameField" : "pedro.espinoza@correo.com"
   }, {
+    "accountNonExpired" : true,
+    "accountNonLocked" : true,
     "admin" : true,
     "avatarInicial" : "AD",
+    "credentialsNonExpired" : true,
     "email" : "admin@safeperu.pe",
+    "enabled" : true,
     "fechaRegistro" : "2026-01-01",
     "id" : 99,
     "nombreCompleto" : "Administrador",
     "password" : "admin2026",
     "rol" : "ADMIN",
-    "username" : "admin"
+    "username" : "admin@safeperu.pe",
+    "usernameField" : "admin@safeperu.pe"
   }, {
+    "accountNonExpired" : true,
+    "accountNonLocked" : true,
     "admin" : false,
     "avatarInicial" : "CC",
+    "credentialsNonExpired" : true,
     "email" : "carlos.castillo@correo.com",
+    "enabled" : true,
     "fechaRegistro" : "2026-05-07",
     "id" : 100,
     "nombreCompleto" : "Carlos Castillo",
     "password" : "pass1234",
     "rol" : "USUARIO",
-    "username" : "carlos.castillo"
+    "username" : "carlos.castillo@correo.com",
+    "usernameField" : "carlos.castillo@correo.com"
+  }, {
+    "accountNonExpired" : true,
+    "accountNonLocked" : true,
+    "admin" : true,
+    "avatarInicial" : "AD",
+    "credentialsNonExpired" : true,
+    "email" : "admin@safeperu.pe",
+    "enabled" : true,
+    "fechaRegistro" : "2026-11-15",
+    "id" : 1,
+    "nombreCompleto" : "Administrador SafePeru",
+    "password" : "$2a$10$zaXW3nRE6g9a3sy7RCCkwOJX9Gku7ZDeqj/pxlMjez16ooYWBfzkm",
+    "rol" : "ADMIN",
+    "username" : "admin@safeperu.pe",
+    "usernameField" : "admin"
   } ],
   "verificaciones" : [ {
-    "adminId" : null,
-    "estado" : "PENDIENTE",
-    "fechaVerificacion" : null,
-    "id" : 1,
-    "usuarioId" : 1,
-    "verificado" : false
-  }, {
     "adminId" : 99,
     "estado" : "VERIFICADO",
     "fechaVerificacion" : "2026-02-15",
@@ -242,6 +337,13 @@
     "fechaVerificacion" : "2026-10-21",
     "id" : 7,
     "usuarioId" : 100,
+    "verificado" : true
+  }, {
+    "adminId" : 1,
+    "estado" : "VERIFICADO",
+    "fechaVerificacion" : "2026-11-15",
+    "id" : 1,
+    "usuarioId" : 1,
     "verificado" : true
   } ]
 }

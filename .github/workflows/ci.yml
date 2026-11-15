@@ -1,0 +1,56 @@
+name: Pipeline CI-CD - SafePeru Spring Boot
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  pruebas:
+    name: Ejecutar pruebas y compilar
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar codigo
+        uses: actions/checkout@v4
+
+      - name: Configurar Java JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21' # Cambia a '17' si tu pom.xml usa Java 17
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Dar permisos a Maven Wrapper
+        run: chmod +x mvnw
+
+      - name: Ejecutar pruebas automatizadas
+        run: ./mvnw test
+
+  entrega:
+    name: Generar artefacto JAR
+    needs: pruebas
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar codigo
+        uses: actions/checkout@v4
+
+      - name: Configurar Java JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Dar permisos a Maven Wrapper
+        run: chmod +x mvnw
+
+      - name: Construir paquete de entrega (.jar)
+        run: ./mvnw clean package -DskipTests
+
+      - name: Publicar artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: safeperu-spring-boot
+          path: target/*.jar
