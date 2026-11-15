@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" lang="es">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="es">
 
 <head>
   <meta charset="UTF-8" />
@@ -38,7 +39,14 @@
 
     <div class="sidebar-section">Sistema</div>
     <a th:href="@{/dashboard}" class="sidebar-link"><i class="bi bi-arrow-left-circle"></i>Vista Ciudadana</a>
-    <a th:href="@{/logout}" class="sidebar-link"><i class="bi bi-box-arrow-left"></i>Cerrar Sesión</a>
+
+    <!-- Logout debe ser POST con CSRF token (Spring Security 6) -->
+    <form th:action="@{/logout}" method="post" style="margin:0;">
+      <button type="submit" class="sidebar-link w-100 border-0 bg-transparent text-start">
+        <i class="bi bi-box-arrow-left"></i>Cerrar Sesión
+      </button>
+    </form>
+
   </aside>
 
   <!-- ════ ÁREA PRINCIPAL ════ -->

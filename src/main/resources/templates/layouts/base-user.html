@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" lang="es">
+<html xmlns:th="http://www.thymeleaf.org" 
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+lang="es">
 
 <head>
     <meta charset="UTF-8" />
@@ -66,6 +69,24 @@
                 });
             });
         })();
+    </script>
+    <!-- Ocultar mensajes de éxito/error automáticamente -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const alerts = document.querySelectorAll(".alert-exito, .alert-error");
+
+            alerts.forEach(alert => {
+                setTimeout(() => {
+                    alert.style.transition = "opacity 0.5s ease, transform 0.5s ease";
+                    alert.style.opacity = "0";
+                    alert.style.transform = "translateY(-10px)";
+
+                    setTimeout(() => {
+                        alert.remove();
+                    }, 500);
+                }, 4000); // 4 segundos
+            });
+        });
     </script>
 
     <!-- SLOT: scripts adicionales por página (Leaflet, lógica de modales, etc.) -->
