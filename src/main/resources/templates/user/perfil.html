@@ -58,24 +58,32 @@
       <div class="col-md-6">
         <div class="section-card">
           <div class="section-card-title"><i class="bi bi-person-fill"></i>Datos de Cuenta</div>
-          <form th:action="@{/perfil/actualizar}" method="post" class="needs-validation" novalidate>
+          <form th:action="@{/perfil/actualizar}" method="post" th:object="${perfil}">
             <div class="mb-3">
               <label class="form-label">Nombre Completo</label>
               <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-person"></i></span>
                 <input type="text" name="nombreCompleto" class="form-control" th:value="${usuario.nombreCompleto}"
-                  required minlength="3" />
-                <div class="invalid-feedback">Mínimo 3 caracteres.</div>
+                  th:field="*{nombreCompleto}"
+                  th:classappend="${#fields.hasErrors('nombreCompleto')} ? 'is-invalid' : ''" />
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('nombreCompleto')}"
+                  th:text="${#fields.errors('nombreCompleto')[0]}"></div>
               </div>
             </div>
             <div class="mb-3">
               <label class="form-label">Correo Electrónico</label>
               <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                <input type="email" name="email" class="form-control" th:value="${usuario.email}" required />
-                <div class="invalid-feedback">Correo inválido.</div>
+                <input type="email" th:field="*{email}" name="email" class="form-control" th:value="${usuario.email}"
+                  th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''" />
+
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Correo
+                  inválido.</div>
+              </div>
+              <div class="text-danger mt-1" th:if="${errorEmail}" th:text="${errorEmail}">
               </div>
             </div>
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
             <button type="submit" class="btn btn-save">
               <i class="bi bi-check-lg me-2"></i>Guardar Cambios
             </button>
@@ -215,21 +223,21 @@
         const strengthText = document.getElementById('strengthText');
 
         const requisitosPassword = [{
-            id: 'reqLength',
-            cumple: password => password.length >= 8
-          },
-          {
-            id: 'reqUpper',
-            cumple: password => /[A-Z]/.test(password)
-          },
-          {
-            id: 'reqLower',
-            cumple: password => /[a-z]/.test(password)
-          },
-          {
-            id: 'reqNumber',
-            cumple: password => /[0-9]/.test(password)
-          }
+          id: 'reqLength',
+          cumple: password => password.length >= 8
+        },
+        {
+          id: 'reqUpper',
+          cumple: password => /[A-Z]/.test(password)
+        },
+        {
+          id: 'reqLower',
+          cumple: password => /[a-z]/.test(password)
+        },
+        {
+          id: 'reqNumber',
+          cumple: password => /[0-9]/.test(password)
+        }
         ];
 
         function actualizarSeguridadPassword() {
@@ -306,8 +314,8 @@
           const nombre = campo.name === 'passwordActual' ?
             'contraseña actual' :
             campo.name === 'nuevaPassword' ?
-            'nueva contraseña' :
-            'confirmación de contraseña';
+              'nueva contraseña' :
+              'confirmación de contraseña';
 
           boton.setAttribute(
             'aria-label',

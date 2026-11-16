@@ -20,13 +20,15 @@
         <p>Completa el formulario e indica la ubicación en el mapa.</p>
       </div>
 
-      <form th:action="@{/reportes/nuevo}" method="post" class="needs-validation" novalidate>
+      <form th:action="@{/reportes/nuevo}" method="post" th:object="${reporte}">
 
         <div class="mb-3">
           <label class="form-label">Título del Reporte</label>
-          <input type="text" name="titulo" class="form-control" placeholder="Describe brevemente el problema" required
-            minlength="5" />
-          <div class="invalid-feedback">El título debe tener al menos 5 caracteres.</div>
+          <input type="text" name="titulo" class="form-control" placeholder="Describe brevemente el problema"
+            th:field="*{titulo}" th:classappend="${#fields.hasErrors('titulo')} ? 'is-invalid' : ''" />
+
+          <div class="invalid-feedback" th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}">
+          </div>
         </div>
 
         <div class="mb-3">
@@ -41,9 +43,11 @@
         <div class="mb-3">
           <label class="form-label">Descripción</label>
           <textarea id="descripcion" name="descripcion" class="form-control" rows="3"
-            placeholder="Describe el incidente con el mayor detalle posible..." required minlength="10"
+            placeholder="Describe el incidente con el mayor detalle posible..." th:field="*{descripcion}"
+            th:classappend="${#fields.hasErrors('descripcion')} ? 'is-invalid' : ''" required minlength="10"
             maxlength="500"></textarea>
-          <div class="invalid-feedback">La descripción debe tener al menos 10 caracteres.</div>
+
+          <div class="invalid-feedback" th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}"></div>
           <small class="text-muted ms-auto">
             <span id="contadorDescripcion">0</span>/500 caracteres
           </small>
@@ -53,9 +57,11 @@
           <label class="form-label">Dirección / Referencia</label>
           <div class="input-group">
             <span class="input-group-text"><i class="bi bi-geo-alt-fill"></i></span>
-            <input type="text" name="ubicacion" id="ubicacion" class="form-control"
-              placeholder="Av. / Jr. / Distrito, Ciudad" required />
-            <div class="invalid-feedback">Ingresa la dirección del incidente.</div>
+            <input type="text" name="ubicacion" id="ubicacion" class="form-control" th:field="*{ubicacion}"
+              placeholder="Av. / Jr. / Distrito, Ciudad" th:classappend="${#fields.hasErrors('ubicacion')} ? 'is-invalid' : ''"  />
+
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('ubicacion')}"
+                         th:errors="*{ubicacion}"></div>
           </div>
         </div>
 
@@ -74,8 +80,8 @@
           </div>
         </div>
 
-        <input type="hidden" name="latitud" id="latInput" />
-        <input type="hidden" name="longitud" id="lngInput" />
+        <input type="hidden" th:field="*{latitud}" name="latitud" id="latInput" />
+        <input type="hidden" th:field="*{longitud}" name="longitud" id="lngInput" />
 
         <button type="submit" class="btn-submit">
           <i class="bi bi-send-fill me-2"></i>Enviar Reporte
