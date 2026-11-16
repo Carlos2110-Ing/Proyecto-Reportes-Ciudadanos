@@ -25,11 +25,11 @@
         <div class="auth-card-body">
 
           <!-- Flash messages -->
-          <div th:if="${error}" class="alert-error mb-3">
+          <div th:if="${error}" class="alert-error mb-3 auto-dismiss">
             <i class="bi bi-exclamation-circle me-2"></i>
             <span th:text="${error}"></span>
           </div>
-          <div th:if="${exito}" class="alert-exito mb-3">
+          <div th:if="${exito}" class="alert-exito mb-3 auto-dismiss">
             <i class="bi bi-check-circle me-2"></i>
             <span th:text="${exito}"></span>
           </div>
@@ -59,7 +59,7 @@
                 <div class="invalid-feedback">Ingresa tu contraseña.</div>
               </div>
             </div>
-
+            
             <button type="submit" id="loginButton" class="btn-primary-custom">
               <i class="fa-solid fa-right-to-bracket me-2"></i>Iniciar Sesión
             </button>
@@ -132,6 +132,22 @@
         });
 
       });
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const alerts = document.querySelectorAll(".auto-dismiss");
+
+        alerts.forEach(alert => {
+          setTimeout(() => {
+            alert.style.transition = "opacity 0.5s ease";
+            alert.style.opacity = "0";
+
+            setTimeout(() => {
+              alert.remove();
+            }, 500);
+          }, 4000); // 4 segundos
+        });
+      });
+
     </script>
   </th:block>
 

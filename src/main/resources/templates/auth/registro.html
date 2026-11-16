@@ -29,15 +29,24 @@
             <span th:text="${error}"></span>
           </div>
 
-          <form th:action="@{/registro}" method="post" id="registerForm" class="needs-validation" novalidate>
+          <form th:action="@{/registro}" method="post" th:object="${usuario}" id="registerForm" class="needs-validation"
+            novalidate>
 
             <div class="mb-3">
               <label class="form-label">Nombre Completo</label>
               <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-person"></i></span>
-                <input type="text" name="nombreCompleto" class="form-control" placeholder="Ej: Juan Díaz" required
-                autocomplete="name"  minlength="3" />
-                <div class="invalid-feedback">Ingresa tu nombre completo.</div>
+                <input type="text" th:field="*{nombreCompleto}" class="form-control"
+                  th:classappend="${#fields.hasErrors('nombreCompleto')} ? 'is-invalid' : ''"
+                  placeholder="Ej: Juan Díaz" required autocomplete="name" minlength="3" />
+                <!--Mensaje de error del servidor-->
+                <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('nombreCompleto')}"
+                  th:text="${#fields.errors('nombreCompleto')[0]}">
+                </div>
+                <!--Mensaje de error de bootstrap-->
+                <div class="invalid-feedback" th:unless="${#fields.hasErrors('nombreCompleto')}">
+                  Ingresa tu nombre completo (mínimo 3 caracteres).
+                </div>
               </div>
             </div>
 
@@ -45,9 +54,17 @@
               <label class="form-label">Correo Electrónico</label>
               <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                <input type="email" name="email" class="form-control" placeholder="usuario@correo.com" 
-                autocomplete="email" required />
-                <div class="invalid-feedback">Ingresa un correo válido.</div>
+                <input type="email" th:field="*{email}" name="email" class="form-control"
+                  th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''" placeholder="usuario@correo.com"
+                  autocomplete="email" required />
+                <!--Mensaje de Error del servidor-->
+                <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('email')}"
+                  th:text="${#fields.errors('email')[0]}">
+                </div>
+                <!--  Mensaje de Error(Bootstrap) -->
+                <div class="invalid-feedback" th:unless="${#fields.hasErrors('email')}">
+                  Ingresa un correo electrónico válido.
+                </div>
               </div>
             </div>
 
@@ -55,14 +72,22 @@
               <label class="form-label">Contraseña</label>
               <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                <input type="password" name="password" id="password" class="form-control" placeholder="••••••••"
+                <input type="password" th:field="*{password}" name="password" id="password" class="form-control"
+                  placeholder="••••••••" th:classappend="${#fields.hasErrors('password')} ? 'is-invalid' : ''"
                   autocomplete="new-password" required minlength="8" />
                 <button type="button" class="btn btn-outline-secondary password-toggle" id="togglePassword"
                   aria-label="Mostrar contraseña">
                   <i class="bi bi-eye"></i>
                 </button>
-                <div class="invalid-feedback">Mínimo 8 caracteres.</div>
+                <!--Mensaje de erro del servidor-->
+                <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">
+                </div>
+                <!-- Error del cliente (Bootstrap) -->
+                <div class="invalid-feedback" th:unless="${#fields.hasErrors('password')}">
+                  La contraseña debe tener al menos 8 caracteres.
+                </div>
               </div>
+
               <div class="password-strength">
                 <div class="strength-bar">
                   <div id="strengthProgress" class="strength-progress"></div>
@@ -103,7 +128,13 @@
                   aria-label="Mostrar contraseña">
                   <i class="bi bi-eye"></i>
                 </button>
-                <div class="invalid-feedback">Las contraseñas no coinciden.</div>
+
+                <!-- Error del servidor (Spring Boot) -->
+                <div class="invalid-feedback d-block" th:if="${errorPassword}" th:text="${errorPassword}"></div>
+                <!-- Error del cliente (Bootstrap) -->
+                <div class="invalid-feedback" th:unless="${errorPassword}">
+                  Confirma tu contraseña.
+                </div>
               </div>
             </div>
 
