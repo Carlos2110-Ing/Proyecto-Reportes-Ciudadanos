@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-  layout:decorate="~{layouts/base-admin}" lang="es">
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security" layout:decorate="~{layouts/base-admin}" lang="es">
 
 <head>
   <title>Panel Admin</title>
@@ -63,9 +63,9 @@
           <thead>
             <tr>
               <th>Usuario</th>
-              <th>Estado</th>
-              <th>Rol</th>
-              <th>Registro</th>
+              <th>Verificación</th>
+              <th>Rol Actual</th>
+              <th>Cambiar Rol</th>
               <th>Acción</th>
             </tr>
           </thead>
@@ -90,8 +90,21 @@
                   </span>
                 </th:block>
               </td>
-              <td style="font-size:0.8rem; color:#64748b;" th:text="${u.rol}">USUARIO</td>
-              <td style="font-size:0.8rem; color:#94a3b8;" th:text="${u.fechaRegistro}">—</td>
+              <td>
+                <span style="font-size:0.8rem; color:#64748b;" th:text="${u.rol}">USUARIO></span>
+              </td>
+              <!-- Cambiar rol dinámicamente -->
+              <td>
+                <form th:action="@{/admin/usuarios/rol/{id}(id=${u.id})}" method="post" class="d-flex gap-1">
+                  <select name="nuevoRol" class="estado-select">
+                    <option th:each="rol : ${roles}" th:value="${rol.nombre}" th:text="${rol.nombre}"
+                      th:selected="${rol.nombre == u.rol}">ROL</option>
+                  </select>
+                  <button type="submit" class="btn-verify-action">
+                    <i class="bi bi-check2"></i>
+                  </button>
+                </form>
+              </td>
               <td>
                 <th:block th:with="verif=${verificaciones.?[usuarioId == __${u.id}__]}">
                   <form th:if="${!verif.isEmpty() and verif[0].verificado}"
@@ -134,7 +147,8 @@
           </thead>
           <tbody>
             <tr th:each="r : ${ultimosReportes}">
-              <td style="font-weight:600; color:var(--navy); font-size:0.85rem;" th:text="${r.titulo}">—</td>
+              <td style="font-weight:600; color:var(--navy); font-size:0.85rem;" th:text="${r.titulo}">—
+              </td>
               <td>
                 <span style="font-size:0.82rem;" th:text="${r.usuarioNombre}">—</span>
                 <i class="bi bi-patch-check-fill ms-1" th:if="${r.usuarioVerificado}"
@@ -169,12 +183,258 @@
       </div>
     </div>
 
+
+    <!--GESTIÓN DE ROLES Y PERMISOS -->
+    <div class="admin-card" id="roles">
+
+      <!-- Encabezado -->
+      <div class="admin-card-header">
+        <h6>
+          <i class="bi bi-shield-lock-fill"></i>
+          Gestión de Roles y Permisos
+        </h6>
+
+        <span style="font-size: 0.78rem; color: #94a3b8;" th:text="${#lists.size(roles)} + ' roles'">
+        </span>
+      </div>
+
+      <div class="container-fluid p-3">
+        <div class="row g-4">
+
+          <!--  COLUMNA IZQUIERDA: ROLES EXISTENTES -->
+          <div class="col-md-7">
+
+            <p class="admin-section-subtitle">
+              Roles actuales
+            </p>
+
+            <div th:each="rol : ${roles}" class="mb-3 p-3 admin-box">
+
+              <!-- Información del rol -->
+              <div class="d-flex align-items-center justify-content-between mb-2">
+
+                <div>
+                  <span class="badge-en-proceso me-2" th:text="${rol.nombre}">
+                    ROL
+                  </span>
+
+                  <span class="admin-role-description" th:text="${rol.descripcion}">
+                  </span>
+                </div>
+
+                <!-- Eliminar rol -->
+                <form th:action="@{/admin/roles/eliminar/{id}(id=${rol.id})}" method="post" th:data-rol="${rol.nombre}"
+                  onsubmit="return confirm('¿Eliminar el rol ' + this.dataset.rol + '?')">
+
+                  <button type="submit" class="btn-del-report admin-btn-small">
+                    <i class="bi bi-trash3"></i>
+                  </button>
+
+                </form>
+              </div>
+
+              <!-- Asignar permisos al rol -->
+              <form th:action="@{/admin/roles/permisos/{id}(id=${rol.id})}" method="post">
+
+                <div class="admin-permissions-list">
+
+                  <div th:each="permiso : ${permisos}" class="admin-permission-item">
+
+                    <input type="checkbox" th:name="permisoIds" th:value="${permiso.id}"
+                      th:checked="${rol.permisoIds.contains(permiso.id)}" class="admin-checkbox-teal" />
+
+                    <span th:text="${permiso.descripcion}">
+                      Permiso
+                    </span>
+
+                    <code class="admin-permission-code" th:text="'(' + ${permiso.urlPattern} + ')'">
+                                </code>
+
+                  </div>
+                </div>
+
+                <!-- Guardar permisos -->
+                <button type="submit" class="btn-verify-action">
+                  <i class="bi bi-floppy me-1"></i>
+                  Guardar permisos
+                </button>
+
+              </form>
+            </div>
+          </div>
+
+
+          <!-- COLUMNA DERECHA: ADMINISTRACIÓN -->
+          <div class="col-md-5">
+
+            <!-- CREAR NUEVO ROL-->
+            <div class="mb-4 p-3 admin-panel-box">
+
+              <p class="admin-panel-title">
+                <i class="bi bi-plus-circle me-1 admin-icon-teal"></i>
+                Nuevo Rol
+              </p>
+
+              <form th:action="@{/admin/roles/crear}" method="post" th:object="${rol}" class="needs-validation"
+                novalidate>
+
+                <!-- Nombre del rol -->
+                <div class="mb-2">
+
+                  <input type="text" th:field="*{nombre}" class="form-control form-control-sm input-uppercase"
+                    th:classappend="${#fields.hasErrors('nombre')} ? ' is-invalid'"
+                    placeholder="Nombre (ej: VISUALIZADOR)" required />
+
+                  <div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}"
+                    th:text="${#fields.errors('nombre')[0]}">
+                  </div>
+
+                </div>
+
+                <!-- Descripción del rol -->
+                <div class="mb-2">
+
+                  <input type="text" th:field="*{descripcion}" class="form-control form-control-sm"
+                    placeholder="Descripción del rol"
+                    th:classappend="${#fields.hasErrors('descripcion')} ? ' is-invalid'" required />
+
+                  <div class="invalid-feedback" th:if="${#fields.hasErrors('descripcion')}"
+                    th:text="${#fields.errors('descripcion')[0]}">
+                  </div>
+
+                </div>
+
+                <!-- Botón crear rol -->
+                <button type="submit" class="btn-teal w-100 btn-center">
+
+                  <i class="bi bi-plus"></i>
+                  Crear Rol
+
+                </button>
+
+              </form>
+            </div>
+
+
+            <!-- CREAR NUEVO PERMISO-->
+            <div class="p-3 admin-panel-box">
+
+              <p class="admin-panel-title">
+                <i class="bi bi-key-fill me-1 admin-icon-teal"></i>
+                Nuevo Permiso
+              </p>
+
+              <form th:action="@{/admin/permisos/crear}" method="post" th:object="${permiso}" class="needs-validation"
+                novalidate>
+
+                <!-- URL del permiso -->
+                <div class="mb-2">
+
+                  <input type="text" th:field="*{urlPattern}" class="form-control form-control-sm"
+                    placeholder="URL (ej: /reportes/nuevo)"
+                    th:classappend="${#fields.hasErrors('urlPattern')} ? ' is-invalid'" required />
+
+                  <div class="invalid-feedback" th:if="${#fields.hasErrors('urlPattern')}"
+                    th:text="${#fields.errors('urlPattern')[0]}">
+                  </div>
+
+                </div>
+
+                <!-- Descripción del permiso -->
+                <div class="mb-2">
+
+                  <input type="text" th:field="*{descripcion}" class="form-control form-control-sm"
+                    placeholder="Descripción" th:classappend="${#fields.hasErrors('descripcion')} ? ' is-invalid'"
+                    required />
+
+                  <div class="invalid-feedback" th:if="${#fields.hasErrors('descripcion')}"
+                    th:text="${#fields.errors('descripcion')[0]}">
+                  </div>
+
+                </div>
+
+                <!-- Método HTTP -->
+                <div class="mb-2">
+
+                  <select th:field="*{httpMethod}" class="form-select form-select-sm"
+                    th:classappend="${#fields.hasErrors('httpMethod')} ? ' is-invalid'">
+
+                    <option value="*">
+                      Cualquier método (*)
+                    </option>
+
+                    <option value="GET">GET</option>
+                    <option value="POST">POST</option>
+
+                  </select>
+
+                  <div class="invalid-feedback" th:if="${#fields.hasErrors('httpMethod')}"
+                    th:text="${#fields.errors('httpMethod')[0]}">
+                  </div>
+
+                </div>
+
+                <!-- Botón crear permiso -->
+                <button type="submit" class="btn-teal w-100 btn-center">
+
+                  <i class="bi bi-plus"></i>
+                  Crear Permiso
+
+                </button>
+
+              </form>
+            </div>
+
+            <!-- PERMISOS EXISTENTES-->
+            <div class="mt-4 p-3 admin-panel-box">
+
+              <p class="admin-panel-title">
+                <i class="bi bi-list-check me-1 admin-icon-teal"></i>
+                Permisos existentes
+              </p>
+
+              <div th:each="permiso : ${permisos}"
+                class="d-flex align-items-center justify-content-between mb-2 p-2 admin-box">
+
+                <!-- Información del permiso -->
+                <div>
+
+                  <div style="font-size: 0.82rem; font-weight: 700;" th:text="${permiso.descripcion}">
+                    Descripción
+                  </div>
+
+                  <code class="admin-permission-code"
+                    th:text="'(' + ${permiso.httpMethod} + ' ' + ${permiso.urlPattern} + ')'">
+                            </code>
+
+                </div>
+
+                <!-- Eliminar permiso -->
+                <form th:action="@{/admin/permisos/eliminar/{id}(id=${permiso.id})}" method="post"
+                  onsubmit="return confirm('¿Eliminar este permiso/ruta?')">
+
+                  <button type="submit" class="btn-del-report admin-btn-small">
+
+                    <i class="bi bi-trash3"></i>
+
+                  </button>
+
+                </form>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
   <th:block layout:fragment="scripts-extra">
     <script>
       document.addEventListener("DOMContentLoaded", () => {
         const counters = document.querySelectorAll('.counter');
-        const duration = 1000; 
+        const duration = 1000;
 
         const startCounterAnimation = (counter) => {
           const target = parseInt(counter.innerText, 10);
@@ -202,7 +462,7 @@
         };
 
         const observerOptions = {
-          root: null, 
+          root: null,
           threshold: 0.2
         };
 
@@ -211,7 +471,7 @@
             if (entry.isIntersecting) {
               const counter = entry.target;
               startCounterAnimation(counter);
-              observer.unobserve(counter); 
+              observer.unobserve(counter);
             }
           });
         }, observerOptions);
@@ -222,4 +482,5 @@
   </th:block>
 
 </body>
+
 </html>
