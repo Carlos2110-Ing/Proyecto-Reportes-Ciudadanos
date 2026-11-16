@@ -4,8 +4,6 @@
  */
 package com.utp.reportes_ciudadanos.controller;
 
-
-import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -15,9 +13,9 @@ import org.springframework.web.bind.annotation.GetMapping;
  */
 @Controller
 public class AcercaDeController {
+
     @GetMapping("/acerca-de")
-    public String acercaDe(HttpSession session) {
-        if (session.getAttribute("usuarioId") == null) return "redirect:/login";
+    public String acercaDe() {
         return "user/acerca-de";
     }
 }

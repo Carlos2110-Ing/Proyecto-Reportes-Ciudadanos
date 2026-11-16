@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/base-auth}"
+      lang="es">
+    <head>
+        <title>Error del servidor</title>
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <div class="auth-wrapper">
+                <div class="auth-card">
+                    <div class="auth-card-header">
+                        <div class="auth-logo-icon" style="background:rgba(245,124,0,0.15); border-color:rgba(245,124,0,0.3);">
+                            <i class="bi bi-exclamation-triangle-fill" style="color:#f57c00;"></i>
+                        </div>
+                        <div class="auth-brand-title">500</div>
+                        <div class="auth-brand-sub">Error interno del servidor</div>
+                    </div>
+                    <div class="auth-card-body text-center">
+                        <p class="auth-desc" th:text="${mensaje}">Ocurrió un error interno. Intenta de nuevo más tarde.</p>
+                        <a th:href="@{/dashboard}" class="btn-primary-custom" style="display:inline-block; width:auto; padding:0.7rem 2rem;">
+                            <i class="bi bi-house me-2"></i>Volver al inicio
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
