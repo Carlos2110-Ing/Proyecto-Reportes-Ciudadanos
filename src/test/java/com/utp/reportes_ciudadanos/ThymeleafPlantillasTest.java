@@ -123,8 +123,9 @@ class ThymeleafPlantillasTest {
                     .andExpect(content().string(containsString("navbar-safeperu")))
                     .andExpect(content().string(containsString("footer-safeperu")));
         } else {
-            result.andExpect(content().string(containsString("navbar-safeperu")))
-                    .andExpect(content().string(containsString("footer-safeperu")));
+            result.andExpect(content().string(containsString("auth-wrapper")))
+                    .andExpect(content().string(containsString("auth-card")))
+                    .andExpect(content().string(org.hamcrest.Matchers.not(containsString("navbar-safeperu"))));
         }
     }
 

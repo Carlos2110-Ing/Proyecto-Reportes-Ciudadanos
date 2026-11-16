@@ -268,21 +268,6 @@
   }, {
     "accountNonExpired" : true,
     "accountNonLocked" : true,
-    "admin" : true,
-    "avatarInicial" : "AD",
-    "credentialsNonExpired" : true,
-    "email" : "admin@safeperu.pe",
-    "enabled" : true,
-    "fechaRegistro" : "2026-11-16",
-    "id" : 1,
-    "nombreCompleto" : "Administrador SafePeru",
-    "password" : "$2a$10$0R91VJD37bH87PpjeBltvuPOJKcCyNHBYsQyjXut7b2PU4S//Jzym",
-    "rol" : "ADMIN",
-    "username" : "admin@safeperu.pe",
-    "usernameField" : "admin@safeperu.pe"
-  }, {
-    "accountNonExpired" : true,
-    "accountNonLocked" : true,
     "admin" : false,
     "avatarInicial" : "CC",
     "credentialsNonExpired" : true,
@@ -294,7 +279,22 @@
     "password" : "$2a$10$B99p2RBiKryht4Tqwu9reuknloogIjLJYZ.NOXwC3pKzSHM6rbzZ2",
     "rol" : "USUARIO",
     "username" : "carlos.castillo@correo.com",
-    "usernameField" : "carlos.castillo"
+    "usernameField" : "carlos.castillo@correo.com"
+  }, {
+    "accountNonExpired" : true,
+    "accountNonLocked" : true,
+    "admin" : true,
+    "avatarInicial" : "AD",
+    "credentialsNonExpired" : true,
+    "email" : "admin@safeperu.pe",
+    "enabled" : true,
+    "fechaRegistro" : "2026-11-16",
+    "id" : 1,
+    "nombreCompleto" : "Administrador SafePeru",
+    "password" : "$2a$10$rj46D/h7IqiwCDxPqT7yd.bMy1kbuwueENu0vED3Nl72p6QMxT2ki",
+    "rol" : "ADMIN",
+    "username" : "admin@safeperu.pe",
+    "usernameField" : "admin"
   } ],
   "verificaciones" : [ {
     "adminId" : null,
@@ -332,18 +332,18 @@
     "usuarioId" : 100,
     "verificado" : true
   }, {
-    "adminId" : 1,
-    "estado" : "VERIFICADO",
-    "fechaVerificacion" : "2026-11-16",
-    "id" : 1,
-    "usuarioId" : 1,
-    "verificado" : true
-  }, {
     "adminId" : null,
     "estado" : "PENDIENTE",
     "fechaVerificacion" : null,
     "id" : 2,
     "usuarioId" : 2,
     "verificado" : false
+  }, {
+    "adminId" : 1,
+    "estado" : "VERIFICADO",
+    "fechaVerificacion" : "2026-11-16",
+    "id" : 1,
+    "usuarioId" : 1,
+    "verificado" : true
   } ]
 }
