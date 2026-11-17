@@ -33,6 +33,7 @@ public class Rol {
             name = "rol_permisos",
             joinColumns = @JoinColumn(name = "rol_id")
     )
+    @OrderColumn(name = "orden")
     @Column(name = "permiso_id")
     private List<Integer> permisoIds = new ArrayList<>();
 
