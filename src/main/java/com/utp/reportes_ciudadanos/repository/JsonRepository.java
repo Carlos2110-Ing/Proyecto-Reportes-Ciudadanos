@@ -1,14 +1,18 @@
 package com.utp.reportes_ciudadanos.repository;
+
 import com.utp.reportes_ciudadanos.model.*;
 
 import tools.jackson.databind.ObjectMapper;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,20 +28,26 @@ public class JsonRepository {
     @Autowired
     public JsonRepository(ObjectMapper objectMapper) throws IOException {
         this.objectMapper = objectMapper;
-        try {
-            URL resourceUrl = getClass().getClassLoader().getResource("data/db.json");
-            if (resourceUrl == null) {
-                throw new RuntimeException("No se encontró data/db.json");
+
+        // 1. Definir un archivo físico en el directorio temporal del sistema (funciona
+        // en Windows y Docker/Linux)
+        Path tempDir = Paths.get(System.getProperty("java.io.tmpdir"), "reportes-ciudadanos-data");
+        Files.createDirectories(tempDir);
+        this.dbFile = tempDir.resolve("db.json").toFile();
+
+        // 2. Si aún no existe el archivo temporal, copiar el contenido inicial desde
+        // resources/data/db.json
+        if (!this.dbFile.exists()) {
+            try (InputStream is = getClass().getClassLoader().getResourceAsStream("data/db.json")) {
+                if (is == null) {
+                    throw new RuntimeException("No se encontró data/db.json en el classpath");
+                }
+                Files.copy(is, this.dbFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
             }
-
-            Path targetClasses = Paths.get(resourceUrl.toURI()).getParent().getParent();
-            Path projectRoot = targetClasses.getParent().getParent();
-            this.dbFile = projectRoot.resolve("src/main/resources/data/db.json").toFile();
-
-            this.database = objectMapper.readValue(this.dbFile, Database.class);
-        } catch (URISyntaxException e) {
-            throw new RuntimeException("Error al cargar db.json: " + e.getMessage(), e);
         }
+
+        // 3. Cargar la base de datos desde ese archivo físico escribible
+        this.database = objectMapper.readValue(this.dbFile, Database.class);
     }
 
     // ── PERSISTENCIA ───────────────────────────────────────────────────
@@ -239,4 +249,3 @@ public class JsonRepository {
         return ok;
     }
 }
-
